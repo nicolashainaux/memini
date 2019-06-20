@@ -1,0 +1,26 @@
+## DIRECTORIES
+
+#  top-level directories
+*.egg/
+*.egg-info/
+.cache/
+.idea/
+.pytest_cache/
+.tox/
+.venv/
+build/
+dist/
+.git/
+
+#  specific directories
+docs/_build/
+
+## GARBAGE
+__pycache__/
+*.pyc
+*~
+
+## SPECIFIC FILES
+.coverage
+
+#  runtime files
