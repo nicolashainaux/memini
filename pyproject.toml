@@ -6,6 +6,7 @@ authors = ["Nicolas Hainaux <nh.techn@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.6"
+toml = "^0.9.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.0"
