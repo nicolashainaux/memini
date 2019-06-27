@@ -21,6 +21,8 @@
 
 import re
 
+from vocashaker.core.errors import PatternError, MismatchError
+
 
 def parse_pattern(pattern):
     """
@@ -31,19 +33,27 @@ def parse_pattern(pattern):
 
     Exactly one separator must be found.
     """
-    sep = {s.split('>')[-1] for s in pattern.split('<')}
-    sep = {s for s in sep if s != ''}
-    if len(sep) == 1:
-        sep = sep.pop()
-    else:
-        raise ValueError('Cannot find a separator between tags in this '
-                         'string: {}'.format(pattern))
+    missing_tag_position = pattern.find('><')
+    if missing_tag_position != -1:
+        raise PatternError(pattern, missing_tag_position)
     tags = re.findall(r'<.*?>', pattern)
+    regex = pattern
+    for t in tags:
+        regex = regex.replace(t, '(.*?)')
     tags = [t[1:-1] for t in tags]
-    return (sep, tags)
+    return (regex, tags)
 
 
-def parse_line(line, pattern):
+def parse_line(pattern, line):
     """Parse one line of data, according to pattern"""
-    sep, _ = parse_pattern(pattern)
-    return [l.strip() for l in line.split(sep)]
+    regex, _ = parse_pattern(pattern)
+    match = re.fullmatch(regex, line)
+    if match:
+        result = [g.strip() for g in match.groups()]
+    else:
+        raise MismatchError(line, pattern)
+    return result
+
+
+def parse_file(filename, pattern):
+    """Parse one entire file of data lines, according to pattern"""

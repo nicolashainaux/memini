@@ -22,21 +22,25 @@
 import pytest
 
 from vocashaker.core.parser import parse_pattern, parse_line
+from vocashaker.core.errors import PatternError, MismatchError
 
 
 def test_parse_pattern():
     p = '<tag1>:<tag2>'
-    assert parse_pattern(p) == (':', ['tag1', 'tag2'])
-    with pytest.raises(ValueError) as excinfo:
+    assert parse_pattern(p) == ('(.*?):(.*?)', ['tag1', 'tag2'])
+    with pytest.raises(PatternError) as excinfo:
         parse_pattern('<tag1><tag2>')
-    assert str(excinfo.value) == 'Cannot find a separator between tags in '\
-        'this string: <tag1><tag2>'
+    assert str(excinfo.value) == 'Missing separator in pattern:\n'\
+        '<tag1><tag2>\n'\
+        '      ^'
 
 
 def test_parse_line():
     p = '<Latin>:<Français>'
     line = 'ambitio, onis, f. : ambition'
-    assert parse_line(line, p) == ['ambitio, onis, f.', 'ambition']
-    # line1 = 'acies, ei, f ligne de bataille'
-    # line2 = 'agmen, minis,n armée en marche'
-    # line3 = ' ager, gri, m champ'
+    assert parse_line(p, line) == ['ambitio, onis, f.', 'ambition']
+    line = 'acies, ei, f ligne de bataille'
+    with pytest.raises(MismatchError) as excinfo:
+        parse_line(p, line)
+    assert str(excinfo.value) == 'This line: acies, ei, f ligne de bataille\n'\
+        'does not match provided pattern: <Latin>:<Français>'

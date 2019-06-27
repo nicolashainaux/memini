@@ -20,6 +20,23 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
-from . import env, errors, parser
+class VocaShakerError(Exception):
+    """Basic exception for errors raised by VocaShaker."""
+    def __init__(self, msg):
+        super().__init__(msg)
 
-__all__ = ['env', 'errors', 'parser']
+
+class PatternError(VocaShakerError):
+    """When an incorrect pattern is provided."""
+    def __init__(self, pattern, missing_tag_position):
+        msg = 'Missing separator in pattern:\n{}\n{}'\
+            .format(pattern, ' ' * (missing_tag_position + 1) + '^')
+        super().__init__(msg)
+
+
+class MismatchError(VocaShakerError):
+    """When a line does not match the provided pattern."""
+    def __init__(self, line, pattern):
+        msg = 'This line: {}\ndoes not match provided pattern: {}'\
+            .format(line, pattern)
+        super().__init__(msg)
