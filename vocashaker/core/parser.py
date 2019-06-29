@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import re
+import warnings
 
 from vocashaker.core.errors import PatternError, MismatchError
 
@@ -57,3 +58,14 @@ def parse_line(pattern, line):
 
 def parse_file(filename, pattern):
     """Parse one entire file of data lines, according to pattern"""
+    result = []
+    with open(filename) as f:
+        for line in f.readlines():
+            if line.strip():
+                try:
+                    to_add = parse_line(pattern, line.strip())
+                except MismatchError as e:
+                    warnings.warn(str(e))
+                else:
+                    result.append(to_add)
+    return result

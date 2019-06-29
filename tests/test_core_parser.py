@@ -21,7 +21,7 @@
 
 import pytest
 
-from vocashaker.core.parser import parse_pattern, parse_line
+from vocashaker.core.parser import parse_pattern, parse_line, parse_file
 from vocashaker.core.errors import PatternError, MismatchError
 
 
@@ -44,3 +44,28 @@ def test_parse_line():
         parse_line(p, line)
     assert str(excinfo.value) == 'This line: acies, ei, f ligne de bataille\n'\
         'does not match provided pattern: <Latin>:<Français>'
+
+
+def test_parse_file(mocker):
+    content = """gaudium,  i, n. : joie
+
+jungo,  is, ere, junxi, junctum : joindre
+
+nosco,  is, ere, novi, notum : apprendre ; pf. savoir
+
+nuntio, as, are : annoncer
+
+soleo,  es, ere, solui, solitum : avoir l'habitude de
+
+solvo,  is, ere, vi, solutum : détacher, payer
+"""
+    m = mocker.patch('builtins.open', mocker.mock_open(read_data=content))
+    result = parse_file('some_file.txt', '<Latin>:<Français>')
+    m.assert_called_once_with('some_file.txt')
+    expected = [['gaudium,  i, n.', 'joie'],
+                ['jungo,  is, ere, junxi, junctum', 'joindre'],
+                ['nosco,  is, ere, novi, notum', 'apprendre ; pf. savoir'],
+                ['nuntio, as, are', 'annoncer'],
+                ['soleo,  es, ere, solui, solitum', "avoir l'habitude de"],
+                ['solvo,  is, ere, vi, solutum', 'détacher, payer']]
+    assert result == expected
