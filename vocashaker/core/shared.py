@@ -20,27 +20,11 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
-from pathlib import Path
 
-import toml
+from .env import USER_LOCAL_SHARE, USER_DB_PATH
 
 
-__process_name = os.path.basename(__file__)
-__abspath = os.path.abspath(__file__)
-__l1 = len(__process_name)
-__l2 = len(__abspath)
-CORE_DIRNAME = 'core/'
-ROOTDIR = __abspath[:__l2 - __l1][:-(len(CORE_DIRNAME) + 1)]
-DATADIR = os.path.join(ROOTDIR, 'data')
-
-with open(os.path.join(DATADIR, 'metadata.toml'), 'r') as f:
-    pp = toml.load(f)
-
-__myname__ = pp['__myname__']
-__authors__ = pp['__authors__']
-__version__ = pp['__version__']
-
-USER_LOCAL_SHARE = os.path.join(str(Path.home()), '.local', 'share',
-                                __myname__)
-USER_DB_NAME = 'data.db'
-USER_DB_PATH = os.path.join(USER_LOCAL_SHARE, USER_DB_NAME)
+def init():
+    os.makedirs(USER_LOCAL_SHARE, mode=0o770, exist_ok=True)
+    if not os.path.isfile(USER_DB_PATH):
+        open(USER_DB_PATH, 'a').close()
