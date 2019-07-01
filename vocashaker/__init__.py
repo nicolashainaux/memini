@@ -21,7 +21,7 @@
 
 from vocashaker.core.env import USER_DB_PATH
 from vocashaker.core import shared
-from vocashaker.core import db
+from vocashaker.core import database
 
 
 shared.init()
@@ -31,5 +31,5 @@ __all__ = ['run']
 
 def run():
     print('Starting!')
-    with db.Connect(USER_DB_PATH) as c:
-        shared.db_connection = c
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db

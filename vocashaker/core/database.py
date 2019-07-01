@@ -25,7 +25,7 @@ import sqlite3
 
 
 # Inspiration from: https://gist.github.com/miku/6522074
-class Connect:
+class Manager:
     """
     Simple CM for sqlite3 databases. Commits AND closes everything at exit.
     """

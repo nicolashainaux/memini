@@ -20,6 +20,6 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 
-from . import env, errors, parser, shared
+from . import database, env, errors, parser, shared
 
-__all__ = ['env', 'errors', 'parser', 'shared']
+__all__ = ['database', 'env', 'errors', 'parser', 'shared']
