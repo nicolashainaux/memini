@@ -25,6 +25,10 @@ from .env import USER_LOCAL_SHARE, USER_DB_PATH
 
 
 def init():
+    global db_connection
+
     os.makedirs(USER_LOCAL_SHARE, mode=0o770, exist_ok=True)
     if not os.path.isfile(USER_DB_PATH):
         open(USER_DB_PATH, 'a').close()
+
+    db_connection = None  # Will be initialized in main script

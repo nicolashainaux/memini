@@ -19,7 +19,9 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+from vocashaker.core.env import USER_DB_PATH
 from vocashaker.core import shared
+from vocashaker.core import db
 
 
 shared.init()
@@ -29,3 +31,5 @@ __all__ = ['run']
 
 def run():
     print('Starting!')
+    with db.Connect(USER_DB_PATH) as c:
+        shared.db_connection = c
