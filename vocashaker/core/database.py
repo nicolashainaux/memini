@@ -45,6 +45,9 @@ class Manager:
 
 
 def list_tables():
+    """
+    List all available tables.
+    """
     results = shared.db.execute(
         'SELECT name FROM sqlite_master WHERE type=\'table\';')
     return [_[0] for _ in results.fetchall()]
