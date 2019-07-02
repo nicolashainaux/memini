@@ -20,14 +20,22 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import sqlite3
-# from unittest.mock import patch
 
 import pytest
 
-# from vocashaker.core.env import TEST_DB_PATH
-# from vocashaker.core import shared
+from vocashaker.core import shared
+from vocashaker.core.env import TEST_DB_PATH
 from vocashaker.core.database import Manager
-# from vocashaker.core.database import list_tables
+from vocashaker.core.database import list_tables
+
+
+@pytest.fixture
+def testdb():
+    testdb_conn = sqlite3.connect(TEST_DB_PATH)
+    shared.db = testdb_conn.cursor()
+    yield
+    testdb_conn.rollback()
+    testdb_conn.close()
 
 
 def test_Manager():
@@ -42,10 +50,8 @@ def test_Manager():
     assert str(excinfo.value) == 'Cannot operate on a closed database.'
 
 
-# with Manager(TEST_DB_PATH) as db:
-#     @patch(shared.db, db)
-#     def test_list_tables():
-#         assert list_tables() == ['table1', 'table2']
+def test_list_tables(testdb):
+    assert list_tables() == ['table1', 'table2']
 
-    # def test_table_exists():
-    #     pass
+# def test_table_exists():
+#     pass

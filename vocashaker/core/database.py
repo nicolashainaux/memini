@@ -21,7 +21,7 @@
 
 import sqlite3
 
-# from . import shared
+from . import shared
 
 
 # Inspiration from: https://gist.github.com/miku/6522074
@@ -43,9 +43,11 @@ class Manager:
         self.conn.commit()
         self.conn.close()
 
-# List all tables
-# r = c.execute('SELECT name FROM sqlite_master WHERE type=\'table\';')
-# assert r.fetchall() == [('test1',)]
+
+def list_tables():
+    results = shared.db.execute(
+        'SELECT name FROM sqlite_master WHERE type=\'table\';')
+    return [_[0] for _ in results.fetchall()]
 
 # Check whether a table exists
 
