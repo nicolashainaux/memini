@@ -27,6 +27,7 @@ from vocashaker.core import shared
 from vocashaker.core.env import TEST_DB_PATH
 from vocashaker.core.database import Manager
 from vocashaker.core.database import list_tables
+from vocashaker.core.database import table_exists
 
 
 @pytest.fixture
@@ -53,5 +54,7 @@ def test_Manager():
 def test_list_tables(testdb):
     assert list_tables() == ['table1', 'table2']
 
-# def test_table_exists():
-#     pass
+
+def test_table_exists(testdb):
+    assert table_exists('table1')
+    assert not table_exists('TABLE1')

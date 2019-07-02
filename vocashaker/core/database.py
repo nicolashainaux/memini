@@ -52,6 +52,9 @@ def list_tables():
         'SELECT name FROM sqlite_master WHERE type=\'table\';')
     return [_[0] for _ in results.fetchall()]
 
-# Check whether a table exists
+
+def table_exists(name):
+    """True if a table of this name does exist in the database."""
+    return name in list_tables()
 
 # To rename: ALTER TABLE `foo` RENAME TO `bar`
