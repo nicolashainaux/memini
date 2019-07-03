@@ -22,5 +22,6 @@ __pycache__/
 
 ## SPECIFIC FILES
 .coverage
+tests/data/test.db-journal
 
 #  runtime files
