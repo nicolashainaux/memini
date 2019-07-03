@@ -40,3 +40,24 @@ class LineDoesNotMatchError(VocaShakerError):
         msg = 'This line: {}\ndoes not match provided pattern: {}'\
             .format(line, pattern)
         super().__init__(msg)
+
+
+class NoSuchTableError(VocaShakerError):
+    """When the provided name does not match any table."""
+    def __init__(self, name):
+        msg = 'Cannot find a table named "{}"'.format(name)
+        super().__init__(msg)
+
+
+class NoSuchRowError(VocaShakerError):
+    """When the provided name does not match any row."""
+    def __init__(self, name):
+        msg = 'Cannot find a row containing "{}"'.format(name)
+        super().__init__(msg)
+
+
+class ColumnsDoNotMatchError(VocaShakerError):
+    """When the columns number does not match."""
+    def __init__(self, col_nb):
+        msg = '"{}"'.format(col_nb)
+        super().__init__(msg)
