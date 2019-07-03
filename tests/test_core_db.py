@@ -39,8 +39,11 @@ from vocashaker.core.errors import ColumnsDoNotMatchError
 def testdb():
     testdb_conn = sqlite3.connect(TEST_DB_PATH)
     shared.db = testdb_conn.cursor()
+    shared.db.execute('SAVEPOINT starttest;')
     yield
-    testdb_conn.rollback()
+    # Using testdb_conn.rollback() would not rollback certain transactions
+    # like RENAME...
+    shared.db.execute('ROLLBACK TO SAVEPOINT starttest;')
     testdb_conn.close()
 
 
@@ -66,11 +69,11 @@ def test_table_exists(testdb):
 
 
 def test_rename_table(testdb):
-    rename_table('table1', 'TABLE1')
+    rename_table('table1', 'table4')
     assert not table_exists('table1')
-    assert table_exists('TABLE1')
+    assert table_exists('table4')
     with pytest.raises(NoSuchTableError) as excinfo:
-        rename_table('table1', 'TABLE1')
+        rename_table('table1', 'table4')
     assert str(excinfo.value) == 'Cannot find a table named "table1"'
 
 

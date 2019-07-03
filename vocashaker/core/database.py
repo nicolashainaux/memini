@@ -22,6 +22,7 @@
 import sqlite3
 
 from . import shared
+from .errors import NoSuchTableError
 
 
 # Inspiration from: https://gist.github.com/miku/6522074
@@ -59,8 +60,10 @@ def table_exists(name):
 
 
 def rename_table(name, new_name):
-    pass
-    # To rename: ALTER TABLE `foo` RENAME TO `bar`
+    if not table_exists(name):
+        raise NoSuchTableError(name)
+    shared.db.execute('ALTER TABLE `{}` RENAME TO `{}`;'
+                      .format(name, new_name))
 
 
 def get_table(name):
