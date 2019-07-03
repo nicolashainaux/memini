@@ -126,7 +126,7 @@ def test_create_table(testdb):
             ]
 
 
-def test_add_rows(testdb):
+def test_add_row(testdb):
     add_row('table1', ('spes, ei f', 'espoir'))
     assert get_table('table1') \
         == [('1', 'adventus,  us, m.', 'arrivée'),
