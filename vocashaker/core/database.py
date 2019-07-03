@@ -57,4 +57,35 @@ def table_exists(name):
     """True if a table of this name does exist in the database."""
     return name in list_tables()
 
-# To rename: ALTER TABLE `foo` RENAME TO `bar`
+
+def rename_table(name, new_name):
+    pass
+    # To rename: ALTER TABLE `foo` RENAME TO `bar`
+
+
+def get_table(name):
+    pass
+
+
+def table_to_text(name, pattern):
+    pass
+
+
+def remove_table(name):
+    pass
+
+
+def create_table(name, col_titles, content):
+    pass
+
+
+def add_row(name, row):
+    pass
+
+
+def remove_row(name, id):
+    pass
+
+
+def draw_rows(name, nb):
+    pass
