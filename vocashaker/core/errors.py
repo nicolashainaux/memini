@@ -26,15 +26,15 @@ class VocaShakerError(Exception):
         super().__init__(msg)
 
 
-class PatternError(VocaShakerError):
-    """When an incorrect pattern is provided."""
+class MissingSeparatorError(VocaShakerError):
+    """When a pattern is provided with missing separator."""
     def __init__(self, pattern, missing_tag_position):
         msg = 'Missing separator in pattern:\n{}\n{}'\
             .format(pattern, ' ' * (missing_tag_position + 1) + '^')
         super().__init__(msg)
 
 
-class MismatchError(VocaShakerError):
+class LineDoesNotMatchError(VocaShakerError):
     """When a line does not match the provided pattern."""
     def __init__(self, line, pattern):
         msg = 'This line: {}\ndoes not match provided pattern: {}'\

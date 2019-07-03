@@ -22,7 +22,7 @@
 import re
 import warnings
 
-from vocashaker.core.errors import PatternError, MismatchError
+from vocashaker.core.errors import MissingSeparatorError, LineDoesNotMatchError
 
 
 def parse_pattern(pattern):
@@ -36,7 +36,7 @@ def parse_pattern(pattern):
     """
     missing_tag_position = pattern.find('><')
     if missing_tag_position != -1:
-        raise PatternError(pattern, missing_tag_position)
+        raise MissingSeparatorError(pattern, missing_tag_position)
     tags = re.findall(r'<.*?>', pattern)
     regex = pattern
     for t in tags:
@@ -52,7 +52,7 @@ def parse_line(pattern, line):
     if match:
         result = [g.strip() for g in match.groups()]
     else:
-        raise MismatchError(line, pattern)
+        raise LineDoesNotMatchError(line, pattern)
     return result
 
 
@@ -64,7 +64,7 @@ def parse_file(filename, pattern):
             if line.strip():
                 try:
                     to_add = parse_line(pattern, line.strip())
-                except MismatchError as e:
+                except LineDoesNotMatchError as e:
                     warnings.warn(str(e))
                 else:
                     result.append(to_add)
