@@ -72,17 +72,23 @@ def rename_table(name, new_name):
                       .format(name, new_name))
 
 
-def get_cols(name):
+def get_cols(name, include_id=False):
     """
     List all columns of a given table.
     """
     assert_table_exists(name)
     cursor = shared.db.execute('SELECT * from {};'.format(name))
-    return [_[0] for _ in cursor.description][1:-1]
+    start = 0 if include_id else 1
+    return [_[0] for _ in cursor.description][start:-1]
 
 
 def get_table(name):
-    pass
+    assert_table_exists(name)
+    cols = ','.join(get_cols(name, include_id=True))
+    content = shared.db.execute(
+        'SELECT {} FROM {};'.format(cols, name)).fetchall()
+    content = [(str(t[0]), ) + t[1:] for t in content]
+    return content
 
 
 def table_to_text(name, pattern):

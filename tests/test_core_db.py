@@ -88,6 +88,9 @@ def test_rename_table(testdb):
 def test_get_cols(testdb):
     assert get_cols('table1') == ['col1', 'col2']
     assert get_cols('table2') == ['col1', 'col2', 'col3']
+    assert get_cols('table1', include_id=True) == ['id', 'col1', 'col2']
+    assert get_cols('table2', include_id=True) == ['id', 'col1', 'col2',
+                                                   'col3']
 
 
 def test_get_table(testdb):
