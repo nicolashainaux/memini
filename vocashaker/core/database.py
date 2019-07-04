@@ -59,9 +59,15 @@ def table_exists(name):
     return name in list_tables()
 
 
-def rename_table(name, new_name):
+def assert_table_exists(name):
+    """Raise an exception if no table of this name exists in the database."""
     if not table_exists(name):
         raise NoSuchTableError(name)
+    return True
+
+
+def rename_table(name, new_name):
+    assert_table_exists(name)
     shared.db.execute('ALTER TABLE `{}` RENAME TO `{}`;'
                       .format(name, new_name))
 

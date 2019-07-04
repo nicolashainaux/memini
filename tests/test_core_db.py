@@ -27,6 +27,7 @@ from vocashaker.core import shared
 from vocashaker.core.env import TEST_DB_PATH
 from vocashaker.core.database import Manager
 from vocashaker.core.database import list_tables, table_exists
+from vocashaker.core.database import assert_table_exists
 from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table
 from vocashaker.core.database import add_row, remove_row, draw_rows
@@ -66,6 +67,13 @@ def test_list_tables(testdb):
 def test_table_exists(testdb):
     assert table_exists('table1')
     assert not table_exists('TABLE1')
+
+
+def test_assert_table_exists(testdb):
+    assert assert_table_exists('table1')
+    with pytest.raises(NoSuchTableError) as excinfo:
+        assert_table_exists('table4')
+    assert str(excinfo.value) == 'Cannot find a table named "table4"'
 
 
 def test_rename_table(testdb):
