@@ -20,9 +20,11 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import sqlite3
+from itertools import zip_longest, chain
 
 from . import shared
-from .errors import NoSuchTableError
+from .errors import NoSuchTableError, ColumnsDoNotMatchError
+from .parser import parse_pattern
 
 
 # Inspiration from: https://gist.github.com/miku/6522074
@@ -92,7 +94,20 @@ def get_table(name):
 
 
 def table_to_text(name, pattern):
-    pass
+    content = get_table(name)
+    content = [c[1:] for c in content]
+    col_titles = get_cols(name)
+    cols_nb = len(col_titles)
+    sep_list, tags = parse_pattern(pattern, sep_list=True)
+    tags_nb = len(tags)
+    if cols_nb != tags_nb:
+        raise ColumnsDoNotMatchError(cols_nb, tags_nb,
+                                     name, col_titles, pattern)
+    lines = [list(zip_longest(c, sep_list)) for c in content]
+    lines = [list(chain(*z))[:-1] for z in lines]
+    lines = [''.join(line) for line in lines]
+    output = '\n'.join(lines)
+    return output
 
 
 def remove_table(name):

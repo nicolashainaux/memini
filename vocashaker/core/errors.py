@@ -58,6 +58,10 @@ class NoSuchRowError(VocaShakerError):
 
 class ColumnsDoNotMatchError(VocaShakerError):
     """When the columns number does not match."""
-    def __init__(self, col_nb):
-        msg = '"{}"'.format(col_nb)
+    def __init__(self, expected, found, table_name, col_titles, data):
+        col_titles = ['"{}"'.format(c) for c in col_titles]
+        col_list = '{} and {}'.format(', '.join(col_titles[:-1]),
+                                      col_titles[-1])
+        msg = '"{}" requires {} columns, but "{}" has {} columns ({}).'\
+            .format(data, found, table_name, expected, col_list)
         super().__init__(msg)
