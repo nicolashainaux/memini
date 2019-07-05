@@ -34,6 +34,7 @@ def test_parse_pattern():
     assert str(excinfo.value) == 'Missing separator in pattern:\n'\
         '<tag1><tag2>\n'\
         '      ^'
+    assert parse_pattern(p, sep_list=True) == ([':'], ['tag1', 'tag2'])
 
 
 def test_parse_line():

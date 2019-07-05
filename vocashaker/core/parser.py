@@ -25,7 +25,7 @@ import warnings
 from vocashaker.core.errors import MissingSeparatorError, LineDoesNotMatchError
 
 
-def parse_pattern(pattern):
+def parse_pattern(pattern, sep_list=False):
     """
     Return a tuple containing a regex and the list of tags.
 
@@ -40,6 +40,8 @@ def parse_pattern(pattern):
     for t in tags:
         regex = regex.replace(t, '(.*?)')
     tags = [t[1:-1] for t in tags]
+    if sep_list:
+        regex = regex.split('(.*?)')
     return (regex, tags)
 
 
