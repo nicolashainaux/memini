@@ -117,6 +117,11 @@ sol, solis, m : soleil"""
         table_to_text('table1', '<Latin> : <Français> : <Grec>')
     assert str(excinfo.value) == '"<Latin> : <Français> : <Grec>" requires ' \
         '3 columns, but "table1" has 2 columns ("col1" and "col2").'
+    assert table_to_text('table2', '<col1>, <col2> : <col3>') \
+        == """begin, began, begun : commencer
+break, broke, broken : casser
+do, did, done : faire
+give, gave, given : donner"""
 
 
 def test_remove_table(testdb):
