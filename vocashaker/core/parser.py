@@ -27,12 +27,10 @@ from vocashaker.core.errors import MissingSeparatorError, LineDoesNotMatchError
 
 def parse_pattern(pattern):
     """
-    Return a tuple containing the separator and the list of tags.
+    Return a tuple containing a regex and the list of tags.
 
     Pattern example:
-    '<tag1>:<tag2>' would return (':', ['tag1', 'tag2'])
-
-    Exactly one separator must be found.
+    '<tag1>:<tag2>' would return ('(.*?):(.*?)', ['tag1', 'tag2'])
     """
     missing_tag_position = pattern.find('><')
     if missing_tag_position != -1:
