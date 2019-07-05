@@ -41,7 +41,7 @@ def parse_pattern(pattern, sep_list=False):
         regex = regex.replace(t, '(.*?)')
     tags = [t[1:-1] for t in tags]
     if sep_list:
-        regex = regex.split('(.*?)')
+        regex = regex.split('(.*?)')[1:-1]
     return (regex, tags)
 
 

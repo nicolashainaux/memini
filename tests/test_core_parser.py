@@ -35,6 +35,8 @@ def test_parse_pattern():
         '<tag1><tag2>\n'\
         '      ^'
     assert parse_pattern(p, sep_list=True) == ([':'], ['tag1', 'tag2'])
+    p = '<Latin> : <Français>'
+    assert parse_pattern(p, sep_list=True) == ([' : '], ['Latin', 'Français'])
 
 
 def test_parse_line():
