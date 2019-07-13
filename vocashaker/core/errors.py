@@ -51,8 +51,8 @@ class NoSuchTableError(VocaShakerError):
 
 class NoSuchRowError(VocaShakerError):
     """When the provided name does not match any row."""
-    def __init__(self, name):
-        msg = 'Cannot find a row containing "{}"'.format(name)
+    def __init__(self, id_, name):
+        msg = 'Cannot find a row number {} in "{}"'.format(id_, name)
         super().__init__(msg)
 
 

@@ -23,7 +23,7 @@ import sqlite3
 from itertools import zip_longest, chain
 
 from . import shared
-from .errors import NoSuchTableError, ColumnsDoNotMatchError
+from .errors import NoSuchTableError, ColumnsDoNotMatchError, NoSuchRowError
 from .parser import parse_pattern
 
 
@@ -141,8 +141,14 @@ def add_row(name, row):
     shared.db.execute(cmd)
 
 
-def remove_row(name, id):
-    pass
+def remove_row(name, id_):
+    assert_table_exists(name)
+    cmd = 'SELECT EXISTS(SELECT 1 FROM {} WHERE id={});'.format(name, id_)
+    row_exists = shared.db.execute(cmd).fetchall()[0][0]
+    if not row_exists:
+        raise NoSuchRowError(id_, name)
+    cmd = 'DELETE FROM {} WHERE id = {};'.format(name, id_)
+    shared.db.execute(cmd)
 
 
 def draw_rows(name, nb):
