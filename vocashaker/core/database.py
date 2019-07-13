@@ -116,7 +116,15 @@ def remove_table(name):
 
 
 def create_table(name, col_titles, content):
-    pass
+    titles = ' TEXT, '.join(col_titles) + ' TEXT, '
+    cmd = """CREATE TABLE {} (id INTEGER PRIMARY KEY, {}timestamp INTEGER)"""\
+        .format(name, titles)
+    shared.db.execute(cmd)
+    titles = ', '.join(col_titles) + ', timestamp'
+    qmarks = '?, ' * len(col_titles) + '?'
+    cmd = """INSERT INTO {}({}) VALUES({})""".format(name, titles, qmarks)
+    content = [item + (0, ) for item in content]
+    shared.db.executemany(cmd, content)
 
 
 def add_row(name, row):

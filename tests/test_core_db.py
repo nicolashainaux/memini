@@ -136,7 +136,7 @@ def test_create_table(testdb):
     create_table('table3', ('infinitif', 'passé', 'français'),
                  [('bieten', 'bot, hat geboten', 'offrir'),
                   ('bleiben', 'blieb, ist geblieben', 'rester'),
-                  ('gelingen', 'gelang, ist gelungen', 'réussir')
+                  ('gelingen', 'gelang, ist gelungen', 'réussir'),
                   ('schmelzen', 'schmolz, ist geschmolzen', 'fondre'),
                   ('ziegen', 'zog, hat OU ist gezogen', 'tirer OU déménager'),
                   ])
@@ -144,7 +144,7 @@ def test_create_table(testdb):
     assert get_table('table3') \
         == [('1', 'bieten', 'bot, hat geboten', 'offrir'),
             ('2', 'bleiben', 'blieb, ist geblieben', 'rester'),
-            ('3', 'gelingen', 'gelang, ist gelungen', 'réussir')
+            ('3', 'gelingen', 'gelang, ist gelungen', 'réussir'),
             ('4', 'schmelzen', 'schmolz, ist geschmolzen', 'fondre'),
             ('5', 'ziegen', 'zog, hat OU ist gezogen', 'tirer OU déménager'),
             ]
