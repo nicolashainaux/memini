@@ -163,7 +163,7 @@ def test_add_row(testdb):
     assert str(excinfo.value) == 'Cannot find a table named "table3"'
     with pytest.raises(ColumnsDoNotMatchError) as excinfo:
         add_row('table1', ('spes, ei', 'f', 'espoir'))
-    assert str(excinfo.value) == '("\'spes, ei\', \'f\', \'espoir\'") '\
+    assert str(excinfo.value) == '"\'spes, ei\', \'f\', \'espoir\'" '\
         'requires 3 columns, but "table1" has 2 columns ("col1" and "col2").'
 
 

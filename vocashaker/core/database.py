@@ -128,7 +128,17 @@ def create_table(name, col_titles, content):
 
 
 def add_row(name, row):
-    pass
+    assert_table_exists(name)
+    cols = get_cols(name)
+    if len(cols) != len(row):
+        data = ["'{}'".format(item) for item in row]
+        data = ', '.join(data)
+        raise ColumnsDoNotMatchError(len(cols), len(row), name, cols, data)
+    titles = ', '.join(cols + ['timestamp'])
+    row = ['"{}"'.format(item) for item in row]
+    values = ', '.join(row + ['0'])
+    cmd = """INSERT INTO {}({}) VALUES({})""".format(name, titles, values)
+    shared.db.execute(cmd)
 
 
 def remove_row(name, id):
