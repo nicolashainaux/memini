@@ -111,7 +111,8 @@ def table_to_text(name, pattern):
 
 
 def remove_table(name):
-    pass
+    assert_table_exists(name)
+    shared.db.execute('DROP TABLE {};'.format(name))
 
 
 def create_table(name, col_titles, content):
