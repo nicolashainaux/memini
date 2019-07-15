@@ -31,6 +31,7 @@ from vocashaker.core.database import assert_table_exists, assert_row_exists
 from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table, get_cols
 from vocashaker.core.database import add_row, remove_row, draw_rows
+from vocashaker.core.database import _timestamp
 from vocashaker.core.errors import NoSuchTableError
 from vocashaker.core.errors import NoSuchRowError
 from vocashaker.core.errors import ColumnsDoNotMatchError
@@ -186,6 +187,13 @@ def test_remove_row(testdb):
         == [('1', 'adventus,  us, m.', 'arrivée'),
             ('3', 'candidus,  a, um', 'blanc'),
             ('4', 'sol, solis, m', 'soleil')]
+
+
+def test_timestamp(testdb):
+    _timestamp('table1', 1)
+    blanks = shared.db.execute('SELECT id FROM table1 WHERE timestamp != 0;')\
+        .fetchall()
+    assert blanks == [(1, )]
 
 
 def test_draw_rows(testdb):

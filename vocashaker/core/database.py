@@ -157,5 +157,12 @@ def remove_row(name, id_):
     shared.db.execute(cmd)
 
 
+def _timestamp(name, id_):
+    assert_row_exists(name, id_)
+    cmd = """UPDATE {} SET timestamp = strftime('%Y-%m-%d %H:%M:%f')
+WHERE id = {};""".format(name, id_)
+    shared.db.execute(cmd)
+
+
 def draw_rows(name, nb):
     pass
