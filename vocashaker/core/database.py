@@ -68,6 +68,16 @@ def assert_table_exists(name):
     return True
 
 
+def assert_row_exists(name, id_):
+    """Raise an exception if no table or no such row in the table exists."""
+    assert_table_exists(name)
+    cmd = 'SELECT EXISTS(SELECT 1 FROM {} WHERE id={});'.format(name, id_)
+    row_exists = shared.db.execute(cmd).fetchall()[0][0]
+    if not row_exists:
+        raise NoSuchRowError(id_, name)
+    return True
+
+
 def rename_table(name, new_name):
     assert_table_exists(name)
     shared.db.execute('ALTER TABLE `{}` RENAME TO `{}`;'
@@ -142,11 +152,7 @@ def add_row(name, row):
 
 
 def remove_row(name, id_):
-    assert_table_exists(name)
-    cmd = 'SELECT EXISTS(SELECT 1 FROM {} WHERE id={});'.format(name, id_)
-    row_exists = shared.db.execute(cmd).fetchall()[0][0]
-    if not row_exists:
-        raise NoSuchRowError(id_, name)
+    assert_row_exists(name, id_)
     cmd = 'DELETE FROM {} WHERE id = {};'.format(name, id_)
     shared.db.execute(cmd)
 
