@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import sqlite3
+from decimal import Decimal
 from itertools import zip_longest, chain
 
 from . import shared
@@ -161,6 +162,17 @@ def _timestamp(name, id_):
     assert_row_exists(name, id_)
     cmd = """UPDATE {} SET timestamp = strftime('%Y-%m-%d %H:%M:%f')
 WHERE id = {};""".format(name, id_)
+    shared.db.execute(cmd)
+
+
+def _reset(name, ratio):
+    """Will reset only a fraction of the already timestamped entries."""
+    cmd = 'SELECT COUNT(*) from {} WHERE timestamp != 0;'.format(name)
+    n = tuple(shared.db.execute(cmd))[0][0]
+    lim = round(Decimal(ratio) * Decimal(n), 0)
+    cmd = """UPDATE {table_name} SET timestamp=0
+WHERE id IN (SELECT id FROM {table_name} WHERE timestamp != 0
+ORDER BY timestamp LIMIT {nb});""".format(table_name=name, nb=lim)
     shared.db.execute(cmd)
 
 

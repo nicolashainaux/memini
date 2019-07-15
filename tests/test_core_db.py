@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import sqlite3
+from decimal import Decimal
 
 import pytest
 
@@ -31,7 +32,7 @@ from vocashaker.core.database import assert_table_exists, assert_row_exists
 from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table, get_cols
 from vocashaker.core.database import add_row, remove_row, draw_rows
-from vocashaker.core.database import _timestamp
+from vocashaker.core.database import _timestamp, _reset
 from vocashaker.core.errors import NoSuchTableError
 from vocashaker.core.errors import NoSuchRowError
 from vocashaker.core.errors import ColumnsDoNotMatchError
@@ -194,6 +195,25 @@ def test_timestamp(testdb):
     stamped = shared.db.execute('SELECT id FROM table1 WHERE timestamp != 0;')\
         .fetchall()
     assert stamped == [(1, )]
+
+
+def test_reset(testdb):
+    _timestamp('table1', 1)
+    _timestamp('table1', 2)
+    _timestamp('table1', 3)
+    _timestamp('table1', 4)
+    _reset('table1', Decimal('0.25'))
+    stamped = shared.db.execute('SELECT id FROM table1 WHERE timestamp != 0;')\
+        .fetchall()
+    assert len(stamped) == 3
+    _timestamp('table1', 1)
+    _timestamp('table1', 2)
+    _timestamp('table1', 3)
+    _timestamp('table1', 4)
+    _reset('table1', Decimal('0.75'))
+    stamped = shared.db.execute('SELECT id FROM table1 WHERE timestamp != 0;')\
+        .fetchall()
+    assert len(stamped) == 1
 
 
 def test_draw_rows(testdb):
