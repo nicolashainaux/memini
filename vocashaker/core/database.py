@@ -20,7 +20,6 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import sqlite3
-from decimal import Decimal
 from itertools import zip_longest, chain
 
 from . import shared
@@ -171,14 +170,11 @@ WHERE id = {};""".format(table_name, id_)
     shared.db.execute(cmd)
 
 
-def _reset(table_name, ratio):
-    """Reset a fraction of the already timestamped entries."""
-    cmd = 'SELECT COUNT(*) from {} WHERE timestamp != 0;'.format(table_name)
-    n = tuple(shared.db.execute(cmd))[0][0]
-    lim = round(Decimal(ratio) * Decimal(n), 0)
+def _reset(table_name, n):
+    """Reset the n oldest timestamped entries."""
     cmd = """UPDATE {table_name} SET timestamp=0
 WHERE id IN (SELECT id FROM {table_name} WHERE timestamp != 0
-ORDER BY timestamp LIMIT {nb});""".format(table_name=table_name, nb=lim)
+ORDER BY timestamp LIMIT {n});""".format(table_name=table_name, n=n)
     shared.db.execute(cmd)
 
 

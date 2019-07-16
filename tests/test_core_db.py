@@ -20,7 +20,6 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import sqlite3
-from decimal import Decimal
 
 import pytest
 
@@ -202,7 +201,7 @@ def test_reset(testdb):
     _timestamp('table1', 2)
     _timestamp('table1', 3)
     _timestamp('table1', 4)
-    _reset('table1', Decimal('0.25'))
+    _reset('table1', 1)
     stamped = shared.db.execute('SELECT id FROM table1 WHERE timestamp != 0;')\
         .fetchall()
     assert len(stamped) == 3
@@ -210,7 +209,7 @@ def test_reset(testdb):
     _timestamp('table1', 2)
     _timestamp('table1', 3)
     _timestamp('table1', 4)
-    _reset('table1', Decimal('0.75'))
+    _reset('table1', 3)
     stamped = shared.db.execute('SELECT id FROM table1 WHERE timestamp != 0;')\
         .fetchall()
     assert len(stamped) == 1
