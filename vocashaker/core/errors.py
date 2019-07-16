@@ -65,3 +65,11 @@ class ColumnsDoNotMatchError(VocaShakerError):
         msg = '"{}" requires {} columns, but "{}" has {} columns ({}).'\
             .format(data, found, table_name, expected, col_list)
         super().__init__(msg)
+
+
+class TooManyRowsRequiredError(VocaShakerError):
+    """When the user requires more rows than a table does contain."""
+    def __init__(self, n_required, n_rows, table_name):
+        msg = '{} rows are required from "{}", but it only contains {} rows.'\
+            .format(n_required, table_name, n_rows)
+        super().__init__(msg)
