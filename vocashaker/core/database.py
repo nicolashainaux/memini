@@ -67,12 +67,16 @@ def assert_table_exists(name):
     return True
 
 
+def _exec(table_name, cmd):
+    assert_table_exists(table_name)
+    return shared.db.execute(cmd)
+
+
 def assert_row_exists(table_name, id_):
     """Raise an exception if no table or no such row in the table exists."""
-    assert_table_exists(table_name)
     cmd = 'SELECT EXISTS(SELECT 1 FROM {} WHERE id={});'\
         .format(table_name, id_)
-    row_exists = shared.db.execute(cmd).fetchall()[0][0]
+    row_exists = _exec(table_name, cmd).fetchall()[0][0]
     if not row_exists:
         raise NoSuchRowError(id_, table_name)
     return True
@@ -80,32 +84,26 @@ def assert_row_exists(table_name, id_):
 
 def rename_table(name, new_name):
     """Change a table's name."""
-    assert_table_exists(name)
-    shared.db.execute('ALTER TABLE `{}` RENAME TO `{}`;'
-                      .format(name, new_name))
+    _exec(name, 'ALTER TABLE `{}` RENAME TO `{}`;'.format(name, new_name))
 
 
 def get_cols(table_name, include_id=False):
     """List all columns of a given table."""
-    assert_table_exists(table_name)
-    cursor = shared.db.execute('SELECT * from {};'.format(table_name))
+    cursor = _exec(table_name, 'SELECT * from {};'.format(table_name))
     start = 0 if include_id else 1
     return [_[0] for _ in cursor.description][start:-1]
 
 
 def get_rows_nb(table_name):
     """Return rows' number of a given table."""
-    assert_table_exists(table_name)
     cmd = 'SELECT COUNT(*) FROM {};'.format(table_name)
-    return tuple(shared.db.execute(cmd))[0][0]
+    return tuple(_exec(table_name, cmd))[0][0]
 
 
 def get_table(name):
     """Return a list of all table's lines."""
-    assert_table_exists(name)
     cols = ','.join(get_cols(name, include_id=True))
-    content = shared.db.execute(
-        'SELECT {} FROM {};'.format(cols, name)).fetchall()
+    content = _exec(name, 'SELECT {} FROM {};'.format(cols, name)).fetchall()
     content = [(str(t[0]), ) + t[1:] for t in content]
     return content
 
@@ -130,8 +128,7 @@ def table_to_text(name, pattern):
 
 def remove_table(name):
     """Remove table name."""
-    assert_table_exists(name)
-    shared.db.execute('DROP TABLE {};'.format(name))
+    _exec(name, 'DROP TABLE {};'.format(name))
 
 
 def create_table(name, col_titles, content):
@@ -149,7 +146,7 @@ def create_table(name, col_titles, content):
 
 def add_row(table_name, row):
     """Add row to the table."""
-    cols = get_cols(table_name)  # get_cols() will check that table exists
+    cols = get_cols(table_name)
     if len(cols) != len(row):
         data = ["'{}'".format(item) for item in row]
         data = ', '.join(data)
@@ -179,11 +176,10 @@ WHERE id = {};""".format(table_name, id_)
 
 def _reset(table_name, n):
     """Reset the n oldest timestamped entries."""
-    assert_table_exists(table_name)
     cmd = """UPDATE {table_name} SET timestamp=0
 WHERE id IN (SELECT id FROM {table_name} WHERE timestamp != 0
 ORDER BY timestamp LIMIT {n});""".format(table_name=table_name, n=n)
-    shared.db.execute(cmd)
+    _exec(table_name, cmd)
 
 
 def _full_reset(table_name):
@@ -193,18 +189,17 @@ def _full_reset(table_name):
 
 def draw_rows(table_name, n, oldest_prevail=False):
     """Return n rows, randomly chosen."""
-    # get_rows_nb() will check that table exists
     rows_nb = get_rows_nb(table_name)
     if n > rows_nb:
         raise TooManyRowsRequiredError(n, rows_nb, table_name)
     timestamps_clause = ''
     if oldest_prevail:  # If timestamps must be taken into account
         cmd = 'SELECT COUNT(*) FROM {} WHERE timestamp=0;'.format(table_name)
-        free_nb = tuple(shared.db.execute(cmd))[0][0]
+        free_nb = tuple(_exec(table_name, cmd))[0][0]
         if n > free_nb:
             _reset(table_name, n - free_nb)
         timestamps_clause = 'WHERE timestamp=0 '
     cols_list = ','.join(get_cols(table_name))
     cmd = 'SELECT {} FROM {} {}ORDER BY random() LIMIT {};'\
         .format(cols_list, table_name, timestamps_clause, n)
-    return shared.db.execute(cmd).fetchall()
+    return _exec(table_name, cmd).fetchall()
