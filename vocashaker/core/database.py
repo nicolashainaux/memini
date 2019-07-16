@@ -49,9 +49,7 @@ class Manager:
 
 
 def list_tables():
-    """
-    List all available tables.
-    """
+    """List all available tables."""
     results = shared.db.execute(
         'SELECT name FROM sqlite_master WHERE type=\'table\';')
     return [_[0] for _ in results.fetchall()]
@@ -80,15 +78,14 @@ def assert_row_exists(name, id_):
 
 
 def rename_table(name, new_name):
+    """Change a table's name."""
     assert_table_exists(name)
     shared.db.execute('ALTER TABLE `{}` RENAME TO `{}`;'
                       .format(name, new_name))
 
 
 def get_cols(name, include_id=False):
-    """
-    List all columns of a given table.
-    """
+    """List all columns of a given table."""
     assert_table_exists(name)
     cursor = shared.db.execute('SELECT * from {};'.format(name))
     start = 0 if include_id else 1
@@ -96,6 +93,7 @@ def get_cols(name, include_id=False):
 
 
 def get_table(name):
+    """Return a list of all table's lines."""
     assert_table_exists(name)
     cols = ','.join(get_cols(name, include_id=True))
     content = shared.db.execute(
@@ -105,6 +103,7 @@ def get_table(name):
 
 
 def table_to_text(name, pattern):
+    """Return table name content using provided pattern."""
     content = get_table(name)
     content = [c[1:] for c in content]
     col_titles = get_cols(name)
@@ -122,11 +121,13 @@ def table_to_text(name, pattern):
 
 
 def remove_table(name):
+    """Remove table name."""
     assert_table_exists(name)
     shared.db.execute('DROP TABLE {};'.format(name))
 
 
 def create_table(name, col_titles, content):
+    """Create table name using given col_titles and content."""
     titles = ' TEXT, '.join(col_titles) + ' TEXT, '
     cmd = 'CREATE TABLE {} (id INTEGER PRIMARY KEY, {}timestamp INTEGER)'\
         .format(name, titles)
@@ -139,6 +140,7 @@ def create_table(name, col_titles, content):
 
 
 def add_row(name, row):
+    """Add row to table name."""
     assert_table_exists(name)
     cols = get_cols(name)
     if len(cols) != len(row):
@@ -153,12 +155,14 @@ def add_row(name, row):
 
 
 def remove_row(name, id_):
+    """Remove row matching id_ in table name."""
     assert_row_exists(name, id_)
     cmd = 'DELETE FROM {} WHERE id = {};'.format(name, id_)
     shared.db.execute(cmd)
 
 
 def _timestamp(name, id_):
+    """Set timestamp to entry matching id_ in table name."""
     assert_row_exists(name, id_)
     cmd = """UPDATE {} SET timestamp = strftime('%Y-%m-%d %H:%M:%f')
 WHERE id = {};""".format(name, id_)
@@ -166,7 +170,7 @@ WHERE id = {};""".format(name, id_)
 
 
 def _reset(name, ratio):
-    """Will reset only a fraction of the already timestamped entries."""
+    """Reset a fraction of the already timestamped entries."""
     cmd = 'SELECT COUNT(*) from {} WHERE timestamp != 0;'.format(name)
     n = tuple(shared.db.execute(cmd))[0][0]
     lim = round(Decimal(ratio) * Decimal(n), 0)
