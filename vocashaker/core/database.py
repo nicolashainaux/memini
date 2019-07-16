@@ -149,8 +149,7 @@ def create_table(name, col_titles, content):
 
 def add_row(table_name, row):
     """Add row to the table."""
-    assert_table_exists(table_name)
-    cols = get_cols(table_name)
+    cols = get_cols(table_name)  # get_cols() will check that table exists
     if len(cols) != len(row):
         data = ["'{}'".format(item) for item in row]
         data = ', '.join(data)
@@ -180,6 +179,7 @@ WHERE id = {};""".format(table_name, id_)
 
 def _reset(table_name, n):
     """Reset the n oldest timestamped entries."""
+    assert_table_exists(table_name)
     cmd = """UPDATE {table_name} SET timestamp=0
 WHERE id IN (SELECT id FROM {table_name} WHERE timestamp != 0
 ORDER BY timestamp LIMIT {n});""".format(table_name=table_name, n=n)
@@ -193,7 +193,7 @@ def _full_reset(table_name):
 
 def draw_rows(table_name, n, oldest_prevail=False):
     """Return n rows, randomly chosen."""
-    assert_table_exists(table_name)
+    # get_rows_nb() will check that table exists
     rows_nb = get_rows_nb(table_name)
     if n > rows_nb:
         raise TooManyRowsRequiredError(n, rows_nb, table_name)
