@@ -27,7 +27,7 @@ from vocashaker.core import shared
 from vocashaker.core.env import TEST_DB_PATH
 from vocashaker.core.database import Manager
 from vocashaker.core.database import list_tables, table_exists
-from vocashaker.core.database import assert_table_exists, assert_row_exists
+from vocashaker.core.database import _assert_table_exists, _assert_row_exists
 from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table, get_cols
 from vocashaker.core.database import add_row, remove_row, draw_rows
@@ -73,16 +73,16 @@ def test_table_exists(testdb):
 
 
 def test_assert_table_exists(testdb):
-    assert assert_table_exists('table1')
+    assert _assert_table_exists('table1')
     with pytest.raises(NoSuchTableError) as excinfo:
-        assert_table_exists('table4')
+        _assert_table_exists('table4')
     assert str(excinfo.value) == 'Cannot find a table named "table4"'
 
 
 def test_assert_row_exists(testdb):
-    assert assert_row_exists('table1', 1)
+    assert _assert_row_exists('table1', 1)
     with pytest.raises(NoSuchRowError) as excinfo:
-        assert_row_exists('table1', 10)
+        _assert_row_exists('table1', 10)
     assert str(excinfo.value) == 'Cannot find a row number 10 in "table1"'
 
 

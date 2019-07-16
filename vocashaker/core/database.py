@@ -60,26 +60,35 @@ def table_exists(name):
     return name in list_tables()
 
 
-def assert_table_exists(name):
+def _assert_table_exists(name):
     """Raise an exception if no table of this name exists in the database."""
     if not table_exists(name):
         raise NoSuchTableError(name)
     return True
 
 
-def _exec(table_name, cmd):
-    assert_table_exists(table_name)
-    return shared.db.execute(cmd)
-
-
-def assert_row_exists(table_name, id_):
-    """Raise an exception if no table or no such row in the table exists."""
+def _assert_row_exists(table_name, id_):
+    """Raise an exception if no such row in the table exists."""
     cmd = 'SELECT EXISTS(SELECT 1 FROM {} WHERE id={});'\
         .format(table_name, id_)
-    row_exists = _exec(table_name, cmd).fetchall()[0][0]
+    row_exists = shared.db.execute(cmd).fetchall()[0][0]
     if not row_exists:
         raise NoSuchRowError(id_, table_name)
     return True
+
+
+def _exec(table_name, cmd, id_=None):
+    """
+    Safe execution of the sql command on existing tables: start by checking
+    table exists, then possibly the row id_ too, and finally execute the
+    command. If table_name is provided as None, then no check is run, the
+    command is simply directly executed.
+    """
+    if table_name is not None:
+        _assert_table_exists(table_name)
+        if id_ is not None:
+            _assert_row_exists(table_name, id_)
+    return shared.db.execute(cmd)
 
 
 def rename_table(name, new_name):
@@ -136,7 +145,7 @@ def create_table(name, col_titles, content):
     titles = ' TEXT, '.join(col_titles) + ' TEXT, '
     cmd = 'CREATE TABLE {} (id INTEGER PRIMARY KEY, {}timestamp INTEGER)'\
         .format(name, titles)
-    shared.db.execute(cmd)
+    _exec(None, cmd)
     titles = ', '.join(col_titles) + ', timestamp'
     qmarks = '?, ' * len(col_titles) + '?'
     cmd = 'INSERT INTO {}({}) VALUES({})'.format(name, titles, qmarks)
@@ -156,22 +165,20 @@ def add_row(table_name, row):
     row = ['"{}"'.format(item) for item in row]
     values = ', '.join(row + ['0'])
     cmd = 'INSERT INTO {}({}) VALUES({})'.format(table_name, titles, values)
-    shared.db.execute(cmd)
+    _exec(table_name, cmd)
 
 
 def remove_row(table_name, id_):
     """Remove row matching id_ in the table."""
-    assert_row_exists(table_name, id_)
     cmd = 'DELETE FROM {} WHERE id = {};'.format(table_name, id_)
-    shared.db.execute(cmd)
+    _exec(table_name, cmd, id_=id_)
 
 
 def _timestamp(table_name, id_):
     """Set timestamp to entry matching id_ in the table."""
-    assert_row_exists(table_name, id_)
     cmd = """UPDATE {} SET timestamp = strftime('%Y-%m-%d %H:%M:%f')
 WHERE id = {};""".format(table_name, id_)
-    shared.db.execute(cmd)
+    _exec(table_name, cmd, id_=id_)
 
 
 def _reset(table_name, n):
