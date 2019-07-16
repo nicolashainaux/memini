@@ -31,6 +31,7 @@ from vocashaker.core.database import assert_table_exists, assert_row_exists
 from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table, get_cols
 from vocashaker.core.database import add_row, remove_row, draw_rows
+from vocashaker.core.database import get_rows_nb
 from vocashaker.core.database import _timestamp, _reset
 from vocashaker.core.errors import NoSuchTableError
 from vocashaker.core.errors import NoSuchRowError
@@ -99,6 +100,10 @@ def test_get_cols(testdb):
     assert get_cols('table1', include_id=True) == ['id', 'col1', 'col2']
     assert get_cols('table2', include_id=True) == ['id', 'col1', 'col2',
                                                    'col3']
+
+
+def test_get_rows_nb(testdb):
+    assert get_rows_nb('table1') == 4
 
 
 def test_get_table(testdb):

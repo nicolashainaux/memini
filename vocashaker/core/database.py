@@ -92,6 +92,13 @@ def get_cols(table_name, include_id=False):
     return [_[0] for _ in cursor.description][start:-1]
 
 
+def get_rows_nb(table_name):
+    """Return rows' number of a given table."""
+    assert_table_exists(table_name)
+    cmd = 'SELECT COUNT(*) FROM {};'.format(table_name)
+    return tuple(shared.db.execute(cmd))[0][0]
+
+
 def get_table(name):
     """Return a list of all table's lines."""
     assert_table_exists(name)
