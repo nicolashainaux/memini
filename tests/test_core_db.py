@@ -32,7 +32,7 @@ from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table, get_cols
 from vocashaker.core.database import add_row, remove_row, draw_rows
 from vocashaker.core.database import get_rows_nb
-from vocashaker.core.database import _timestamp, _reset
+from vocashaker.core.database import _timestamp, _reset, _full_reset
 from vocashaker.core.errors import NoSuchTableError
 from vocashaker.core.errors import NoSuchRowError
 from vocashaker.core.errors import ColumnsDoNotMatchError
@@ -218,6 +218,13 @@ def test_reset(testdb):
     stamped = shared.db.execute('SELECT id FROM table1 WHERE timestamp != 0;')\
         .fetchall()
     assert len(stamped) == 1
+    _timestamp('table1', 1)
+    _timestamp('table1', 2)
+    _timestamp('table1', 3)
+    _full_reset('table1')
+    stamped = shared.db.execute('SELECT id FROM table1 WHERE timestamp != 0;')\
+        .fetchall()
+    assert len(stamped) == 0
 
 
 def test_draw_rows(testdb):

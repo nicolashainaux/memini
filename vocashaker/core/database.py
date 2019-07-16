@@ -185,5 +185,10 @@ ORDER BY timestamp LIMIT {n});""".format(table_name=table_name, n=n)
     shared.db.execute(cmd)
 
 
+def _full_reset(table_name):
+    """Reset all entries."""
+    _reset(table_name, get_rows_nb(table_name))
+
+
 def draw_rows(table_name, nb):
     pass
