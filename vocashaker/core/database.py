@@ -24,6 +24,7 @@ from itertools import zip_longest, chain
 
 from . import shared
 from .errors import NoSuchTableError, ColumnsDoNotMatchError, NoSuchRowError
+from .errors import TooManyRowsRequiredError
 from .parser import parse_pattern
 
 
@@ -190,5 +191,20 @@ def _full_reset(table_name):
     _reset(table_name, get_rows_nb(table_name))
 
 
-def draw_rows(table_name, nb):
-    pass
+def draw_rows(table_name, n, oldest_prevail=False):
+    """Return n rows, randomly chosen."""
+    assert_table_exists(table_name)
+    rows_nb = get_rows_nb(table_name)
+    if n > rows_nb:
+        raise TooManyRowsRequiredError(n, rows_nb, table_name)
+    timestamps_clause = ''
+    if oldest_prevail:  # If timestamps must be taken into account
+        cmd = 'SELECT COUNT(*) FROM {} WHERE timestamp=0;'.format(table_name)
+        free_nb = tuple(shared.db.execute(cmd))[0][0]
+        if n > free_nb:
+            _reset(table_name, n - free_nb)
+        timestamps_clause = 'WHERE timestamp=0 '
+    cols_list = ','.join(get_cols(table_name))
+    cmd = 'SELECT {} FROM {} {}ORDER BY random() LIMIT {};'\
+        .format(cols_list, table_name, timestamps_clause, n)
+    return shared.db.execute(cmd).fetchall()

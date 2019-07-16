@@ -36,6 +36,7 @@ from vocashaker.core.database import _timestamp, _reset, _full_reset
 from vocashaker.core.errors import NoSuchTableError
 from vocashaker.core.errors import NoSuchRowError
 from vocashaker.core.errors import ColumnsDoNotMatchError
+from vocashaker.core.errors import TooManyRowsRequiredError
 
 
 @pytest.fixture
@@ -231,6 +232,23 @@ def test_draw_rows(testdb):
     with pytest.raises(NoSuchTableError) as excinfo:
         draw_rows('table3', 2)
     assert str(excinfo.value) == 'Cannot find a table named "table3"'
+    with pytest.raises(TooManyRowsRequiredError) as excinfo:
+        draw_rows('table1', 5)
+    assert str(excinfo.value) == '5 rows are required from "table1", '\
+        'but it only contains 4 rows.'
     result = draw_rows('table1', 2)
     assert len(result) == 2
-    # Check there are two timestamped data
+    assert all([type(r) == tuple for r in result])
+    assert all([len(r) == 2 for r in result])
+    _full_reset('table1')
+    _timestamp('table1', 1)
+    _timestamp('table1', 2)
+    result = draw_rows('table1', 2, oldest_prevail=True)
+    assert ('candidus,  a, um', 'blanc') in result
+    assert ('sol, solis, m', 'soleil') in result
+    _full_reset('table1')
+    _timestamp('table1', 1)
+    _timestamp('table1', 2)
+    _timestamp('table1', 3)
+    result = draw_rows('table1', 2, oldest_prevail=True)
+    assert ('sol, solis, m', 'soleil') in result
