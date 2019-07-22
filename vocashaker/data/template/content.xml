@@ -179,7 +179,7 @@
                     </table:table-cell>
                     <table:table-cell table:style-name="Tableau1.B2" office:value-type="string">
                         <text:p text:style-name="P4">
-                            <text:a xlink:type="simple" xlink:href="relatorio://row.col1" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
+                            <text:a xlink:type="simple" xlink:href="relatorio://row.col2" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
                                 <text:span text:style-name="T5">row.col2</text:span>
                             </text:a>
                         </text:p>
