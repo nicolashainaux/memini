@@ -46,10 +46,16 @@
         <style:style style:name="Tableau1.B1" style:family="table-cell">
             <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border="0.5pt solid #000000" style:writing-mode="page"><style:background-image/></style:table-cell-properties>
         </style:style>
+        <style:style style:name="Tableau1.C1" style:family="table-cell">
+            <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border="0.5pt solid #000000" style:writing-mode="page"><style:background-image/></style:table-cell-properties>
+        </style:style>
         <style:style style:name="Tableau1.A2" style:family="table-cell">
             <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border-left="0.5pt solid #000000" fo:border-right="none" fo:border-top="none" fo:border-bottom="0.5pt solid #000000" style:writing-mode="page"><style:background-image/></style:table-cell-properties>
         </style:style>
         <style:style style:name="Tableau1.B2" style:family="table-cell">
+            <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border-left="0.5pt solid #000000" fo:border-right="0.5pt solid #000000" fo:border-top="none" fo:border-bottom="0.5pt solid #000000" style:writing-mode="page"><style:background-image/></style:table-cell-properties>
+        </style:style>
+        <style:style style:name="Tableau1.C2" style:family="table-cell">
             <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border-left="0.5pt solid #000000" fo:border-right="0.5pt solid #000000" fo:border-top="none" fo:border-bottom="0.5pt solid #000000" style:writing-mode="page"><style:background-image/></style:table-cell-properties>
         </style:style>
         <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties officeooo:rsid="001691e6" officeooo:paragraph-rsid="001691e6"/></style:style>
@@ -143,13 +149,16 @@
         <office:text>
             <text:sequence-decls><text:sequence-decl text:display-outline-level="0" text:name="Illustration"/><text:sequence-decl text:display-outline-level="0" text:name="Table"/><text:sequence-decl text:display-outline-level="0" text:name="Text"/><text:sequence-decl text:display-outline-level="0" text:name="Drawing"/><text:sequence-decl text:display-outline-level="0" text:name="Figure"/></text:sequence-decls>
             <text:p text:style-name="P1">__TITLE__</text:p><text:p text:style-name="Standard"/>
-            <table:table table:name="Tableau1" table:style-name="Tableau1"><table:table-column table:style-name="Tableau1.A" table:number-columns-repeated="2"/>
+            <table:table table:name="Tableau1" table:style-name="Tableau1"><table:table-column table:style-name="Tableau1.A" table:number-columns-repeated="3"/>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau1.A1" office:value-type="string">
                         <text:p text:style-name="P2">__COL1__</text:p>
                     </table:table-cell>
                     <table:table-cell table:style-name="Tableau1.B1" office:value-type="string">
                         <text:p text:style-name="P2">__COL2__</text:p>
+                    </table:table-cell>
+                    <table:table-cell table:style-name="Tableau1.C1" office:value-type="string">
+                        <text:p text:style-name="P2">__COL3__</text:p>
                     </table:table-cell>
                 </table:table-row>
                 <table:table-row>
@@ -168,6 +177,7 @@
                         </text:p>
                     </table:table-cell>
                     <table:table-cell table:style-name="Tableau1.B2" office:value-type="string"><text:p text:style-name="P3"/></table:table-cell>
+                    <table:table-cell table:style-name="Tableau1.C2" office:value-type="string"><text:p text:style-name="P3"/></table:table-cell>
                 </table:table-row>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau1.A2" office:value-type="string">
@@ -184,6 +194,13 @@
                             </text:a>
                         </text:p>
                     </table:table-cell>
+                    <table:table-cell table:style-name="Tableau1.C2" office:value-type="string">
+                        <text:p text:style-name="P4">
+                            <text:a xlink:type="simple" xlink:href="relatorio://row.col3" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
+                                <text:span text:style-name="T5">row.col3</text:span>
+                            </text:a>
+                        </text:p>
+                    </table:table-cell>
                 </table:table-row>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau1.A2" office:value-type="string">
@@ -192,6 +209,7 @@
                         </text:p>
                     </table:table-cell>
                     <table:table-cell table:style-name="Tableau1.B2" office:value-type="string"><text:p text:style-name="P3"/></table:table-cell>
+                    <table:table-cell table:style-name="Tableau1.C2" office:value-type="string"><text:p text:style-name="P3"/></table:table-cell>
                 </table:table-row>
             </table:table><text:p text:style-name="Standard"/><text:p text:style-name="Standard"/><text:p text:style-name="Standard"/></office:text>
     </office:body>
