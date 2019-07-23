@@ -39,19 +39,19 @@
     <office:font-face-decls><style:font-face style:name="Ubuntu" svg:font-family="Ubuntu"/><style:font-face style:name="Droid Sans Devanagari1" svg:font-family="&apos;Droid Sans Devanagari&apos;" style:font-family-generic="swiss"/><style:font-face style:name="Ubuntu1" svg:font-family="Ubuntu" style:font-pitch="variable"/><style:font-face style:name="Liberation Serif" svg:font-family="&apos;Liberation Serif&apos;" style:font-family-generic="roman" style:font-pitch="variable"/><style:font-face style:name="Droid Sans Devanagari" svg:font-family="&apos;Droid Sans Devanagari&apos;" style:font-family-generic="system" style:font-pitch="variable"/><style:font-face style:name="Lucida Sans Unicode" svg:font-family="&apos;Lucida Sans Unicode&apos;" style:font-family-generic="system" style:font-pitch="variable"/></office:font-face-decls>
     <office:automatic-styles>
         <style:style style:name="Tableau1" style:family="table"><style:table-properties style:width="19.6cm" table:align="margins"/></style:style>
-        <style:style style:name="Tableau1.A" style:family="table-column"><style:table-column-properties style:column-width="9.8cm" style:rel-column-width="32767*"/></style:style>
+        <style:style style:name="Tableau1.A" style:family="table-column"><style:table-column-properties style:column-width="__COLWIDTH_CM__" style:rel-column-width="__COLWIDTH_PX__*"/></style:style>
         <style:style style:name="Tableau1.A1" style:family="table-cell">
             <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border-left="0.5pt solid #000000" fo:border-right="none" fo:border-top="0.5pt solid #000000" fo:border-bottom="0.5pt solid #000000" style:writing-mode="page"><style:background-image/></style:table-cell-properties>
         </style:style>
-        <style:style style:name="Tableau1.B1" style:family="table-cell">
+        <style:style style:name="Tableau1.__LASTCOL_ID__1" style:family="table-cell">
             <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border="0.5pt solid #000000" style:writing-mode="page"><style:background-image/></style:table-cell-properties>
-        </style:style>__EXTRA_STYLES1__
+        </style:style>
         <style:style style:name="Tableau1.A2" style:family="table-cell">
             <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border-left="0.5pt solid #000000" fo:border-right="none" fo:border-top="none" fo:border-bottom="0.5pt solid #000000" style:writing-mode="page"><style:background-image/></style:table-cell-properties>
         </style:style>
-        <style:style style:name="Tableau1.B2" style:family="table-cell">
+        <style:style style:name="Tableau1.__LASTCOL_ID__2" style:family="table-cell">
             <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border-left="0.5pt solid #000000" fo:border-right="0.5pt solid #000000" fo:border-top="none" fo:border-bottom="0.5pt solid #000000" style:writing-mode="page"><style:background-image/></style:table-cell-properties>
-        </style:style>__EXTRA_STYLES2__
+        </style:style>
         <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties officeooo:rsid="001691e6" officeooo:paragraph-rsid="001691e6"/></style:style>
         <style:style style:name="P2" style:family="paragraph" style:parent-style-name="Table_20_Contents"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties
             fo:color="#000000"
@@ -135,8 +135,6 @@
             style:font-weight-complex="normal"
             style:text-overline-style="none"
             style:text-overline-color="font-color"/></style:style>
-        <style:style style:name="T3" style:family="text"><style:text-properties fo:font-style="normal" style:font-style-asian="normal" style:font-style-complex="normal"/></style:style>
-        <style:style style:name="T4" style:family="text"><style:text-properties fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic"/></style:style>
         <style:style style:name="T5" style:family="text"><style:text-properties fo:font-style="italic" officeooo:rsid="001691e6" style:font-style-asian="italic" style:font-style-complex="italic"/></style:style>
     </office:automatic-styles>
     <office:body>
@@ -147,27 +145,14 @@
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau1.A1" office:value-type="string">
                         <text:p text:style-name="P2">__COL1__</text:p>
-                    </table:table-cell>
-                    <table:table-cell table:style-name="Tableau1.B1" office:value-type="string">
-                        <text:p text:style-name="P2">__COL2__</text:p>
-                    </table:table-cell>__EXTRA_TITLE_CELLS__
+                    </table:table-cell>__MORE_TITLE_CELLS__
                 </table:table-row>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau1.A2" office:value-type="string">
                         <text:p text:style-name="P3">
-                            <text:a xlink:type="simple" xlink:href="relatorio://for%20each=%22line%20in%20o.lines%22" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">for each=&quot;</text:a>
-                            <text:a xlink:type="simple" xlink:href="relatorio://for%20each=%22line%20in%20o.lines%22" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
-                                <text:span text:style-name="T1">row</text:span>
-                            </text:a>
-                            <text:a xlink:type="simple" xlink:href="relatorio://for%20each=%22line%20in%20o.lines%22" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
-                                in o.</text:a>
-                            <text:a xlink:type="simple" xlink:href="relatorio://for%20each=%22line%20in%20o.lines%22" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
-                                <text:span text:style-name="T1">row</text:span>
-                            </text:a>
-                            <text:a xlink:type="simple" xlink:href="relatorio://for%20each=%22line%20in%20o.lines%22" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">s&quot;</text:a>
+                            <text:a xlink:type="simple" xlink:href="relatorio://for%20each=%22line%20in%20o.lines%22" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">for each=&quot;row in o.rows&quot;</text:a>
                         </text:p>
-                    </table:table-cell>
-                    <table:table-cell table:style-name="Tableau1.B2" office:value-type="string"><text:p text:style-name="P3"/></table:table-cell>__EXTRA_ROW1_CELLS__
+                    </table:table-cell>__MORE_ROW1_CELLS__
                 </table:table-row>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau1.A2" office:value-type="string">
@@ -176,22 +161,14 @@
                                 <text:span text:style-name="T5">row.col1</text:span>
                             </text:a>
                         </text:p>
-                    </table:table-cell>
-                    <table:table-cell table:style-name="Tableau1.B2" office:value-type="string">
-                        <text:p text:style-name="P4">
-                            <text:a xlink:type="simple" xlink:href="relatorio://row.col2" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
-                                <text:span text:style-name="T5">row.col2</text:span>
-                            </text:a>
-                        </text:p>
-                    </table:table-cell>__EXTRA_ROW2_CELLS__
+                    </table:table-cell>__MORE_ROW2_CELLS__
                 </table:table-row>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau1.A2" office:value-type="string">
                         <text:p text:style-name="P3">
                             <text:a xlink:type="simple" xlink:href="relatorio:///for" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">/for</text:a>
                         </text:p>
-                    </table:table-cell>
-                    <table:table-cell table:style-name="Tableau1.B2" office:value-type="string"><text:p text:style-name="P3"/></table:table-cell>__EXTRA_ROW3_CELLS__
+                    </table:table-cell>__MORE_ROW3_CELLS__
                 </table:table-row>
             </table:table><text:p text:style-name="Standard"/><text:p text:style-name="Standard"/><text:p text:style-name="Standard"/></office:text>
     </office:body>
