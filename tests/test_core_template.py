@@ -22,30 +22,30 @@
 # import pytest
 from decimal import Decimal
 
-from vocashaker.core.template import colwidth, lastcolid, more_row_cells
+from vocashaker.core.template import _colwidth, _lastcolid, _more_row_cells
 
 
 def test_colwidth():
-    assert colwidth(4) == (Decimal('4.9'), 16384)
+    assert _colwidth(4) == (Decimal('4.9'), 16384)
 
 
 def test_lastcolid():
-    assert lastcolid(4) == 'D'
+    assert _lastcolid(4) == 'D'
 
 
 def test_more_row_cells():
-    assert more_row_cells(0, 1, 2) == """
+    assert _more_row_cells(0, 1, 2) == """
 <table:table-cell table:style-name="Tableau1.B1" office:value-type="string">
     <text:p text:style-name="P5">__COL2__</text:p>
 </table:table-cell>"""
-    assert more_row_cells(0, 2, 3) == """
+    assert _more_row_cells(0, 2, 3) == """
 <table:table-cell table:style-name="Tableau2.A1" office:value-type="string">
     <text:p text:style-name="P6">__COL2__</text:p>
 </table:table-cell>
 <table:table-cell table:style-name="Tableau2.C1" office:value-type="string">
     <text:p text:style-name="P6">__COL3__</text:p>
 </table:table-cell>"""
-    assert more_row_cells(0, 1, 4) == """
+    assert _more_row_cells(0, 1, 4) == """
 <table:table-cell table:style-name="Tableau1.A1" office:value-type="string">
     <text:p text:style-name="P5">__COL2__</text:p>
 </table:table-cell>
