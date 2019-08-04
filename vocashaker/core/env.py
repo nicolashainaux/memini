@@ -48,3 +48,11 @@ USER_DB_PATH = os.path.join(USER_LOCAL_SHARE, USER_DB_NAME)
 TESTS_DIR = os.path.join(ROOTDIR[:-len(__myname__) - 1], 'tests')
 TESTS_DATADIR = os.path.join(TESTS_DIR, 'data')
 TEST_DB_PATH = os.path.join(TESTS_DATADIR, 'test.db')
+TEST_PREBUILT_CONTENTXML_2COLS_PATH = \
+    os.path.join(TESTS_DATADIR, 'prebuilt_content2.xml')
+TEST_PREBUILT_CONTENTXML_3COLS_PATH = \
+    os.path.join(TESTS_DATADIR, 'prebuilt_content3.xml')
+TEST_PREBUILT_CONTENTXML_4COLS_PATH = \
+    os.path.join(TESTS_DATADIR, 'prebuilt_content4.xml')
+TEST_BUILT_TABLE1_CONTENTXML_PATH = \
+    os.path.join(TESTS_DATADIR, 'built_table1_contentxml.xml')
