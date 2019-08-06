@@ -26,7 +26,7 @@ import sqlite3
 import pytest
 
 from vocashaker.core import shared, template
-from vocashaker.core.env import TEST_DB_PATH, CONTENTXML_PATH
+from vocashaker.core.env import TEST_DB_PATH
 from vocashaker.core.env import TEST_BUILT_TABLE1_CONTENTXML_PATH
 from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT
 
@@ -58,9 +58,7 @@ def test_exists(mocker):
 
 
 def test_prepare_content(testdb):
-    template._prepare_content('table1')
-    with open(CONTENTXML_PATH, 'r') as f:
-        created = f.read()
+    created = template._prepare_content('table1')
     with open(TEST_BUILT_TABLE1_CONTENTXML_PATH, 'r') as f:
         expected = f.read()
     assert created == expected
@@ -68,4 +66,5 @@ def test_prepare_content(testdb):
 
 # @mock.patch('tarfile.open')
 # def test_create(testdb, mock_tarfile_open):
-#     template.create('table1')
+    #     template.create('table1')
+    # assert not os.path.isfile(CONTENTXML_PATH)

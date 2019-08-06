@@ -39,7 +39,7 @@
     <office:font-face-decls><style:font-face style:name="Ubuntu" svg:font-family="Ubuntu"/><style:font-face style:name="Droid Sans Devanagari1" svg:font-family="&apos;Droid Sans Devanagari&apos;" style:font-family-generic="swiss"/><style:font-face style:name="Ubuntu1" svg:font-family="Ubuntu" style:font-pitch="variable"/><style:font-face style:name="Droid Sans Devanagari" svg:font-family="&apos;Droid Sans Devanagari&apos;" style:font-family-generic="system" style:font-pitch="variable"/><style:font-face style:name="Lucida Sans Unicode" svg:font-family="&apos;Lucida Sans Unicode&apos;" style:font-family-generic="system" style:font-pitch="variable"/></office:font-face-decls>
     <office:automatic-styles>
         <style:style style:name="Tableau1" style:family="table"><style:table-properties style:width="19.6cm" table:align="margins"/></style:style>
-        <style:style style:name="Tableau1.A" style:family="table-column"><style:table-column-properties style:column-width="9.8cm" style:rel-column-width="5556*"/></style:style>
+        <style:style style:name="Tableau1.A" style:family="table-column"><style:table-column-properties style:column-width="9.8cm" style:rel-column-width="32767*"/></style:style>
         <style:style style:name="Tableau1.A1" style:family="table-cell">
             <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border-left="0.5pt solid #000000" fo:border-right="none" fo:border-top="0.5pt solid #000000" fo:border-bottom="0.5pt solid #000000" style:writing-mode="page"><style:background-image/></style:table-cell-properties>
         </style:style>
@@ -53,7 +53,7 @@
             <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border-left="0.5pt solid #000000" fo:border-right="0.5pt solid #000000" fo:border-top="none" fo:border-bottom="0.5pt solid #000000" style:writing-mode="page"><style:background-image/></style:table-cell-properties>
         </style:style>
         <style:style style:name="Tableau2" style:family="table"><style:table-properties style:width="19.6cm" table:align="margins"/></style:style>
-        <style:style style:name="Tableau2.A" style:family="table-column"><style:table-column-properties style:column-width="9.8cm" style:rel-column-width="5556*"/></style:style>
+        <style:style style:name="Tableau2.A" style:family="table-column"><style:table-column-properties style:column-width="9.8cm" style:rel-column-width="32767*"/></style:style>
         <style:style style:name="Tableau2.A1" style:family="table-cell">
             <style:table-cell-properties fo:background-color="transparent" fo:padding="0.097cm" fo:border-left="0.5pt solid #000000" fo:border-right="none" fo:border-top="0.5pt solid #000000" fo:border-bottom="0.5pt solid #000000" style:writing-mode="page"><style:background-image/></style:table-cell-properties>
         </style:style>
@@ -95,66 +95,6 @@
             fo:font-style="normal"
             fo:text-shadow="none"
             style:text-underline-style="none"
-            fo:font-weight="normal"
-            officeooo:paragraph-rsid="001691e6"
-            style:font-size-asian="12pt"
-            style:font-style-asian="normal"
-            style:font-weight-asian="normal"
-            style:font-size-complex="12pt"
-            style:font-style-complex="normal"
-            style:font-weight-complex="normal"
-            style:text-overline-style="none"
-            style:text-overline-color="font-color"/></style:style>
-        <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Table_20_Contents"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties
-            fo:color="#000000"
-            style:text-outline="false"
-            style:text-line-through-style="none"
-            style:text-line-through-type="none"
-            style:font-name="Ubuntu1"
-            fo:font-size="12pt"
-            fo:font-style="normal"
-            fo:text-shadow="none"
-            style:text-underline-style="none"
-            fo:font-weight="normal"
-            officeooo:paragraph-rsid="001847a8"
-            style:font-size-asian="12pt"
-            style:font-style-asian="normal"
-            style:font-weight-asian="normal"
-            style:font-size-complex="12pt"
-            style:font-style-complex="normal"
-            style:font-weight-complex="normal"
-            style:text-overline-style="none"
-            style:text-overline-color="font-color"/></style:style>
-        <style:style style:name="P4" style:family="paragraph" style:parent-style-name="Table_20_Contents"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties
-            fo:color="#000000"
-            style:text-outline="false"
-            style:text-line-through-style="none"
-            style:text-line-through-type="none"
-            style:font-name="Ubuntu1"
-            fo:font-size="12pt"
-            fo:font-style="normal"
-            fo:text-shadow="none"
-            style:text-underline-style="none"
-            fo:font-weight="normal"
-            officeooo:paragraph-rsid="0019b823"
-            style:font-size-asian="12pt"
-            style:font-style-asian="normal"
-            style:font-weight-asian="normal"
-            style:font-size-complex="12pt"
-            style:font-style-complex="normal"
-            style:font-weight-complex="normal"
-            style:text-overline-style="none"
-            style:text-overline-color="font-color"/></style:style>
-        <style:style style:name="P5" style:family="paragraph" style:parent-style-name="Table_20_Contents"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties
-            fo:color="#000000"
-            style:text-outline="false"
-            style:text-line-through-style="none"
-            style:text-line-through-type="none"
-            style:font-name="Ubuntu1"
-            fo:font-size="12pt"
-            fo:font-style="normal"
-            fo:text-shadow="none"
-            style:text-underline-style="none"
             fo:font-weight="bold"
             officeooo:rsid="001691e6"
             officeooo:paragraph-rsid="001691e6"
@@ -166,119 +106,30 @@
             style:font-weight-complex="bold"
             style:text-overline-style="none"
             style:text-overline-color="font-color"/></style:style>
-        <style:style style:name="P6" style:family="paragraph" style:parent-style-name="Table_20_Contents"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties
-            fo:color="#000000"
-            style:text-outline="false"
-            style:text-line-through-style="none"
-            style:text-line-through-type="none"
-            style:font-name="Ubuntu1"
-            fo:font-size="12pt"
-            fo:font-style="normal"
-            fo:text-shadow="none"
-            style:text-underline-style="none"
-            fo:font-weight="bold"
-            officeooo:rsid="001691e6"
-            officeooo:paragraph-rsid="0019b823"
-            style:font-size-asian="12pt"
-            style:font-style-asian="normal"
-            style:font-weight-asian="bold"
-            style:font-size-complex="12pt"
-            style:font-style-complex="normal"
-            style:font-weight-complex="bold"
-            style:text-overline-style="none"
-            style:text-overline-color="font-color"/></style:style>
-        <style:style style:name="P7" style:family="paragraph" style:parent-style-name="Table_20_Contents"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/></style:style>
-        <style:style style:name="P8" style:family="paragraph" style:parent-style-name="Table_20_Contents"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties officeooo:paragraph-rsid="001691e6"/></style:style>
-        <style:style style:name="P9" style:family="paragraph" style:parent-style-name="Table_20_Contents"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties officeooo:paragraph-rsid="0019b823"/></style:style>
-        <style:style style:name="P10" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties fo:font-weight="bold" officeooo:rsid="001691e6" officeooo:paragraph-rsid="001691e6" style:font-weight-asian="bold" style:font-weight-complex="bold"/></style:style>
-        <style:style style:name="P11" style:family="paragraph" style:parent-style-name="Standard"><style:text-properties officeooo:paragraph-rsid="0019b823"/></style:style>
-        <style:style style:name="P12" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false" fo:break-before="page"/><style:text-properties fo:font-weight="bold" officeooo:rsid="001691e6" officeooo:paragraph-rsid="0019b823" style:font-weight-asian="bold" style:font-weight-complex="bold"/></style:style>
-        <style:style style:name="P13" style:family="paragraph" style:parent-style-name="Table_20_Contents"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties officeooo:paragraph-rsid="001c3eb5"/></style:style>
-        <style:style style:name="P14" style:family="paragraph" style:parent-style-name="Table_20_Contents"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties
-            fo:color="#000000"
-            style:text-outline="false"
-            style:text-line-through-style="none"
-            style:text-line-through-type="none"
-            style:font-name="Ubuntu1"
-            fo:font-size="12pt"
-            fo:font-style="normal"
-            fo:text-shadow="none"
-            style:text-underline-style="none"
-            fo:font-weight="normal"
-            officeooo:paragraph-rsid="0019b823"
-            style:font-size-asian="12pt"
-            style:font-style-asian="normal"
-            style:font-weight-asian="normal"
-            style:font-size-complex="12pt"
-            style:font-style-complex="normal"
-            style:font-weight-complex="normal"
-            style:text-overline-style="none"
-            style:text-overline-color="font-color"/></style:style>
+        <style:style style:name="P3" style:family="paragraph" style:parent-style-name="Table_20_Contents"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/></style:style>
+        <style:style style:name="P4" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false"/><style:text-properties fo:font-weight="bold" officeooo:rsid="001691e6" officeooo:paragraph-rsid="001691e6" style:font-weight-asian="bold" style:font-weight-complex="bold"/></style:style>
+        <style:style style:name="P5" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:text-align="center" style:justify-single-word="false" fo:break-before="page"/><style:text-properties fo:font-weight="bold" officeooo:rsid="001691e6" officeooo:paragraph-rsid="001691e6" style:font-weight-asian="bold" style:font-weight-complex="bold"/></style:style>
         <style:style style:name="T1" style:family="text"><style:text-properties fo:font-style="italic" officeooo:rsid="001691e6" style:font-style-asian="italic" style:font-style-complex="italic"/></style:style>
-        <style:style style:name="T2" style:family="text"><style:text-properties fo:font-style="italic" officeooo:rsid="0017840f" style:font-style-asian="italic" style:font-style-complex="italic"/></style:style>
-        <style:style style:name="T3" style:family="text"><style:text-properties fo:font-style="italic" officeooo:rsid="001847a8" style:font-style-asian="italic" style:font-style-complex="italic"/></style:style>
-        <style:style style:name="T4" style:family="text"><style:text-properties officeooo:rsid="001847a8"/></style:style>
-        <style:style style:name="T5" style:family="text"><style:text-properties officeooo:rsid="0019b823"/></style:style>
-        <style:style style:name="T6" style:family="text"><style:text-properties
-            fo:color="#000000"
-            style:text-outline="false"
-            style:text-line-through-style="none"
-            style:text-line-through-type="none"
-            style:font-name="Ubuntu1"
-            fo:font-size="12pt"
-            fo:font-style="normal"
-            fo:text-shadow="none"
-            style:text-underline-style="none"
-            fo:font-weight="normal"
-            officeooo:rsid="0019b823"
-            style:font-size-asian="12pt"
-            style:font-style-asian="normal"
-            style:font-weight-asian="normal"
-            style:font-size-complex="12pt"
-            style:font-style-complex="normal"
-            style:font-weight-complex="normal"
-            style:text-overline-style="none"
-            style:text-overline-color="font-color"/></style:style>
-        <style:style style:name="T7" style:family="text"><style:text-properties
-            fo:color="#000000"
-            style:text-outline="false"
-            style:text-line-through-style="none"
-            style:text-line-through-type="none"
-            style:font-name="Ubuntu1"
-            fo:font-size="12pt"
-            fo:font-style="italic"
-            fo:text-shadow="none"
-            style:text-underline-style="none"
-            fo:font-weight="normal"
-            officeooo:rsid="001691e6"
-            style:font-size-asian="12pt"
-            style:font-style-asian="italic"
-            style:font-weight-asian="normal"
-            style:font-size-complex="12pt"
-            style:font-style-complex="italic"
-            style:font-weight-complex="normal"
-            style:text-overline-style="none"
-            style:text-overline-color="font-color"/></style:style>
-        <style:style style:name="T8" style:family="text"><style:text-properties officeooo:rsid="001c3eb5"/></style:style>
+        <style:style style:name="T2" style:family="text"><style:text-properties officeooo:rsid="0019b823"/></style:style>
     </office:automatic-styles>
     <office:body>
         <office:text text:use-soft-page-breaks="true"><office:forms form:automatic-focus="false" form:apply-design-mode="false"/>
             <text:sequence-decls><text:sequence-decl text:display-outline-level="0" text:name="Illustration"/><text:sequence-decl text:display-outline-level="0" text:name="Table"/><text:sequence-decl text:display-outline-level="0" text:name="Text"/><text:sequence-decl text:display-outline-level="0" text:name="Drawing"/><text:sequence-decl text:display-outline-level="0" text:name="Figure"/></text:sequence-decls>
-            <text:p text:style-name="P10">table1</text:p><text:p text:style-name="Standard"/>
+            <text:p text:style-name="P4">table1</text:p><text:p text:style-name="Standard"/>
             <table:table table:name="Tableau1" table:style-name="Tableau1"><table:table-column table:style-name="Tableau1.A" table:number-columns-repeated="2"/>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau1.A1" office:value-type="string">
-                        <text:p text:style-name="P5">col1</text:p>
+                        <text:p text:style-name="P2">col1</text:p>
                     </table:table-cell>
                     <table:table-cell table:style-name="Tableau1.B1" office:value-type="string">
-                        <text:p text:style-name="P5">col2</text:p>
+                        <text:p text:style-name="P2">col2</text:p>
                     </table:table-cell>
                 </table:table-row>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau1.A2" office:value-type="string">
-                        <text:p text:style-name="P7">
+                        <text:p text:style-name="P3">
                             <text:a xlink:type="simple" xlink:href="relatorio://for%20each=%22row%20in%20o.rows%22" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
-                                <text:span text:style-name="T5">for each=&quot;row in o.rows&quot;</text:span>
+                                <text:span text:style-name="T2">for each=&quot;row in o.rows&quot;</text:span>
                             </text:a>
                         </text:p>
                     </table:table-cell>
@@ -286,14 +137,14 @@
                 </table:table-row>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau1.A2" office:value-type="string">
-                        <text:p text:style-name="P8">
+                        <text:p text:style-name="P3">
                             <text:a xlink:type="simple" xlink:href="relatorio://row.col1" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
                                 <text:span text:style-name="T1">row.col1</text:span>
                             </text:a>
                         </text:p>
                     </table:table-cell>
                     <table:table-cell table:style-name="Tableau1.B2" office:value-type="string">
-                        <text:p text:style-name="P2">
+                        <text:p text:style-name="P1">
                             <text:a xlink:type="simple" xlink:href="relatorio://row.col2" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
                                 <text:span text:style-name="T1">row.col2</text:span>
                             </text:a>
@@ -308,37 +159,37 @@
                     </table:table-cell>
                     <table:table-cell table:style-name="Tableau1.B2" office:value-type="string"><text:p text:style-name="P1"/></table:table-cell>
                 </table:table-row>
-            </table:table><text:p text:style-name="Standard"/><text:p text:style-name="Standard"/><text:p text:style-name="Standard"/>
-            <text:p text:style-name="P12">table1</text:p><text:p text:style-name="P11"/>
+            </table:table><text:p text:style-name="Standard"/><text:p text:style-name="Standard"/><text:p text:style-name="Standard"/><text:p text:style-name="P4"/>
+            <text:p text:style-name="P5">table1</text:p><text:p text:style-name="Standard"/>
             <table:table table:name="Tableau2" table:style-name="Tableau2"><table:table-column table:style-name="Tableau2.A" table:number-columns-repeated="2"/>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau2.A1" office:value-type="string">
-                        <text:p text:style-name="P6">col1</text:p>
+                        <text:p text:style-name="P2">col1</text:p>
                     </table:table-cell>
                     <table:table-cell table:style-name="Tableau2.B1" office:value-type="string">
-                        <text:p text:style-name="P6">col2</text:p>
+                        <text:p text:style-name="P2">col2</text:p>
                     </table:table-cell>
                 </table:table-row>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau2.A2" office:value-type="string">
-                        <text:p text:style-name="P13">
+                        <text:p text:style-name="P3">
                             <text:a xlink:type="simple" xlink:href="relatorio://for%20each=%22row%20in%20o.answers%22" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
-                                <text:span text:style-name="T8">for each=&quot;row in o.answers&quot;</text:span>
+                                <text:span text:style-name="T2">for each=&quot;row in o.answers&quot;</text:span>
                             </text:a>
                         </text:p>
                     </table:table-cell>
-                    <table:table-cell table:style-name="Tableau2.B2" office:value-type="string"><text:p text:style-name="P4"/></table:table-cell>
+                    <table:table-cell table:style-name="Tableau2.B2" office:value-type="string"><text:p text:style-name="P1"/></table:table-cell>
                 </table:table-row>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau2.A2" office:value-type="string">
-                        <text:p text:style-name="P9">
+                        <text:p text:style-name="P3">
                             <text:a xlink:type="simple" xlink:href="relatorio://row.col1" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
                                 <text:span text:style-name="T1">row.col1</text:span>
                             </text:a>
                         </text:p>
                     </table:table-cell>
                     <table:table-cell table:style-name="Tableau2.B2" office:value-type="string">
-                        <text:p text:style-name="P4">
+                        <text:p text:style-name="P1">
                             <text:a xlink:type="simple" xlink:href="relatorio://row.col2" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">
                                 <text:span text:style-name="T1">row.col2</text:span>
                             </text:a>
@@ -347,12 +198,12 @@
                 </table:table-row>
                 <table:table-row>
                     <table:table-cell table:style-name="Tableau2.A2" office:value-type="string">
-                        <text:p text:style-name="P4">
+                        <text:p text:style-name="P1">
                             <text:a xlink:type="simple" xlink:href="relatorio:///for" text:style-name="Internet_20_link" text:visited-style-name="Visited_20_Internet_20_Link">/for</text:a>
                         </text:p>
                     </table:table-cell>
-                    <table:table-cell table:style-name="Tableau2.B2" office:value-type="string"><text:p text:style-name="P4"/></table:table-cell>
+                    <table:table-cell table:style-name="Tableau2.B2" office:value-type="string"><text:p text:style-name="P1"/></table:table-cell>
                 </table:table-row>
-            </table:table><text:p text:style-name="P11"/><text:p text:style-name="P11"/><text:p text:style-name="P11"/></office:text>
+            </table:table><text:p text:style-name="Standard"/><text:p text:style-name="Standard"/><text:p text:style-name="Standard"/></office:text>
     </office:body>
 </office:document-content>

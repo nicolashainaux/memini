@@ -21,7 +21,8 @@
 
 import os
 
-from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT
+from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT, TEMPLATE_DIR
+from vocashaker.core.database import get_cols
 
 
 def exists(table_name):
@@ -32,8 +33,21 @@ def exists(table_name):
 
 
 def _prepare_content(table_name):
-    """Prepare the temporary content.xml matching table_name."""
+    """Return the content of content.xml to write, matching table_name."""
+    cols_titles = get_cols(table_name)
+    cols_nb = len(cols_titles)
+    src = os.path.join(TEMPLATE_DIR, 'content{}.xml'.format(cols_nb))
+    with open(src, 'r') as f:
+        contentxml = f.read()
+    contentxml = contentxml.replace('__TITLE__', table_name)
+    for i in range(cols_nb):
+        contentxml = contentxml.replace('__COL{}__'.format(str(i + 1)),
+                                        cols_titles[i])
+    return contentxml
 
 
 def create(table_name):
     """Create the template (.odt) file."""
+    # dst = os.path.join(TEMPLATE_DIR, 'content.xml')
+    # with open(dst, 'w') as f:
+    #     f.write(_prepare_content(table_name))
