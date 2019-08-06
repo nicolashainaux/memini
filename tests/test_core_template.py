@@ -19,8 +19,8 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-import mock
 import sqlite3
+# import unittest.mock as mock
 
 import pytest
 
@@ -41,8 +41,8 @@ def testdb():
     testdb_conn.close()
 
 
-@mock.patch('os.path.isfile')
-def test_exists(testdb, mock_os_is_file):
+def test_exists(mocker):
+    mock_os_is_file = mocker.patch('os.path.isfile')
     mock_os_is_file.return_value = True
     assert template.exists('table1')
     mock_os_is_file.return_value = False

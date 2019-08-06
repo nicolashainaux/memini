@@ -19,9 +19,16 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+import os
+
+from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT
+
 
 def exists(table_name):
     """Tell if the template matching table_name does exist."""
+    template_path = os.path.join(USER_TEMPLATES_PATH,
+                                 '{}.{}'.format(table_name, TEMPLATE_EXT))
+    return os.path.isfile(template_path)
 
 
 def _prepare_content(table_name):

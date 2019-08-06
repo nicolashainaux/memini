@@ -44,6 +44,9 @@ USER_LOCAL_SHARE = os.path.join(str(Path.home()), '.local', 'share',
                                 __myname__)
 USER_DB_NAME = 'data.db'
 USER_DB_PATH = os.path.join(USER_LOCAL_SHARE, USER_DB_NAME)
+USER_TEMPLATES_DIRNAME = 'templates'
+USER_TEMPLATES_PATH = os.path.join(USER_LOCAL_SHARE, USER_TEMPLATES_DIRNAME)
+TEMPLATE_EXT = 'odt'
 
 TESTS_DIR = os.path.join(ROOTDIR[:-len(__myname__) - 1], 'tests')
 TESTS_DATADIR = os.path.join(TESTS_DIR, 'data')
