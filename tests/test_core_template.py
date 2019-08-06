@@ -19,6 +19,7 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+import os
 import sqlite3
 # import unittest.mock as mock
 
@@ -27,6 +28,7 @@ import pytest
 from vocashaker.core import shared, template
 from vocashaker.core.env import TEST_DB_PATH, CONTENTXML_PATH
 from vocashaker.core.env import TEST_BUILT_TABLE1_CONTENTXML_PATH
+from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT
 
 
 @pytest.fixture
@@ -45,8 +47,14 @@ def test_exists(mocker):
     mock_os_is_file = mocker.patch('os.path.isfile')
     mock_os_is_file.return_value = True
     assert template.exists('table1')
+    t1_path = os.path.join(USER_TEMPLATES_PATH,
+                           'table1.{}'.format(TEMPLATE_EXT))
+    mock_os_is_file.assert_called_with(t1_path)
     mock_os_is_file.return_value = False
     assert not template.exists('table2')
+    t2_path = os.path.join(USER_TEMPLATES_PATH,
+                           'table2.{}'.format(TEMPLATE_EXT))
+    mock_os_is_file.assert_called_with(t2_path)
 
 
 def test_prepare_content(testdb):
