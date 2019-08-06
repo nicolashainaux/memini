@@ -19,32 +19,14 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# from vocashaker.core.settings import TABLE_WIDTH_CM, TABLE_WIDTH_PX
+
+def exists(table_name):
+    """Tell if the template matching table_name does exist."""
 
 
-def _colwidth(n):
-    """
-    Return the columns width of a table of n columns and fixed width.
-
-    Result is a tuple containing the width in cm and pixels.
-    """
-
-
-def _colid(n):
-    """Return the column id for column number n. Simply the matching letter."""
-
-
-def _more_row_cells(row_nb, table_nb, col_nb):
-    """Return the portion of content.xml that defines the table rows."""
-
-
-def _prebuild(n):
-    """Return a model to build content.xml, matching n columns."""
-
-
-def _build(table_name):
-    """Return content.xml matching table_name's content."""
+def _prepare_content(table_name):
+    """Prepare the temporary content.xml matching table_name."""
 
 
 def create(table_name):
-    """Create the template file."""
+    """Create the template (.odt) file."""

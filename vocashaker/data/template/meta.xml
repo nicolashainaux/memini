@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<office:document-meta
-    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0"
-    xmlns:ooo="http://openoffice.org/2004/office"
-    xmlns:grddl="http://www.w3.org/2003/g/data-view#"
-    office:version="1.2">
-    <office:meta>
+<office:document-meta xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:grddl="http://www.w3.org/2003/g/data-view#" office:version="1.2"><office:meta>
         <meta:creation-date>2019-07-21T09:39:38.405690689</meta:creation-date>
         <dc:title>default</dc:title>
-        <meta:editing-duration>PT11M56S</meta:editing-duration>
-        <meta:editing-cycles>6</meta:editing-cycles>
+        <meta:editing-duration>PT13M52S</meta:editing-duration>
+        <meta:editing-cycles>7</meta:editing-cycles>
         <meta:generator>LibreOffice/6.1.6.3$Linux_X86_64 LibreOffice_project/10$Build-3</meta:generator>
         <meta:initial-creator>vocashaker
         </meta:initial-creator>
-        <dc:date>2019-07-23T07:57:28.240741247</dc:date>
-        <dc:creator>vocashaker
-        </dc:creator><meta:document-statistic meta:table-count="2" meta:image-count="0" meta:object-count="0" meta:page-count="2" meta:paragraph-count="22" meta:word-count="28" meta:character-count="205" meta:non-whitespace-character-count="199"/><meta:template xlink:type="simple" xlink:actuate="onRequest" xlink:title="default" xlink:href="../../../../../../.config/libreoffice/4/user/template/default1.ott" meta:date="2019-07-21T09:39:38.166822890"/></office:meta>
-</office:document-meta>
+        <dc:date>2019-07-30T17:35:07.220326896</dc:date>
+        <dc:creator>vocashaker </dc:creator><meta:document-statistic meta:table-count="2" meta:image-count="0" meta:object-count="0" meta:page-count="2" meta:paragraph-count="14" meta:word-count="20" meta:character-count="149" meta:non-whitespace-character-count="135"/><meta:template xlink:type="simple" xlink:actuate="onRequest" xlink:title="default" xlink:href="../../../../../../.config/libreoffice/4/user/template/default1.ott" meta:date="2019-07-21T09:39:38.166822890"/></office:meta></office:document-meta>
