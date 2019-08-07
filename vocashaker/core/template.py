@@ -62,3 +62,7 @@ def create(table_name):
     # dst = os.path.join(TEMPLATE_DIR, 'content.xml')
     # with open(dst, 'w') as f:
     #     f.write(_prepare_content(table_name))
+
+
+def remove(table_name):
+    """Remove the template (.odt) file."""

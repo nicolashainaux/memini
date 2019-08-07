@@ -137,11 +137,14 @@ def table_to_text(name, pattern):
 
 def remove_table(name):
     """Remove table name."""
+    from . import template
     _exec(name, 'DROP TABLE {};'.format(name))
+    template.remove(name)
 
 
 def create_table(name, col_titles, content):
     """Create table name using given col_titles and content."""
+    from . import template
     titles = ' TEXT, '.join(col_titles) + ' TEXT, '
     cmd = 'CREATE TABLE {} (id INTEGER PRIMARY KEY, {}timestamp INTEGER)'\
         .format(name, titles)
@@ -151,6 +154,7 @@ def create_table(name, col_titles, content):
     cmd = 'INSERT INTO {}({}) VALUES({})'.format(name, titles, qmarks)
     content = [item + (0, ) for item in content]
     shared.db.executemany(cmd, content)
+    template.create(name)
 
 
 def add_row(table_name, row):
