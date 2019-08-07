@@ -24,6 +24,10 @@ import os
 from .env import USER_LOCAL_SHARE, USER_DB_PATH
 
 
+MINI_COL_NB = 2
+MAXI_COL_NB = 4
+
+
 def init():
     global db
 
