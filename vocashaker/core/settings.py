@@ -20,4 +20,4 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 MINI_COL_NB = 2
-MAXI_COL_NB = 26
+MAXI_COL_NB = 4
