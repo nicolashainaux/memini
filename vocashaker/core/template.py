@@ -25,11 +25,15 @@ from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT, TEMPLATE_DIR
 from vocashaker.core.database import get_cols
 
 
+def path(table_name):
+    """Return the path to template matching table_name."""
+    return os.path.join(USER_TEMPLATES_PATH,
+                        '{}.{}'.format(table_name, TEMPLATE_EXT))
+
+
 def exists(table_name):
     """Tell if the template matching table_name does exist."""
-    template_path = os.path.join(USER_TEMPLATES_PATH,
-                                 '{}.{}'.format(table_name, TEMPLATE_EXT))
-    return os.path.isfile(template_path)
+    return os.path.isfile(path(table_name))
 
 
 def _prepare_content(table_name):

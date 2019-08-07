@@ -43,18 +43,22 @@ def testdb():
     testdb_conn.close()
 
 
+def test_path():
+    expected = os.path.join(USER_TEMPLATES_PATH,
+                            'NAME.{}'.format(TEMPLATE_EXT))
+    assert template.path('NAME') == expected
+
+
 def test_exists(mocker):
     mock_os_is_file = mocker.patch('os.path.isfile')
+    mock_path = mocker.patch('vocashaker.core.template.path')
+    mock_path.return_value = '/path/to/template.odt'
     mock_os_is_file.return_value = True
     assert template.exists('table1')
-    t1_path = os.path.join(USER_TEMPLATES_PATH,
-                           'table1.{}'.format(TEMPLATE_EXT))
-    mock_os_is_file.assert_called_with(t1_path)
+    mock_os_is_file.assert_called_with('/path/to/template.odt')
     mock_os_is_file.return_value = False
     assert not template.exists('table2')
-    t2_path = os.path.join(USER_TEMPLATES_PATH,
-                           'table2.{}'.format(TEMPLATE_EXT))
-    mock_os_is_file.assert_called_with(t2_path)
+    mock_os_is_file.assert_called_with('/path/to/template.odt')
 
 
 def test_prepare_content(testdb):
