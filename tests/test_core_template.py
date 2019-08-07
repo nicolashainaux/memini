@@ -25,7 +25,7 @@ import sqlite3
 
 import pytest
 
-from vocashaker.core import shared, template
+from vocashaker.core import shared, template, prefs
 from vocashaker.core.env import TEST_DB_PATH
 from vocashaker.core.env import TEST_BUILT_TABLE1_CONTENTXML_PATH
 from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT
@@ -59,6 +59,12 @@ def test_exists(mocker):
     mock_os_is_file.return_value = False
     assert not template.exists('table2')
     mock_os_is_file.assert_called_with('/path/to/template.odt')
+
+
+def test_edit(mocker):
+    mock_popen = mocker.patch('subprocess.Popen')
+    template.edit('table1')
+    mock_popen.assert_called_with([prefs.EDITOR, template.path('table1')])
 
 
 def test_prepare_content(testdb):

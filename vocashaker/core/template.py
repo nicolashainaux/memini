@@ -20,7 +20,9 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
+import subprocess
 
+from vocashaker.core.prefs import EDITOR
 from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT, TEMPLATE_DIR
 from vocashaker.core.database import get_cols
 
@@ -48,6 +50,11 @@ def _prepare_content(table_name):
         contentxml = contentxml.replace('__COL{}__'.format(str(i + 1)),
                                         cols_titles[i])
     return contentxml
+
+
+def edit(table_name):
+    """Run the editor on table_name's template."""
+    _ = subprocess.Popen([EDITOR, path(table_name)])
 
 
 def create(table_name):
