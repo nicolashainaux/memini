@@ -52,16 +52,16 @@ def _prepare_content(table_name):
     return contentxml
 
 
-def edit(table_name):
-    """Run the editor on table_name's template."""
-    _ = subprocess.Popen([EDITOR, path(table_name)])
-
-
 def create(table_name):
     """Create the template (.odt) file."""
     # dst = os.path.join(TEMPLATE_DIR, 'content.xml')
     # with open(dst, 'w') as f:
     #     f.write(_prepare_content(table_name))
+
+
+def edit(table_name):
+    """Run the editor on table_name's template."""
+    _ = subprocess.Popen([EDITOR, path(table_name)])
 
 
 def remove(table_name):
