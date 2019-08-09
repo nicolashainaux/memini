@@ -20,16 +20,13 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
-import tarfile
+import shutil
 import subprocess
 
 from vocashaker.core.prefs import EDITOR
 from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT, TEMPLATE_DIR
-from vocashaker.core.env import CONTENTXML_PATH
+from vocashaker.core.env import CONTENTXML_PATH, DATADIR
 from vocashaker.core.database import get_cols
-
-TAR_LISTING = ['META-INF', 'content.xml', 'layout-cache', 'manifest.rdf',
-               'meta.xml', 'mimetype', 'settings.xml', 'styles.xml']
 
 
 def path(table_name):
@@ -47,7 +44,7 @@ def _prepare_content(table_name):
     """Return the content of content.xml to write, matching table_name."""
     cols_titles = get_cols(table_name)
     cols_nb = len(cols_titles)
-    src = os.path.join(TEMPLATE_DIR, 'content{}.xml'.format(cols_nb))
+    src = os.path.join(DATADIR, 'content{}.xml'.format(cols_nb))
     with open(src, 'r') as f:
         contentxml = f.read()
     contentxml = contentxml.replace('__TITLE__', table_name)
@@ -57,19 +54,12 @@ def _prepare_content(table_name):
     return contentxml
 
 
-def _files_to_add(source_dir):
-    return [os.path.join(source_dir, f)
-            for f in os.listdir(source_dir)
-            if f in TAR_LISTING]
-
-
 def create(table_name):
     """Create the template (.odt) file."""
     with open(CONTENTXML_PATH, 'w') as f:
         f.write(_prepare_content(table_name))
-    with tarfile.open(path(table_name), 'w:gz') as tar:
-        for f in _files_to_add(TEMPLATE_DIR):
-            tar.add(f, arcname=os.path.basename(f))
+    zipped = shutil.make_archive(table_name, 'zip', TEMPLATE_DIR)
+    shutil.move(zipped, path(table_name))
     os.remove(CONTENTXML_PATH)
 
 
