@@ -20,11 +20,16 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
+import tarfile
 import subprocess
 
 from vocashaker.core.prefs import EDITOR
 from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT, TEMPLATE_DIR
+from vocashaker.core.env import CONTENTXML_PATH
 from vocashaker.core.database import get_cols
+
+TAR_LISTING = ['META-INF', 'content.xml', 'layout-cache', 'manifest.rdf',
+               'meta.xml', 'mimetype', 'settings.xml', 'styles.xml']
 
 
 def path(table_name):
@@ -52,11 +57,20 @@ def _prepare_content(table_name):
     return contentxml
 
 
+def _files_to_add(source_dir):
+    return [os.path.join(source_dir, f)
+            for f in os.listdir(source_dir)
+            if f in TAR_LISTING]
+
+
 def create(table_name):
     """Create the template (.odt) file."""
-    # dst = os.path.join(TEMPLATE_DIR, 'content.xml')
-    # with open(dst, 'w') as f:
-    #     f.write(_prepare_content(table_name))
+    with open(CONTENTXML_PATH, 'w') as f:
+        f.write(_prepare_content(table_name))
+    with tarfile.open(path(table_name), 'w:gz') as tar:
+        for f in _files_to_add(TEMPLATE_DIR):
+            tar.add(f, arcname=os.path.basename(f))
+    os.remove(CONTENTXML_PATH)
 
 
 def edit(table_name):
@@ -66,3 +80,4 @@ def edit(table_name):
 
 def remove(table_name):
     """Remove the template (.odt) file."""
+    os.remove(path(table_name))

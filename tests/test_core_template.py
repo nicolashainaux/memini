@@ -21,6 +21,7 @@
 
 import os
 import sqlite3
+from unittest.mock import mock_open, patch
 # import unittest.mock as mock
 
 import pytest
@@ -28,6 +29,7 @@ import pytest
 from vocashaker.core import shared, template, prefs
 from vocashaker.core.env import TEST_DB_PATH
 from vocashaker.core.env import TEST_BUILT_TABLE1_CONTENTXML_PATH
+from vocashaker.core.env import CONTENTXML_PATH
 from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT
 
 
@@ -74,7 +76,30 @@ def test_prepare_content(testdb):
     assert created == expected
 
 
-# @mock.patch('tarfile.open')
-# def test_create(testdb, mock_tarfile_open):
-    #     template.create('table1')
-    # assert not os.path.isfile(CONTENTXML_PATH)
+def test_files_to_add(mocker):
+    mock_listdir = mocker.patch('os.listdir')
+    mock_listdir.return_value = ['content2.xml', 'layout-cache', 'styles.xml',
+                                 'mimetype', 'meta.xml', 'META-INF',
+                                 'content4.xml', 'settings.xml',
+                                 'content3.xml', 'manifest.rdf']
+    expected = ['/path/to/layout-cache', '/path/to/styles.xml',
+                '/path/to/mimetype', '/path/to/meta.xml', '/path/to/META-INF',
+                '/path/to/settings.xml', '/path/to/manifest.rdf']
+    assert template._files_to_add('/path/to') == expected
+
+
+def test_create(testdb, mocker):
+    m1 = mocker.mock_open()
+    m2 = mocker.patch('tarfile.open', autospec=True, create=True)
+    m3 = mocker.patch('os.remove')
+    m4 = mocker.patch('vocashaker.core.template._files_to_add')
+    m4.return_value = ['/path/to/file1', '/path/to/file2']
+    with patch('builtins.open', m1, create=True):
+        with patch('tarfile.open', m2, create=True):
+            template.create('table1')
+    m2.assert_called_with(template.path('table1'), 'w:gz')
+    m3.assert_called_with(CONTENTXML_PATH)
+    handle = m2()
+    print(handle.mock_calls)
+    handle.add.assert_called_with('/path/to/file1', arcname='file1')
+    handle.add.assert_called_with('/path/to/file2', arcname='file2')
