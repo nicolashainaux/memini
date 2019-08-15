@@ -73,3 +73,31 @@ class TooManyRowsRequiredError(VocaShakerError):
         msg = '{} rows are required from "{}", but it only contains {} rows.'\
             .format(n_required, table_name, n_rows)
         super().__init__(msg)
+
+
+class SchemeSyntaxError(VocaShakerError):
+    """When the user provides a scheme that contains unexpected chars."""
+    def __init__(self, scheme):
+        msg = 'Incorrect scheme: "{}". A scheme should contain underscore '\
+            'and star chars ("_" and "*"), plus possibly one digit as last '\
+            'char.'.format(scheme)
+        super().__init__(msg)
+
+
+class SchemeLogicalError(VocaShakerError):
+    """When the user provides a scheme with too few or too many blanks."""
+    def __init__(self, scheme, blanks_nb, cols_nb, blanks_required):
+        start = 'Incorrect scheme: "{}". '.format(scheme)
+        if blanks_nb == 0:
+            end = 'A scheme should contain at least one possible blank '\
+                'column ("_").'
+        elif blanks_required >= cols_nb:
+            end = 'It shows {} columns, hence {} of them at most can be '\
+                'blank, not more ({}).'.format(str(cols_nb), str(cols_nb - 1),
+                                               str(blanks_required))
+        elif blanks_required > blanks_nb:
+            end = 'It shows less possible blank columns ({} "_") '\
+                'than it requires ({}).'.format(str(blanks_nb),
+                                                str(blanks_required))
+        msg = start + end
+        super().__init__(msg)
