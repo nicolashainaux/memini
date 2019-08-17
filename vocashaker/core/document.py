@@ -22,6 +22,11 @@
 import re
 import random
 
+from relatorio.templates.opendocument import Template
+
+
+from vocashaker.core import database, template
+from vocashaker.core.env import TEMPLATE_EXT
 from vocashaker.core.prefs import BLANK_CHAR, FILLED_CHAR
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
 from vocashaker.core.errors import SchemeColumnsMismatchError
@@ -89,3 +94,16 @@ def _process_data(data, scheme=None):
         rows.append(line)
     result = {'rows': rows, 'answers': answers}
     return result
+
+
+def generate(table_name, n, oldest_prevail=False):
+    """
+    Generate a new document using n data from the table and the matching
+    template.
+    """
+    data = _process_data(database.draw_rows(table_name, n,
+                                            oldest_prevail=oldest_prevail))
+    basic = Template(source='', filepath=template.path(table_name))
+    basic_generated = basic.generate(o=data).render()
+    with open('{}.{}'.format(table_name, TEMPLATE_EXT), 'wb') as f:
+        f.write(basic_generated.getvalue())

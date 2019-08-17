@@ -53,6 +53,7 @@ TESTS_DATADIR = os.path.join(TESTS_DIR, 'data')
 TEST_DB_PATH = os.path.join(TESTS_DATADIR, 'test.db')
 TEST_BUILT_TABLE1_CONTENTXML_PATH = \
     os.path.join(TESTS_DATADIR, 'built_table1_contentxml.xml')
+TEST_TEMPLATE1_PATH = os.path.join(TESTS_DATADIR, 'template1.odt')
 
 TEMPLATE_DIR = os.path.join(DATADIR, 'template')
 CONTENTXML_PATH = os.path.join(TEMPLATE_DIR, 'content.xml')

@@ -20,11 +20,13 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import pytest
+from unittest.mock import patch
 
+from vocashaker.core.env import TEMPLATE_EXT, TEST_TEMPLATE1_PATH
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
 from vocashaker.core.errors import SchemeColumnsMismatchError
 from vocashaker.core.document import _default_scheme, _parse_scheme
-from vocashaker.core.document import _process_data
+from vocashaker.core.document import _process_data, generate
 
 
 def test_default_scheme():
@@ -124,3 +126,26 @@ def test_process_data(mocker):
     for row in result['rows']:
         assert list(row.keys()) == ['col1', 'col2', 'col3']
         assert list(row.values())[:-1].count('') == 1
+
+
+def test_generate(mocker):
+    mocker.patch('vocashaker.core.database.draw_rows')
+    mt = mocker.patch('vocashaker.core.template.path')
+    mt.return_value = TEST_TEMPLATE1_PATH
+    m = mocker.patch('vocashaker.core.document._process_data')
+    m.return_value = {'rows': [{'col1': 'adventus,  us, m.', 'col2': ''},
+                               {'col1': '', 'col2': 'eau'},
+                               {'col1': '', 'col2': 'blanc'},
+                               {'col1': 'sol, solis, m', 'col2': ''},
+                               {'col1': 'spes, ei f', 'col2': ''}],
+                      'answers': [{'col1': 'adventus,  us, m.',
+                                   'col2': 'arrivée'},
+                                  {'col1': 'aqua , ae, f', 'col2': 'eau'},
+                                  {'col1': 'candidus,  a, um',
+                                   'col2': 'blanc'},
+                                  {'col1': 'sol, solis, m', 'col2': 'soleil'},
+                                  {'col1': 'spes, ei f', 'col2': 'espoir'}]}
+    mo = mocker.mock_open()
+    with patch('builtins.open', mo, create=True):
+        generate('table1', 5)
+    mo.assert_called_with('table1.{}'.format(TEMPLATE_EXT), 'wb')
