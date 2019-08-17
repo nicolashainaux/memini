@@ -57,9 +57,9 @@ def test_parse_scheme():
     assert str(excinfo.value) == 'Incorrect scheme: "**_2". It shows less '\
         'possible blank columns (1 "_") than it requires (2).'
 
-    assert _parse_scheme('**_') == ([2], 1)
-    assert _parse_scheme('___') == ([0, 1, 2], 2)
-    assert _parse_scheme('___1') == ([0, 1, 2], 1)
+    assert _parse_scheme('**_') == ([2], 1, 3)
+    assert _parse_scheme('___') == ([0, 1, 2], 2, 3)
+    assert _parse_scheme('___1') == ([0, 1, 2], 1, 3)
 
 
 def test_process_data(mocker, testdb):

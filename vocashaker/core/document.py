@@ -65,4 +65,4 @@ def _parse_scheme(scheme):
         raise SchemeLogicalError(original_scheme, blanks_nb, cols_nb,
                                  blanks_required)
     return ([m.start() for m in re.finditer(BLANK_CHAR, scheme)],
-            blanks_required)
+            blanks_required, cols_nb)
