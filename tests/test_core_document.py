@@ -62,7 +62,7 @@ def test_parse_scheme():
     assert _parse_scheme('___1') == ([0, 1, 2], 1, 3)
 
 
-def test_process_data(mocker, testdb):
+def test_process_data(mocker):
     data = [('adventus,  us, m.', 'arrivée'),
             ('candidus,  a, um', 'blanc'),
             ('sol, solis, m', 'soleil')]
