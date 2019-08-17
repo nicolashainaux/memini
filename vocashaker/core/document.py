@@ -20,9 +20,11 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import re
+import random
 
 from vocashaker.core.prefs import BLANK_CHAR, FILLED_CHAR
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
+from vocashaker.core.errors import SchemeColumnsMismatchError
 
 
 def _default_scheme(n):
@@ -66,3 +68,24 @@ def _parse_scheme(scheme):
                                  blanks_required)
     return ([m.start() for m in re.finditer(BLANK_CHAR, scheme)],
             blanks_required, cols_nb)
+
+
+def _process_data(data, scheme=None):
+    """Process data retrieved from a table for use with relatorio."""
+    cols_nb = len(data[0])
+    if scheme is None:
+        scheme = _default_scheme(cols_nb)
+    possible_blanks, blanks_nb, scheme_cols_nb = _parse_scheme(scheme)
+    if cols_nb != scheme_cols_nb:
+        raise SchemeColumnsMismatchError(scheme, cols_nb)
+    answers = [{'col{}'.format(str(i + 1)): d[i] for i in range(len(d))}
+               for d in data]
+    rows = []
+    for a in answers:
+        blanks = random.sample(possible_blanks, blanks_nb)
+        line = dict(a)
+        for b in blanks:
+            line['col{}'.format(str(b + 1))] = ''
+        rows.append(line)
+    result = {'rows': rows, 'answers': answers}
+    return result
