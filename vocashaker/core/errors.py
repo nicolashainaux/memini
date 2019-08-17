@@ -101,3 +101,14 @@ class SchemeLogicalError(VocaShakerError):
                                                 str(blanks_required))
         msg = start + end
         super().__init__(msg)
+
+
+class SchemeColumnsMismatchError(VocaShakerError):
+    """
+    When the user provides a scheme that does not match the number of
+    columns in the table.
+    """
+    def __init__(self, scheme, cols_nb):
+        msg = 'The provided scheme ({}) does not have the same number of '\
+            'columns as the table ({}).'.format(scheme, str(cols_nb))
+        super().__init__(msg)
