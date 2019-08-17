@@ -69,7 +69,7 @@ def test_process_data(mocker, testdb):
     scheme = '___'
     with pytest.raises(SchemeColumnsMismatchError) as excinfo:
         _process_data(data, scheme)
-    assert str(excinfo.value) == 'The provided scheme (**_2) does not have '\
+    assert str(excinfo.value) == 'The provided scheme (___) does not have '\
         'the same number of columns as the table (2).'
 
     # Test default scheme
