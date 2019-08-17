@@ -123,4 +123,4 @@ def test_process_data(mocker):
     assert result['answers'] == expected_answers
     for row in result['rows']:
         assert list(row.keys()) == ['col1', 'col2', 'col3']
-        assert list(row.values()[:-1]).count('') == 1
+        assert list(row.values())[:-1].count('') == 1
