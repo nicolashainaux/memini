@@ -79,6 +79,14 @@ version = "1.8.0"
 
 [[package]]
 category = "dev"
+description = "pyfakefs implements a fake file system that mocks the Python file system modules."
+name = "pyfakefs"
+optional = false
+python-versions = "*"
+version = "3.6.1"
+
+[[package]]
+category = "dev"
 description = "pytest: simple powerful testing with Python"
 name = "pytest"
 optional = false
@@ -143,7 +151,7 @@ python-versions = ">=2.7"
 version = "0.5.1"
 
 [metadata]
-content-hash = "2361ca41528e55dc244e86344ecd629cc5da0a350fbc553e2f7f7c3dea04553a"
+content-hash = "b840f2401a350b21b08ed06b8603ad54d7196ebf9a143baf0ccbd490d44f0ee2"
 python-versions = "^3.6"
 
 [metadata.hashes]
@@ -156,6 +164,7 @@ lxml = ["02ca7bf899da57084041bb0f6095333e4d239948ad3169443f454add9f4e9cb4", "096
 more-itertools = ["2112d2ca570bb7c3e53ea1a35cd5df42bb0fd10c45f0fb97178679c3c03d64c7", "c3e4748ba1aad8dba30a4886b0b1a2004f9a863837b8654e7059eebf727afa5a"]
 pluggy = ["0825a152ac059776623854c1543d65a4ad408eb3d33ee114dff91e57ec6ae6fc", "b9817417e95936bf75d85d3f8767f7df6cdde751fc40aed3bb3074cbcb77757c"]
 py = ["64f65755aee5b381cea27766a3a147c3f15b9b6b9ac88676de66ba2ae36793fa", "dc639b046a6e2cff5bbe40194ad65936d6ba360b52b3c3fe1d08a82dd50b5e53"]
+pyfakefs = ["2654c665500ea8117b55cab51d4683a83ec1c76ddfae13640e509e4aac64b308", "e85a454bcdab7671243d2b7df386ab6a310f1378bf3317b2b84a7bcf88eff21a"]
 pytest = ["3f193df1cfe1d1609d4c583838bea3d532b18d6160fd3f55c9447fdca30848ec", "e246cf173c01169b9617fc07264b7b1316e78d7a650055235d6d897bc80d9660"]
 pytest-mock = ["43ce4e9dd5074993e7c021bb1c22cbb5363e612a2b5a76bc6d956775b10758b7", "5bf5771b1db93beac965a7347dc81c675ec4090cb841e49d9d34637a25c30568"]
 relatorio = ["5212fcf677af535ca95ba4fbaa0108ef2e9b1de95834a2f0cec059d9435b938a", "cc263a32e0db1a51f694765c3e77eeef6b407db0dd655b9b886efb3e9c2c9975", "d33c7dabdc20e0af3f41adfb64da718aecd73ab1a526fca8ef72bb7b0fd52361"]
