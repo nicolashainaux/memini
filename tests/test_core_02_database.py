@@ -139,9 +139,7 @@ give, gave, given : donner"""
 
 
 def test_remove_table(testdb, mocker):
-    mock_t_remove = mocker.patch('vocashaker.core.template.remove')
     remove_table('table1')
-    mock_t_remove.assert_called_with('table1')
     assert list_tables() == ['table2']
     with pytest.raises(NoSuchTableError) as excinfo:
         remove_table('table1')
@@ -149,7 +147,6 @@ def test_remove_table(testdb, mocker):
 
 
 def test_create_table(testdb, mocker):
-    mock_t_create = mocker.patch('vocashaker.core.template.create')
     create_table('table3', ('infinitif', 'passé', 'français'),
                  [('bieten', 'bot, hat geboten', 'offrir'),
                   ('bleiben', 'blieb, ist geblieben', 'rester'),
@@ -157,7 +154,6 @@ def test_create_table(testdb, mocker):
                   ('schmelzen', 'schmolz, ist geschmolzen', 'fondre'),
                   ('ziegen', 'zog, hat OU ist gezogen', 'tirer OU déménager'),
                   ])
-    mock_t_create.assert_called_with('table3')
     assert list_tables() == ['table1', 'table2', 'table3']
     assert get_table('table3') \
         == [('1', 'bieten', 'bot, hat geboten', 'offrir'),
