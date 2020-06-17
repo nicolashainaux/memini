@@ -19,8 +19,10 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+import shutil
+
 from .prefs import DEFAULT_Q_NB
-from . import database
+from . import database, template
 
 
 def add(name, file, pattern):
@@ -74,7 +76,8 @@ def rename(name1, name2):
     """
     Rename table name1 as name2. Also rename the associated default template.
     """
-    pass
+    shutil.move(template.path(name1), template.path(name2))
+    database.rename_table(name1, name2)
 
 
 def generate(name, nb=DEFAULT_Q_NB):

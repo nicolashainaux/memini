@@ -19,9 +19,9 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# import os
+import os
 
-# from vocashaker.core import template
+from vocashaker.core import template
 from vocashaker.core import commands
 
 
@@ -31,13 +31,13 @@ def test_list_(testdb, capsys):
     assert captured.out == 'table1\ntable2\n'
 
 
-def test_rename(fs, mocker):
-    pass
-    # mock_rename_table = mocker.patch('vocashaker.core.database.rename_table')
-    # fs.create_file(template.path('name1'))
-    # commands.rename('name1', 'name2')
-    # assert os.path.exists(template.path('name2'))
-    # assert mock_rename_table.assert_called_with('name1', 'name2')
+def test_rename(testdb, fs, mocker):
+    m1 = mocker.patch('vocashaker.core.database.rename_table')
+    fs.create_file(template.path('name1'))
+    commands.rename('name1', 'name2')
+    assert os.path.exists(template.path('name2'))
+    assert not os.path.exists(template.path('name1'))
+    m1.assert_called_with('name1', 'name2')
 
 
 def test_delete(fs, mocker):
