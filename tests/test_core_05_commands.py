@@ -19,8 +19,31 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-EDITOR = 'soffice'
-BLANK_CHAR = '_'
-FILLED_CHAR = '*'
+# import os
 
-DEFAULT_Q_NB = 20
+# from vocashaker.core import template
+from vocashaker.core import commands
+
+
+def test_list_(testdb, capsys):
+    commands.list_()
+    captured = capsys.readouterr()
+    assert captured.out == 'table1\ntable2\n'
+
+
+def test_rename(fs, mocker):
+    pass
+    # mock_rename_table = mocker.patch('vocashaker.core.database.rename_table')
+    # fs.create_file(template.path('name1'))
+    # commands.rename('name1', 'name2')
+    # assert os.path.exists(template.path('name2'))
+    # assert mock_rename_table.assert_called_with('name1', 'name2')
+
+
+def test_delete(fs, mocker):
+    pass
+    # mock_remove_table = mocker.patch('vocashaker.core.database.remove_table')
+    # fs.create_file(template.path('name1'))
+    # commands.delete('name1')
+    # assert not os.path.exists(template.path('name1'))
+    # assert mock_remove_table.assert_called_with('name1')
