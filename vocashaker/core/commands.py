@@ -26,20 +26,26 @@ from . import database
 def add(name, file, pattern):
     """
     Parse file using pattern and create a new table filled with the result.
-    Check if the name is already used. If yes, ask if the lines should be
-    appended to the existing table or not (cancel).
+    Create the associated default template.
+    Before doing so, check if the name is already used. If yes, ask if the
+    lines should be appended to the existing table or not (cancel).
     """
     pass
     # template.create(name)
 
 
 def delete(name):
-    """Delete the table matching "name". Ask confirmation before."""
+    """
+    Delete the table and associated default template matching name.
+    Ask confirmation before."""
     pass
 
 
 def remove(name, id_span):
-    """Remove the rows identified by the given id_span from the table."""
+    """
+    Remove the rows identified by the given id_span from the table identified
+    by its name.
+    """
     pass
     # template.remove(name)
 
@@ -49,7 +55,7 @@ def merge(name1, name2, name3=None):
     If name3 is None, then merge contents of tables name1 and name2 into name2.
     Ask before doing so.
     If name3 is not None, then the merged content goes to a newly created table
-    named name3.
+    named name3 (the matching default template will then be created too).
     """
     pass
 
@@ -65,7 +71,9 @@ def show(name):
 
 
 def rename(name1, name2):
-    """Rename table name1 as name2."""
+    """
+    Rename table name1 as name2. Also rename the associated default template.
+    """
     pass
 
 
