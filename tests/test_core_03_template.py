@@ -20,28 +20,12 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
-import sqlite3
 from unittest.mock import patch
 
-import pytest
-
-from vocashaker.core import shared, template, prefs
-from vocashaker.core.env import TEST_DB_PATH
+from vocashaker.core import template, prefs
 from vocashaker.core.env import TEST_BUILT_TABLE1_CONTENTXML_PATH
 from vocashaker.core.env import CONTENTXML_PATH
 from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT
-
-
-@pytest.fixture
-def testdb():
-    testdb_conn = sqlite3.connect(TEST_DB_PATH)
-    shared.db = testdb_conn.cursor()
-    shared.db.execute('SAVEPOINT starttest;')
-    yield
-    # Using testdb_conn.rollback() would not rollback certain transactions
-    # like RENAME...
-    shared.db.execute('ROLLBACK TO SAVEPOINT starttest;')
-    testdb_conn.close()
 
 
 def test_path():

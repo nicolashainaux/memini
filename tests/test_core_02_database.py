@@ -24,7 +24,6 @@ import sqlite3
 import pytest
 
 from vocashaker.core import shared
-from vocashaker.core.env import TEST_DB_PATH
 from vocashaker.core.database import Manager
 from vocashaker.core.database import list_tables, table_exists
 from vocashaker.core.database import _assert_table_exists, _assert_row_exists
@@ -37,18 +36,6 @@ from vocashaker.core.errors import NoSuchTableError
 from vocashaker.core.errors import NoSuchRowError
 from vocashaker.core.errors import ColumnsDoNotMatchError
 from vocashaker.core.errors import TooManyRowsRequiredError
-
-
-@pytest.fixture
-def testdb():
-    testdb_conn = sqlite3.connect(TEST_DB_PATH)
-    shared.db = testdb_conn.cursor()
-    shared.db.execute('SAVEPOINT starttest;')
-    yield
-    # Using testdb_conn.rollback() would not rollback certain transactions
-    # like RENAME...
-    shared.db.execute('ROLLBACK TO SAVEPOINT starttest;')
-    testdb_conn.close()
 
 
 def test_Manager():
