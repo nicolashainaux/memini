@@ -28,13 +28,22 @@ from vocashaker.core import template
 from vocashaker.core import commands
 from vocashaker.core import database
 from vocashaker.core.errors import NoSuchTableError, DestinationExistsError
-from vocashaker.core.errors import NotFoundError
+from vocashaker.core.errors import NotFoundError, CommandError
 
 
-def test_list_(testdb, capsys):
-    commands.list_()
+def test_list_(testdb, capsys, fs):
+    fs.create_file(template.path('template1'))
+    fs.create_file(template.path('template2'))
+    commands.list_('tables')
     captured = capsys.readouterr()
     assert captured.out == 'table1\ntable2\n'
+    commands.list_('templates')
+    captured = capsys.readouterr()
+    assert captured.out == 'template1.odt\ntemplate2.odt\n'
+    with pytest.raises(CommandError) as excinfo:
+        commands.list_('foo')
+    assert str(excinfo.value) == 'I can list "tables" or "templates". '\
+        'I don\'t know what "foo" might mean.'
 
 
 def test_rename(testdb, fs, mocker, capsys):

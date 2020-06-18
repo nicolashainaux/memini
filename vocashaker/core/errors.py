@@ -57,6 +57,12 @@ class NotFoundError(VocaShakerError):
         super().__init__(msg)
 
 
+class CommandError(VocaShakerError):
+    """When the user mistyped a command."""
+    def __init__(self, msg):
+        super().__init__(msg)
+
+
 class NoSuchTableError(VocaShakerError):
     """When the provided name does not match any table."""
     def __init__(self, name):

@@ -24,6 +24,7 @@ import shutil
 from .prefs import DEFAULT_Q_NB
 from . import database, template, dialog
 from .errors import NoSuchTableError, DestinationExistsError, NotFoundError
+from .errors import CommandError
 
 
 def add(name, file, pattern):
@@ -75,9 +76,15 @@ def merge(name1, name2, name3=None):
     pass
 
 
-def list_():
-    """Print the listing of all tables' names currently available."""
-    print('\n'.join(database.list_tables()))
+def list_(kind):
+    """Print the listing of all known tables' or templates' names."""
+    if kind == 'tables':
+        print('\n'.join(database.list_tables()))
+    elif kind == 'templates':
+        print('\n'.join(template.list_()))
+    else:
+        raise CommandError('I can list "tables" or "templates". I don\'t '
+                           'know what "{}" might mean.'.format(kind))
 
 
 def show(name):
