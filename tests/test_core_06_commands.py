@@ -46,10 +46,10 @@ def test_rename(testdb, fs, mocker, capsys):
     m.assert_called_with('table1', 'table3')
 
 
-def test_rename_unknown_table(testdb):
+def test_rename_nonexistent_table(testdb):
     with pytest.raises(NoSuchTableError) as excinfo:
-        commands.rename('unknown', 'newname')
-    assert str(excinfo.value) == 'Cannot find a table named "unknown"'
+        commands.rename('nonexistent', 'newname')
+    assert str(excinfo.value) == 'Cannot find a table named "nonexistent"'
 
 
 def test_rename_missing_template(testdb, fs, mocker):
