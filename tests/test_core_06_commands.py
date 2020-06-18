@@ -21,8 +21,12 @@
 
 import os
 
+import pytest
+
 from vocashaker.core import template
 from vocashaker.core import commands
+from vocashaker.core import database
+from vocashaker.core.errors import NoSuchTableError
 
 
 def test_list_(testdb, capsys):
@@ -31,13 +35,78 @@ def test_list_(testdb, capsys):
     assert captured.out == 'table1\ntable2\n'
 
 
-def test_rename(testdb, fs, mocker):
-    m1 = mocker.patch('vocashaker.core.database.rename_table')
-    fs.create_file(template.path('name1'))
-    commands.rename('name1', 'name2')
-    assert os.path.exists(template.path('name2'))
-    assert not os.path.exists(template.path('name1'))
-    m1.assert_called_with('name1', 'name2')
+def test_rename(testdb, fs, mocker, capsys):
+    m = mocker.patch('vocashaker.core.database.rename_table')
+    fs.create_file(template.path('table1'))
+    commands.rename('table1', 'table3')
+    assert os.path.exists(template.path('table3'))
+    assert not os.path.exists(template.path('table1'))
+    m.assert_called_with('table1', 'table3')
+
+
+def test_rename_unknown_table(testdb):
+    with pytest.raises(NoSuchTableError) as excinfo:
+        commands.rename('unknown', 'newname')
+    assert str(excinfo.value) == 'Cannot find a table named "unknown"'
+
+
+def test_rename_missing_template(testdb, fs, mocker):
+    # No template for table2: automatic creation
+    def create_fake_template(*args):
+        fs.create_file(template.path('table2'))
+
+    m = mocker.patch('vocashaker.core.template.create',
+                     side_effect=create_fake_template)
+    commands.rename('table2', 'table4')
+    m.assert_called_with('table2')
+
+
+def test_rename_to_existing_table(testdb, fs, mocker):
+    fs.create_file(template.path('table1'))
+
+    # The user will cancel
+    m = mocker.patch('vocashaker.core.dialog.ask_yes_no',
+                     return_value=False)
+    commands.rename('table1', 'table2')
+    m.assert_called_with('A table named "table2" already exists. Answer "yes" '
+                         'to delete it, as well as its associated template, '
+                         'or "no" to cancel.')
+    assert os.path.exists(template.path('table1'))
+    assert database.table_exists('table1')
+
+    # The user chooses to remove the existing table
+    m = mocker.patch('vocashaker.core.dialog.ask_yes_no',
+                     return_value=True)
+    fs.create_file(template.path('table2'))
+    commands.rename('table1', 'table2')
+    m.assert_called_with('A table named "table2" already exists. Answer "yes" '
+                         'to delete it, as well as its associated template, '
+                         'or "no" to cancel.')
+    assert not os.path.exists(template.path('table1'))
+    assert not database.table_exists('table1')
+
+
+def test_rename_to_existing_template(testdb, fs, mocker):
+    fs.create_file(template.path('table1'))
+    fs.create_file(template.path('table3'))
+
+    # The user will cancel
+    m = mocker.patch('vocashaker.core.dialog.ask_yes_no',
+                     return_value=False)
+    commands.rename('table1', 'table3')
+    m.assert_called_with('A template named "table3" already exists. Answer '
+                         '"yes" to delete it, "no" to cancel.')
+    assert os.path.exists(template.path('table1'))
+    assert database.table_exists('table1')
+
+    # The user chooses to remove the existing template
+    m = mocker.patch('vocashaker.core.dialog.ask_yes_no',
+                     return_value=True)
+    commands.rename('table1', 'table3')
+    m.assert_called_with('A template named "table3" already exists. Answer '
+                         '"yes" to delete it, "no" to cancel.')
+    assert not os.path.exists(template.path('table1'))
+    assert not database.table_exists('table1')
 
 
 def test_delete(fs, mocker):

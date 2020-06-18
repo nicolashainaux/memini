@@ -22,7 +22,8 @@
 import shutil
 
 from .prefs import DEFAULT_Q_NB
-from . import database, template
+from . import database, template, dialog
+from .errors import NoSuchTableError
 
 
 def add(name, file, pattern):
@@ -76,8 +77,29 @@ def rename(name1, name2):
     """
     Rename table name1 as name2. Also rename the associated default template.
     """
-    shutil.move(template.path(name1), template.path(name2))
-    database.rename_table(name1, name2)
+    if not database.table_exists(name1):
+        raise NoSuchTableError(name1)
+    if not template.exists(name1):
+        template.create(name1)
+    go_on = True
+    if database.table_exists(name2):
+        go_on = dialog.ask_yes_no('A table named "{}" already exists. Answer '
+                                  '"yes" to delete it, as well as its '
+                                  'associated template, or "no" to cancel.'
+                                  .format(name2))
+        if go_on:
+            database.remove_table(name2)
+            if template.exists(name2):
+                template.remove(name2)
+    elif template.exists(name2):
+        go_on = dialog.ask_yes_no('A template named "{}" already exists. '
+                                  'Answer "yes" to delete it, "no" to cancel.'
+                                  .format(name2))
+        if go_on:
+            template.remove(name2)
+    if go_on:
+        shutil.move(template.path(name1), template.path(name2))
+        database.rename_table(name1, name2)
 
 
 def generate(name, nb=DEFAULT_Q_NB):
