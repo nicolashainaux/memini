@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
+from unittest.mock import call
 
 import pytest
 
@@ -27,6 +28,7 @@ from vocashaker.core import template
 from vocashaker.core import commands
 from vocashaker.core import database
 from vocashaker.core.errors import NoSuchTableError, DestinationExistsError
+from vocashaker.core.errors import NotFoundError
 
 
 def test_list_(testdb, capsys):
@@ -85,10 +87,27 @@ def test_rename_to_existing_template(testdb, fs):
         'this name.'
 
 
-def test_delete(fs, mocker):
-    pass
-    # mock_remove_table = mocker.patch('vocashaker.core.database.remove_table')
-    # fs.create_file(template.path('name1'))
-    # commands.delete('name1')
-    # assert not os.path.exists(template.path('name1'))
-    # assert mock_remove_table.assert_called_with('name1')
+def test_delete(fs, mocker, testdb):
+    fs.create_file(template.path('table1'))
+    m = mocker.patch('vocashaker.core.dialog.ask_yes_no')
+
+    # User cancels the deletions
+    m.side_effect = [False, False]
+    commands.delete('table1')
+    m.assert_has_calls([call('Delete table "table1"?'),
+                        call('Delete template "table1"?')])
+    assert os.path.exists(template.path('table1'))
+    assert database.table_exists('table1')
+
+    # User confirms the deletions
+    m.side_effect = [True, True]
+    commands.delete('table1')
+    assert not os.path.exists(template.path('table1'))
+    assert not database.table_exists('table1')
+
+
+def test_delete_nonexistent(testdb):
+    with pytest.raises(NotFoundError) as excinfo:
+        commands.delete('table3')
+    assert str(excinfo.value) == 'No table nor template named "table3" can '\
+        'be found to be deleted.'

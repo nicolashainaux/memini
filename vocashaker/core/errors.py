@@ -51,6 +51,12 @@ class DestinationExistsError(VocaShakerError):
         super().__init__(msg)
 
 
+class NotFoundError(VocaShakerError):
+    """When obviously something is missing."""
+    def __init__(self, msg):
+        super().__init__(msg)
+
+
 class NoSuchTableError(VocaShakerError):
     """When the provided name does not match any table."""
     def __init__(self, name):

@@ -23,7 +23,7 @@ import shutil
 
 from .prefs import DEFAULT_Q_NB
 from . import database, template, dialog
-from .errors import NoSuchTableError, DestinationExistsError
+from .errors import NoSuchTableError, DestinationExistsError, NotFoundError
 
 
 def add(name, file, pattern):
@@ -39,9 +39,21 @@ def add(name, file, pattern):
 
 def delete(name):
     """
-    Delete the table and associated default template matching name.
-    Ask confirmation before."""
-    pass
+    Delete the table and/or the associated default template matching name.
+    Ask confirmation before.
+    """
+    if database.table_exists(name) or template.exists(name):
+        if database.table_exists(name):
+            do_delete = dialog.ask_yes_no('Delete table "{}"?'.format(name))
+            if do_delete:
+                database.remove_table(name)
+        if template.exists(name):
+            do_delete = dialog.ask_yes_no('Delete template "{}"?'.format(name))
+            if do_delete:
+                template.remove(name)
+    else:
+        raise NotFoundError('No table nor template named "{}" can be found '
+                            'to be deleted.'.format(name))
 
 
 def remove(name, id_span):
