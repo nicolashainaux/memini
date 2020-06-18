@@ -22,7 +22,7 @@
 import shutil
 
 from .prefs import DEFAULT_Q_NB
-from . import database, template, dialog
+from . import database, template, terminal
 from .errors import NoSuchTableError, DestinationExistsError, NotFoundError
 from .errors import CommandError
 
@@ -45,11 +45,12 @@ def delete(name):
     """
     if database.table_exists(name) or template.exists(name):
         if database.table_exists(name):
-            do_delete = dialog.ask_yes_no('Delete table "{}"?'.format(name))
+            do_delete = terminal.ask_yes_no('Delete table "{}"?'.format(name))
             if do_delete:
                 database.remove_table(name)
         if template.exists(name):
-            do_delete = dialog.ask_yes_no('Delete template "{}"?'.format(name))
+            do_delete = terminal.ask_yes_no('Delete template "{}"?'
+                                            .format(name))
             if do_delete:
                 template.remove(name)
     else:

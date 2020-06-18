@@ -21,35 +21,35 @@
 
 from unittest.mock import patch
 
-from vocashaker.core import dialog
+from vocashaker.core import terminal
 
 
 def test_ask_yes_no(capsys):
     with patch('builtins.input') as mock_input:
         mock_input.return_value = 'YES'
-        answer = dialog.ask_yes_no('Will you do it?')
+        answer = terminal.ask_yes_no('Will you do it?')
         assert answer
         mock_input.assert_called_with('Will you do it? [y/N] ')
 
-        answer = dialog.ask_yes_no('Will you do it?', default=True)
+        answer = terminal.ask_yes_no('Will you do it?', default=True)
         assert answer
         mock_input.assert_called_with('Will you do it? [Y/n] ')
 
         values = ['Y', 'y', 'yes', 'Yes', 'yEs', 'yeS', 'YEs', 'yES', 'YeS']
         mock_input.side_effect = values
         for i in range(len(values)):
-            assert dialog.ask_yes_no('Will you do it?')
+            assert terminal.ask_yes_no('Will you do it?')
 
         values = ['N', 'n', 'no', 'No', 'nO', 'NO']
         mock_input.side_effect = values
         for i in range(len(values)):
-            assert not dialog.ask_yes_no('Will you do it?')
+            assert not terminal.ask_yes_no('Will you do it?')
 
         mock_input.side_effect = ['', '']
-        assert not dialog.ask_yes_no('Will you do it?')
-        assert dialog.ask_yes_no('Will you do it?', default=True)
+        assert not terminal.ask_yes_no('Will you do it?')
+        assert terminal.ask_yes_no('Will you do it?', default=True)
 
         mock_input.side_effect = ['maybe', 'Y']
-        dialog.ask_yes_no('Will you do it?')
+        terminal.ask_yes_no('Will you do it?')
         captured = capsys.readouterr()
         assert captured.out == 'Sorry, I didn\'t understand.\n'

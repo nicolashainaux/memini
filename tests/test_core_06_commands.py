@@ -98,7 +98,7 @@ def test_rename_to_existing_template(testdb, fs):
 
 def test_delete(fs, mocker, testdb):
     fs.create_file(template.path('table1'))
-    m = mocker.patch('vocashaker.core.dialog.ask_yes_no')
+    m = mocker.patch('vocashaker.core.terminal.ask_yes_no')
 
     # User cancels the deletions
     m.side_effect = [False, False]
