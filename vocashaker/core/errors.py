@@ -42,6 +42,15 @@ class LineDoesNotMatchError(VocaShakerError):
         super().__init__(msg)
 
 
+class DestinationExistsError(VocaShakerError):
+    """When a destination table or template already exists."""
+    def __init__(self, name, kind='table'):
+        msg = 'Action cancelled: a {} named "{}" already exists. '\
+            'Please rename or remove it before using this name.'\
+            .format(kind, name)
+        super().__init__(msg)
+
+
 class NoSuchTableError(VocaShakerError):
     """When the provided name does not match any table."""
     def __init__(self, name):
