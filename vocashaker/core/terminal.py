@@ -42,3 +42,12 @@ def ask_yes_no(question, default=False):
         if result is None:
             print('Sorry, I didn\'t understand.')
     return result
+
+
+def _hcenter(word, width):
+    """Add spaces before and after word to get to the given width."""
+    left = width - len(word)
+    after = before = ' ' * (left // 2)
+    if left % 2:
+        after += ' '
+    return f'{before}{word}{after}'

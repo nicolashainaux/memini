@@ -53,3 +53,8 @@ def test_ask_yes_no(capsys):
         terminal.ask_yes_no('Will you do it?')
         captured = capsys.readouterr()
         assert captured.out == 'Sorry, I didn\'t understand.\n'
+
+
+def test_hcenter():
+    assert terminal._hcenter('hello', 11) == '   hello   '
+    assert terminal._hcenter('hello', 12) == '   hello    '
