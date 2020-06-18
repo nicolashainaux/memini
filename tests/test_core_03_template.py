@@ -34,6 +34,12 @@ def test_path():
     assert template.path('NAME') == expected
 
 
+def test_list_(fs):
+    fs.create_file(template.path('table1'))
+    fs.create_file(template.path('table2'))
+    assert template.list_() == ['table1.odt', 'table2.odt']
+
+
 def test_exists(mocker):
     mock_os_is_file = mocker.patch('os.path.isfile')
     mock_path = mocker.patch('vocashaker.core.template.path')

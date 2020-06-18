@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
+import glob
 import shutil
 import subprocess
 
@@ -33,6 +34,11 @@ def path(table_name):
     """Return the path to template matching table_name."""
     return os.path.join(USER_TEMPLATES_PATH,
                         '{}.{}'.format(table_name, TEMPLATE_EXT))
+
+
+def list_():
+    """List all known templates."""
+    return [os.path.basename(p) for p in glob.glob(path('*'))]
 
 
 def exists(table_name):
