@@ -109,12 +109,15 @@ def get_rows_nb(table_name):
     return tuple(_exec(table_name, cmd))[0][0]
 
 
-def get_table(name):
+def get_table(name, include_headers=False):
     """Return a list of all table's lines."""
+    headers = []
     cols = ','.join(get_cols(name, include_id=True))
     content = _exec(name, 'SELECT {} FROM {};'.format(cols, name)).fetchall()
     content = [(str(t[0]), ) + t[1:] for t in content]
-    return content
+    if include_headers:
+        headers = [tuple(get_cols(name, include_id=True))]
+    return headers + content
 
 
 def table_to_text(name, pattern):

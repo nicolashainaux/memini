@@ -100,6 +100,12 @@ def test_get_table(testdb):
             ('2', 'break', 'broke, broken', 'casser'),
             ('3', 'do', 'did, done', 'faire'),
             ('4', 'give', 'gave, given', 'donner')]
+    assert get_table('table2', include_headers=True) \
+        == [('id', 'col1', 'col2', 'col3'),
+            ('1', 'begin', 'began, begun', 'commencer'),
+            ('2', 'break', 'broke, broken', 'casser'),
+            ('3', 'do', 'did, done', 'faire'),
+            ('4', 'give', 'gave, given', 'donner')]
     with pytest.raises(NoSuchTableError) as excinfo:
         get_table('table3')
     assert str(excinfo.value) == 'Cannot find a table named "table3"'
