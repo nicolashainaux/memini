@@ -21,7 +21,6 @@
 
 from unittest.mock import patch
 
-from vocashaker.core import database
 from vocashaker.core import terminal
 
 
@@ -62,7 +61,11 @@ def test_hcenter():
 
 
 def test_tabulate(testdb):
-    data = database.get_table('table1', include_headers=True)
+    data = [('id', 'col1', 'col2'),
+            ('1', 'adventus,  us, m.', 'arrivée'),
+            ('2', 'aqua , ae, f', 'eau'),
+            ('3', 'candidus,  a, um', 'blanc'),
+            ('4', 'sol, solis, m', 'soleil')]
     assert terminal.tabulate(data) == \
         " id |        col1       |   col2  \n"\
         "----+-------------------+---------\n"\
