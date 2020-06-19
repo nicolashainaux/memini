@@ -185,6 +185,15 @@ def _intspan2sqllist(s):
     return f'({values})'
 
 
+def remove_rows(table_name, id_span):
+    """Remove rows matching the ids from id_span from the table."""
+    for id_ in list(intspan(id_span)):
+        _assert_row_exists(table_name, id_)
+    values = _intspan2sqllist(id_span)
+    cmd = f'DELETE FROM {table_name} WHERE id IN {values};'
+    _exec(table_name, cmd)
+
+
 def _timestamp(table_name, id_):
     """Set timestamp to entry matching id_ in the table."""
     cmd = """UPDATE {} SET timestamp = strftime('%Y-%m-%d %H:%M:%f')

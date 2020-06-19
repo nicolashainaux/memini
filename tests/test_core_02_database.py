@@ -31,6 +31,7 @@ from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table, get_cols
 from vocashaker.core.database import add_row, remove_row, draw_rows
 from vocashaker.core.database import get_rows_nb
+from vocashaker.core.database import remove_rows
 from vocashaker.core.database import _timestamp, _reset, _full_reset
 from vocashaker.core.database import _intspan2sqllist
 from vocashaker.core.errors import NoSuchTableError
@@ -192,6 +193,15 @@ def test_remove_row(testdb):
 def test_intspan2sqllist():
     assert _intspan2sqllist('1-3,14,29,92-97') == \
         '(1, 2, 3, 14, 29, 92, 93, 94, 95, 96, 97)'
+
+
+def test_remove_rows(testdb):
+    with pytest.raises(NoSuchRowError) as excinfo:
+        remove_rows('table1', '2-5')
+    assert str(excinfo.value) == 'Cannot find a row number 5 in "table1"'
+    remove_rows('table1', '1-3')
+    assert get_table('table1') \
+        == [('4', 'sol, solis, m', 'soleil')]
 
 
 def test_timestamp(testdb):
