@@ -180,9 +180,9 @@ def remove_row(table_name, id_):
 
 
 def _intspan2sqllist(s):
-    """Turn an ints' span to a SQLite list of values."""
+    """Turn an ints' span (given as str) to a SQLite list of values."""
     values = ', '.join([str(n) for n in list(intspan(s))])
-    return f"({values})"
+    return f'({values})'
 
 
 def _timestamp(table_name, id_):
