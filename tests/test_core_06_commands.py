@@ -46,7 +46,7 @@ def test_list_(testdb, capsys, fs):
         'I don\'t know what "foo" might mean.'
 
 
-def test_rename(testdb, fs, mocker, capsys):
+def test_rename(testdb, fs, mocker):
     m = mocker.patch('vocashaker.core.database.rename_table')
     fs.create_file(template.path('table1'))
     commands.rename('table1', 'table3')
