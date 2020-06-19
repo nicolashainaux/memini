@@ -63,8 +63,7 @@ def remove(name, id_span):
     Remove the rows identified by the given id_span from the table identified
     by its name.
     """
-    pass
-    # template.remove(name)
+    database.remove_rows(name, id_span)
 
 
 # def merge(name1, name2, name3=None):

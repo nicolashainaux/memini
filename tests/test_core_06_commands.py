@@ -138,3 +138,9 @@ def test_show(testdb, capsys):
         "  2 | break | broke, broken |   casser  \n"\
         "  3 |   do  |   did, done   |   faire   \n"\
         "  4 |  give |  gave, given  |   donner  \n"
+
+
+def test_remove(mocker):
+    m = mocker.patch('vocashaker.core.database.remove_rows')
+    commands.remove('table2', '2,3')
+    m.assert_called_with('table2', '2,3')
