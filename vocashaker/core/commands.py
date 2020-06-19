@@ -22,20 +22,22 @@
 import shutil
 
 from .prefs import DEFAULT_Q_NB
-from . import database, template, terminal
+from . import database, template, terminal, parser
 from .errors import NoSuchTableError, DestinationExistsError, NotFoundError
 from .errors import CommandError
 
 
-def add(name, file, pattern):
+def add(name, file_name, pattern):
     """
     Parse file using pattern and create a new table filled with the result.
     Create the associated default template.
     Before doing so, check if the name is already used. If yes, ask if the
     lines should be appended to the existing table or not (cancel).
     """
-    pass
-    # template.create(name)
+    rows = parser.parse_file(file_name, pattern)
+    _, titles = parser.parse_pattern(pattern)
+    database.create_table(name, titles, rows)
+    template.create(name)
 
 
 def delete(name):

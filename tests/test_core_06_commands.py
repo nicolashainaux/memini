@@ -24,6 +24,7 @@ from unittest.mock import call
 
 import pytest
 
+from vocashaker.core.env import TESTS_DATADIR
 from vocashaker.core import template
 from vocashaker.core import commands
 from vocashaker.core import database
@@ -144,3 +145,26 @@ def test_remove(mocker):
     m = mocker.patch('vocashaker.core.database.remove_rows')
     commands.remove('table2', '2,3')
     m.assert_called_with('table2', '2,3')
+
+
+def test_add(testdb, capsys, mocker):
+    m = mocker.patch('vocashaker.core.template.create')
+    f = os.path.join(TESTS_DATADIR, 'latin.txt')
+    commands.add('latin', f, '<Latin>:<Français>')
+    m.assert_called_with('latin')
+    commands.show('latin')
+    captured = capsys.readouterr()
+    assert captured.out == \
+        ' id |         Latin        |       Français      \n'\
+        '----+----------------------+---------------------\n'\
+        '  1 |    actio, onis, f.   | procès , plaidoirie \n'\
+        '  2 | admiratio,  onis, f. |      admiration     \n'\
+        '  3 |   adventus,  us, m.  |       arrivée       \n'\
+        '  4 |   aedilis,  is, m.   |        édile        \n'\
+        '  5 |  aetas, atis, f âge  |         vie         \n'\
+        '  6 |   ambitio, onis, f.  |       ambition      \n'\
+        '  7 |    ambitus, us, m.   |      la brigue      \n'\
+        '  8 |   amicitia,  ae, f.  |        amitié       \n'\
+        '  9 |    amicus,  i, m.    |         ami         \n'\
+        ' 10 |    amor,  oris, m.   |        amour        \n'\
+        ' 11 |    anima,  ae, f.    |      coeur, âme     \n'
