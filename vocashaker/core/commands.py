@@ -22,7 +22,7 @@
 import shutil
 
 from .prefs import DEFAULT_Q_NB
-from . import database, template, terminal, parser
+from . import database, template, terminal, parser, document
 from .errors import NoSuchTableError, DestinationExistsError, NotFoundError
 from .errors import CommandError
 
@@ -119,4 +119,4 @@ def generate(name, nb=DEFAULT_Q_NB):
     Create a new document using default template and drawing data from the
     table matching name.
     """
-    pass
+    document.generate(name, nb=nb)

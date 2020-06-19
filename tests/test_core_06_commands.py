@@ -168,3 +168,9 @@ def test_add(testdb, capsys, mocker):
         '  9 |    amicus,  i, m.    |         ami         \n'\
         ' 10 |    amor,  oris, m.   |        amour        \n'\
         ' 11 |    anima,  ae, f.    |      coeur, âme     \n'
+
+
+def test_generate(mocker):
+    m = mocker.patch('vocashaker.core.document.generate')
+    commands.generate('table1', 4)
+    m.assert_called_with('table1', nb=4)
