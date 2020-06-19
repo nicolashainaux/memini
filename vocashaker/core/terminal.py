@@ -49,5 +49,30 @@ def _hcenter(word, width):
     spaces = width - len(word)
     after = before = ' ' * (spaces // 2)
     if spaces % 2:
-        after += ' '
+        before += ' '
     return f'{before}{word}{after}'
+
+
+def tabulate(rows, vsep=None, hsep=None, isep=None):
+    """Tabulate the given rows. First row is assumed to contain the headers."""
+    if vsep is None:
+        vsep = '|'
+    if hsep is None:
+        hsep = '-'
+    if isep is None:
+        isep = '+'
+    cols = []
+    for i, _ in enumerate(rows[0]):
+        cols.append([rows[j][i] for j in range(len(rows))])
+    widths = []
+    for col in cols:
+        widths.append(max({len(word) for word in col}) + 2)
+    headers = vsep.join([_hcenter(word, width)
+                         for (word, width) in zip(rows[0], widths)])
+    ruler = isep.join([hsep * w for w in widths])
+    content = []
+    for r in rows[1:]:
+        content.append(vsep.join([_hcenter(word, width)
+                                  for (word, width) in zip(r, widths)]))
+    table = [headers, ruler, *content]
+    return '\n'.join(table)

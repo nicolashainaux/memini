@@ -21,6 +21,7 @@
 
 from unittest.mock import patch
 
+from vocashaker.core import database
 from vocashaker.core import terminal
 
 
@@ -57,4 +58,15 @@ def test_ask_yes_no(capsys):
 
 def test_hcenter():
     assert terminal._hcenter('hello', 11) == '   hello   '
-    assert terminal._hcenter('hello', 12) == '   hello    '
+    assert terminal._hcenter('hello', 12) == '    hello   '
+
+
+def test_tabulate(testdb):
+    data = database.get_table('table1', include_headers=True)
+    assert terminal.tabulate(data) == \
+        " id |        col1       |   col2  \n"\
+        "----+-------------------+---------\n"\
+        "  1 | adventus,  us, m. | arrivée \n"\
+        "  2 |    aqua , ae, f   |   eau   \n"\
+        "  3 |  candidus,  a, um |  blanc  \n"\
+        "  4 |   sol, solis, m   |  soleil "
