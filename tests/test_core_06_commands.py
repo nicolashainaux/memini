@@ -120,3 +120,21 @@ def test_delete_nonexistent(testdb):
         commands.delete('table3')
     assert str(excinfo.value) == 'No table nor template named "table3" can '\
         'be found to be deleted.'
+
+
+def test_show_nonexistent(testdb):
+    with pytest.raises(NoSuchTableError) as excinfo:
+        commands.show('nonexistent')
+    assert str(excinfo.value) == 'Cannot find a table named "nonexistent"'
+
+
+def test_show(testdb, capsys):
+    commands.show('table2')
+    captured = capsys.readouterr()
+    assert captured.out == \
+        " id |  col1 |      col2     |    col3   \n"\
+        "----+-------+---------------+-----------\n"\
+        "  1 | begin |  began, begun | commencer \n"\
+        "  2 | break | broke, broken |   casser  \n"\
+        "  3 |   do  |   did, done   |   faire   \n"\
+        "  4 |  give |  gave, given  |   donner  \n"

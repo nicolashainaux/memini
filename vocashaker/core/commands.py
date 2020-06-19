@@ -90,7 +90,9 @@ def list_(kind):
 
 def show(name):
     """Print the content of the table matching name."""
-    pass
+    if not database.table_exists(name):
+        raise NoSuchTableError(name)
+    print(terminal.tabulate(database.get_table(name, include_headers=True)))
 
 
 def rename(name1, name2):
