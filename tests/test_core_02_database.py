@@ -32,6 +32,7 @@ from vocashaker.core.database import remove_table, create_table, get_cols
 from vocashaker.core.database import add_row, remove_row, draw_rows
 from vocashaker.core.database import get_rows_nb
 from vocashaker.core.database import _timestamp, _reset, _full_reset
+from vocashaker.core.database import _intspan2sqllist
 from vocashaker.core.errors import NoSuchTableError
 from vocashaker.core.errors import NoSuchRowError
 from vocashaker.core.errors import ColumnsDoNotMatchError
@@ -186,6 +187,11 @@ def test_remove_row(testdb):
         == [('1', 'adventus,  us, m.', 'arrivée'),
             ('3', 'candidus,  a, um', 'blanc'),
             ('4', 'sol, solis, m', 'soleil')]
+
+
+def test_intspan2sqllist():
+    assert _intspan2sqllist('1-3,14,29,92-97') == \
+        '(1, 2, 3, 14, 29, 92, 93, 94, 95, 96, 97)'
 
 
 def test_timestamp(testdb):

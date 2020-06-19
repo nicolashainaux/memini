@@ -22,6 +22,8 @@
 import sqlite3
 from itertools import zip_longest, chain
 
+from intspan import intspan
+
 from . import shared
 from .errors import NoSuchTableError, ColumnsDoNotMatchError, NoSuchRowError
 from .errors import TooManyRowsRequiredError
@@ -175,6 +177,12 @@ def remove_row(table_name, id_):
     """Remove row matching id_ in the table."""
     cmd = 'DELETE FROM {} WHERE id = {};'.format(table_name, id_)
     _exec(table_name, cmd, id_=id_)
+
+
+def _intspan2sqllist(s):
+    """Turn an ints' span to a SQLite list of values."""
+    values = ', '.join([str(n) for n in list(intspan(s))])
+    return f"({values})"
 
 
 def _timestamp(table_name, id_):
