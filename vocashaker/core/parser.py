@@ -42,7 +42,7 @@ def parse_pattern(pattern, sep_list=False):
     tags = [t[1:-1] for t in tags]
     if sep_list:
         regex = regex.split('(.*?)')[1:-1]
-    return (regex, tags)
+    return (regex, tuple(tags))
 
 
 def parse_line(pattern, line):
@@ -50,7 +50,7 @@ def parse_line(pattern, line):
     regex, _ = parse_pattern(pattern)
     match = re.fullmatch(regex, line)
     if match:
-        result = [g.strip() for g in match.groups()]
+        result = tuple(g.strip() for g in match.groups())
     else:
         raise LineDoesNotMatchError(line, pattern)
     return result

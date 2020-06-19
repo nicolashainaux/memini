@@ -28,21 +28,21 @@ from vocashaker.core.errors import LineDoesNotMatchError
 
 def test_parse_pattern():
     p = '<tag1>:<tag2>'
-    assert parse_pattern(p) == ('(.*?):(.*?)', ['tag1', 'tag2'])
+    assert parse_pattern(p) == ('(.*?):(.*?)', ('tag1', 'tag2'))
     with pytest.raises(MissingSeparatorError) as excinfo:
         parse_pattern('<tag1><tag2>')
     assert str(excinfo.value) == 'Missing separator in pattern:\n'\
         '<tag1><tag2>\n'\
         '      ^'
-    assert parse_pattern(p, sep_list=True) == ([':'], ['tag1', 'tag2'])
+    assert parse_pattern(p, sep_list=True) == ([':'], ('tag1', 'tag2'))
     p = '<Latin> : <Français>'
-    assert parse_pattern(p, sep_list=True) == ([' : '], ['Latin', 'Français'])
+    assert parse_pattern(p, sep_list=True) == ([' : '], ('Latin', 'Français'))
 
 
 def test_parse_line():
     p = '<Latin>:<Français>'
     line = 'ambitio, onis, f. : ambition'
-    assert parse_line(p, line) == ['ambitio, onis, f.', 'ambition']
+    assert parse_line(p, line) == ('ambitio, onis, f.', 'ambition')
     line = 'acies, ei, f ligne de bataille'
     with pytest.raises(LineDoesNotMatchError) as excinfo:
         parse_line(p, line)
@@ -66,10 +66,10 @@ solvo,  is, ere, vi, solutum : détacher, payer
     m = mocker.patch('builtins.open', mocker.mock_open(read_data=content))
     result = parse_file('some_file.txt', '<Latin>:<Français>')
     m.assert_called_once_with('some_file.txt')
-    expected = [['gaudium,  i, n.', 'joie'],
-                ['jungo,  is, ere, junxi, junctum', 'joindre'],
-                ['nosco,  is, ere, novi, notum', 'apprendre ; pf. savoir'],
-                ['nuntio, as, are', 'annoncer'],
-                ['soleo,  es, ere, solui, solitum', "avoir l'habitude de"],
-                ['solvo,  is, ere, vi, solutum', 'détacher, payer']]
+    expected = [('gaudium,  i, n.', 'joie'),
+                ('jungo,  is, ere, junxi, junctum', 'joindre'),
+                ('nosco,  is, ere, novi, notum', 'apprendre ; pf. savoir'),
+                ('nuntio, as, are', 'annoncer'),
+                ('soleo,  es, ere, solui, solitum', "avoir l'habitude de"),
+                ('solvo,  is, ere, vi, solutum', 'détacher, payer')]
     assert result == expected
