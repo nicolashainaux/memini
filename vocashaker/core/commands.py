@@ -67,14 +67,16 @@ def remove(name, id_span):
     # template.remove(name)
 
 
-def merge(name1, name2, name3=None):
-    """
-    If name3 is None, then merge contents of tables name1 and name2 into name2.
-    Ask before doing so.
-    If name3 is not None, then the merged content goes to a newly created table
-    named name3 (the matching default template will then be created too).
-    """
-    pass
+# def merge(name1, name2, name3=None):
+#     """
+#     If name3 is None, then merge contents of tables name1 and name2
+# into name2.
+#     Ask before doing so.
+#     If name3 is not None, then the merged content goes to a newly created
+# table
+#     named name3 (the matching default template will then be created too).
+#     """
+#     pass
 
 
 def list_(kind):
