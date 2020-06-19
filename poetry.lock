@@ -59,6 +59,14 @@ testing = ["packaging", "pep517", "importlib-resources (>=1.3)"]
 
 [[package]]
 category = "main"
+description = "Sets of integers like 1,3-7,33"
+name = "intspan"
+optional = false
+python-versions = "*"
+version = "1.6.1"
+
+[[package]]
+category = "main"
 description = "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API."
 name = "lxml"
 optional = false
@@ -189,7 +197,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "b840f2401a350b21b08ed06b8603ad54d7196ebf9a143baf0ccbd490d44f0ee2"
+content-hash = "a569a8849a0944d8b1b61399cdf43fa21e6fdff67e12186af458eba4bed0b522"
 python-versions = "^3.6"
 
 [metadata.files]
@@ -212,6 +220,10 @@ genshi = [
 importlib-metadata = [
     {file = "importlib_metadata-1.6.1-py2.py3-none-any.whl", hash = "sha256:15ec6c0fd909e893e3a08b3a7c76ecb149122fb14b7efe1199ddd4c7c57ea958"},
     {file = "importlib_metadata-1.6.1.tar.gz", hash = "sha256:0505dd08068cfec00f53a74a0ad927676d7757da81b7436a6eefe4c7cf75c545"},
+]
+intspan = [
+    {file = "intspan-1.6.1-py3-none-any.whl", hash = "sha256:78ea01107adb4c9b833b707ac3d8aec0ae69ce1cee9362fed6d2a3fb4fef24c7"},
+    {file = "intspan-1.6.1.tar.gz", hash = "sha256:2ebefbfeeea9fd07e50e3969671712ed3ade730355d3224a41829fc31f7fc0b2"},
 ]
 lxml = [
     {file = "lxml-4.5.1-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:ee2be8b8f72a2772e72ab926a3bccebf47bb727bda41ae070dc91d1fb759b726"},
