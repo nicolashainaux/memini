@@ -19,9 +19,13 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+import click
+
 from vocashaker.core.env import USER_DB_PATH
+from vocashaker.core.errors import CommandError
 from vocashaker.core import shared
 from vocashaker.core import database
+from vocashaker.core import commands
 
 
 shared.init()
@@ -29,7 +33,17 @@ shared.init()
 __all__ = ['run']
 
 
+@click.group()
 def run():
-    print('Starting!')
+    pass
+
+
+@run.command('list')
+@click.argument('what')
+def list_(what):
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
+        try:
+            commands.list_(what)
+        except CommandError as e:
+            click.echo(str(e))
