@@ -27,6 +27,15 @@ from .errors import NoSuchTableError, DestinationExistsError, NotFoundError
 from .errors import CommandError
 
 
+def parse(filename, pattern):
+    """
+    Parse file using provided pattern and output the result. Do not store
+    anything.
+    """
+    _, titles = parser.parse_pattern(pattern)
+    print(terminal.tabulate([titles] + parser.parse_file(filename, pattern)))
+
+
 def add(name, file_name, pattern):
     """
     Parse file using pattern and create a new table filled with the result.

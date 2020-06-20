@@ -43,8 +43,9 @@ def test_list_(testdb, capsys, fs):
     assert captured.out == 'template1.odt\ntemplate2.odt\n'
     with pytest.raises(CommandError) as excinfo:
         commands.list_('foo')
-    assert str(excinfo.value) == 'I can list "tables" or "templates". '\
-        'I don\'t know what "foo" might mean.'
+    assert str(excinfo.value) == 'Sorry, I can only list "tables" or '\
+        '"templates". Please use one of these two keywords. '\
+        'I will not try to list "foo".'
 
 
 def test_rename(testdb, fs, mocker):
@@ -145,6 +146,27 @@ def test_remove(mocker):
     m = mocker.patch('vocashaker.core.database.remove_rows')
     commands.remove('table2', '2,3')
     m.assert_called_with('table2', '2,3')
+
+
+def test_parse(capsys, mocker):
+    f = os.path.join(TESTS_DATADIR, 'latin.txt')
+    commands.parse(f, '<Latin>:<Français>')
+    captured = capsys.readouterr()
+    print(captured.out)
+    assert captured.out == \
+        '         Latin        |       Français      \n'\
+        '----------------------+---------------------\n'\
+        '    actio, onis, f.   | procès , plaidoirie \n'\
+        ' admiratio,  onis, f. |      admiration     \n'\
+        '   adventus,  us, m.  |       arrivée       \n'\
+        '   aedilis,  is, m.   |        édile        \n'\
+        '  aetas, atis, f âge  |         vie         \n'\
+        '   ambitio, onis, f.  |       ambition      \n'\
+        '    ambitus, us, m.   |      la brigue      \n'\
+        '   amicitia,  ae, f.  |        amitié       \n'\
+        '    amicus,  i, m.    |         ami         \n'\
+        '    amor,  oris, m.   |        amour        \n'\
+        '    anima,  ae, f.    |      coeur, âme     \n'
 
 
 def test_add(testdb, capsys, mocker):
