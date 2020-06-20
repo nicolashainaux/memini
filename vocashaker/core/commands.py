@@ -87,8 +87,9 @@ def list_(kind):
     elif kind == 'templates':
         print('\n'.join(template.list_()))
     else:
-        raise CommandError('I can list "tables" or "templates". I don\'t '
-                           'know what "{}" might mean.'.format(kind))
+        raise CommandError(f'Sorry, I can only list "tables" or "templates". '
+                           f'Please use one of these two keywords. '
+                           f'I will not try to list "{kind}".')
 
 
 def show(name):
