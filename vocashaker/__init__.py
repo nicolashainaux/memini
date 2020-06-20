@@ -47,3 +47,12 @@ def list_(what):
             commands.list_(what)
         except CommandError as e:
             click.echo(str(e))
+
+
+@run.command('parse')
+@click.argument('filename', type=click.Path(exists=True))
+@click.argument('pattern')
+def parse(filename, pattern):
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        commands.parse(filename, pattern)
