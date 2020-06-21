@@ -90,14 +90,14 @@ def tabulate(rows, vsep=None, hsep=None, isep=None):
         cols.append([rows[j][i] for j in range(len(rows))])
     widths = []
     for col in cols:
-        widths.append(max({len(word) for word in col}) + 2)
+        widths.append(max({len(text) for text in col}) + 2)
     # widths = _allocate_widths(widths)
-    headers = vsep.join([_hcenter(word, width)
-                         for (word, width) in zip(rows[0], widths)])
+    headers = vsep.join([_hcenter(text, width)
+                         for (text, width) in zip(rows[0], widths)])
     ruler = isep.join([hsep * w for w in widths])
     content = []
     for r in rows[1:]:
-        content.append(vsep.join([_hcenter(word, width)
-                                  for (word, width) in zip(r, widths)]))
+        content.append(vsep.join([_hcenter(text, width)
+                                  for (text, width) in zip(r, widths)]))
     table = [headers, ruler, *content]
     return '\n'.join(table)
