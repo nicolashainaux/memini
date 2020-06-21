@@ -19,8 +19,7 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-from unittest.mock import patch
-from collections import namedtuple
+from unittest.mock import patch, PropertyMock
 
 from vocashaker.core import terminal
 
@@ -62,14 +61,29 @@ def test_hcenter():
 
 
 def test_allocate_widths(mocker):
-    TSize = namedtuple('TSize', 'columns lines')
-    t1 = TSize(168, 44)
-    mocker.patch('os.get_terminal_size', return_value=t1)
-    assert terminal._allocate_widths([80, 120]) == [80, 88]
-    t2 = TSize(80, 40)
-    mocker.patch('os.get_terminal_size', return_value=t2)
-    assert terminal._allocate_widths([90, 90]) == [40, 40]
-    assert terminal._allocate_widths([20, 40, 40]) == [20, 30, 30]
+    m = patch('blessed.Terminal.width', new_callable=PropertyMock)
+    with m as mock_width:
+        mock_width.return_value = 168
+        assert terminal._allocate_widths([80, 120]) == [80, 87]
+        mock_width.return_value = 80
+        assert terminal._allocate_widths([90, 90]) == [39, 39]
+        assert terminal._allocate_widths([20, 40, 40]) == [20, 29, 29]
+
+
+def test_expand_rows():
+    data = [('id', 'col1', 'col2'),
+            ('1', 'adven tus,us, m.', 'arriv ée')]
+    assert terminal._expand_rows(data, [4, 7, 6]) == \
+        [('id', 'col1', 'col2'),
+         ('1', 'adven', 'arriv'),
+         ('', 'tus,us,', 'ée'),
+         ('', 'm.', '')]
+    data = [('id', 'col1', 'col2'),
+            ('1', 'adventus,  us, m.', 'arrivée'),
+            ('2', 'aqua , ae, f', 'eau'),
+            ('3', 'candidus,  a, um', 'blanc'),
+            ('4', 'sol, solis, m', 'soleil')]
+    assert terminal._expand_rows(data, [4, 19, 9]) == data
 
 
 def test_tabulate(testdb):

@@ -20,6 +20,10 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
+from textwrap import wrap
+from itertools import zip_longest
+
+import blessed
 
 
 def ask_yes_no(question, default=False):
@@ -60,21 +64,36 @@ def _allocate_widths(widths):
     Allocate space in a "smart" way if the total required width is larger
     than the terminal's.
     """
-    term_width = os.get_terminal_size().columns
+    term_width = blessed.Terminal().width
     cols_nb = len(widths)
-    if sum(widths) > term_width:
+    if sum(widths) >= term_width:
         # The text to tabulate is larger than the terminal:
         # Width available for each column if we allocate it equally:
         mean_width = term_width // cols_nb
         # Width left for larger cols if we remove the narrower ones
         # (larger being larger than the mean; narrower, narrower than the mean)
         width_narrower = sum([w for w in widths if w < mean_width])
-        left_for_larger = term_width - width_narrower
+        left_for_larger = term_width - width_narrower - 1
         nb_of_larger = len([w for w in widths if w >= mean_width])
         width_larger = left_for_larger // nb_of_larger
         # Now replace the widths of the larger ones by width_larger
         widths = [w if w < mean_width else width_larger for w in widths]
     return widths
+
+
+def _expand_rows(rows, widths):
+    """Expand each row that contains too wide text in several rows."""
+    result = []
+    for row in rows:
+        new_rows = []
+        texts = []
+        for i, text in enumerate(row):
+            texts.append(wrap(text, widths[i]))
+        for new_row in zip_longest(*texts, fillvalue=''):
+            new_rows.append(new_row)
+        for row in new_rows:
+            result.append(row)
+    return result
 
 
 def tabulate(rows, vsep=None, hsep=None, isep=None):
@@ -91,7 +110,8 @@ def tabulate(rows, vsep=None, hsep=None, isep=None):
     widths = []
     for col in cols:
         widths.append(max({len(text) for text in col}) + 2)
-    # widths = _allocate_widths(widths)
+    widths = _allocate_widths(widths)
+    rows = _expand_rows(rows, widths)
     headers = vsep.join([_hcenter(text, width)
                          for (text, width) in zip(rows[0], widths)])
     ruler = isep.join([hsep * w for w in widths])
