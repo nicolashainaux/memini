@@ -73,3 +73,9 @@ def test_tabulate(testdb):
         "  2 |    aqua , ae, f   |   eau   \n"\
         "  3 |  candidus,  a, um |  blanc  \n"\
         "  4 |   sol, solis, m   |  soleil "
+    data = [('id', 'col1', 'col2'),
+            ('1', '', 'arrivée')]
+    assert terminal.tabulate(data) == \
+        " id | col1 |   col2  \n"\
+        "----+------+---------\n"\
+        "  1 |      | arrivée "
