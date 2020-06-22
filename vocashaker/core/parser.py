@@ -60,12 +60,17 @@ def parse_file(filename, pattern):
     """Parse one entire file of data lines, according to pattern"""
     result = []
     with open(filename) as f:
+        nomatch = []
         for line in f.readlines():
             if line.strip():
                 try:
                     to_add = parse_line(pattern, line.strip())
-                except LineDoesNotMatchError as e:
-                    warnings.warn(str(e))
+                except LineDoesNotMatchError:
+                    nomatch.append(line.strip())
                 else:
                     result.append(to_add)
+    if nomatch:
+        warnings.warn(f'WARNING: the following lines did not '
+                      f'match the pattern "{pattern}":\n'
+                      + '\n'.join(nomatch))
     return result

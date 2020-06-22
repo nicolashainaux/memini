@@ -73,3 +73,25 @@ solvo,  is, ere, vi, solutum : détacher, payer
                 ('soleo,  es, ere, solui, solitum', "avoir l'habitude de"),
                 ('solvo,  is, ere, vi, solutum', 'détacher, payer')]
     assert result == expected
+
+    content = """gaudium,  i, n. : joie
+
+jungo,  is, ere, junxi, junctum joindre
+
+nosco,  is, ere, novi, notum : apprendre ; pf. savoir
+
+solvo,  is, ere, vi, solutum détacher, payer
+"""
+    m = mocker.patch('builtins.open', mocker.mock_open(read_data=content))
+    with pytest.warns(UserWarning) as record:
+        result = parse_file('some_file.txt', '<Latin>:<Français>')
+    m.assert_called_once_with('some_file.txt')
+    assert len(record) == 1
+    assert str(record[0].message) == \
+        'WARNING: the following lines did not match the pattern '\
+        '"<Latin>:<Français>":\n'\
+        'jungo,  is, ere, junxi, junctum joindre\n'\
+        'solvo,  is, ere, vi, solutum détacher, payer'
+    expected = [('gaudium,  i, n.', 'joie'),
+                ('nosco,  is, ere, novi, notum', 'apprendre ; pf. savoir')]
+    assert result == expected
