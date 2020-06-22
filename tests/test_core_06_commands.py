@@ -152,7 +152,6 @@ def test_parse(capsys, mocker):
     f = os.path.join(TESTS_DATADIR, 'latin.txt')
     commands.parse(f, '<Latin>:<Français>')
     captured = capsys.readouterr()
-    print(captured.out)
     assert captured.out == \
         '         Latin        |       Français      \n'\
         '----------------------+---------------------\n'\
@@ -167,6 +166,28 @@ def test_parse(capsys, mocker):
         '    amicus,  i, m.    |         ami         \n'\
         '    amor,  oris, m.   |        amour        \n'\
         '    anima,  ae, f.    |      coeur, âme     \n'
+
+    f = os.path.join(TESTS_DATADIR, 'latin_parse_err.txt')
+    commands.parse(f, '<Latin>:<Français>')
+    captured = capsys.readouterr()
+    assert captured.out == \
+        '         Latin        |       Français      \n'\
+        '----------------------+---------------------\n'\
+        '    actio, onis, f.   | procès , plaidoirie \n'\
+        ' admiratio,  onis, f. |      admiration     \n'\
+        '   adventus,  us, m.  |       arrivée       \n'\
+        '  aetas, atis, f âge  |         vie         \n'\
+        '   ambitio, onis, f.  |       ambition      \n'\
+        '    amicus,  i, m.    |         ami         \n'\
+        '    amor,  oris, m.   |        amour        \n'\
+        '    anima,  ae, f.    |      coeur, âme     \n'
+    assert captured.err == \
+        'WARNING: following lines do not match the pattern '\
+        '"<Latin>:<Français>" and have been ignored:\n'\
+        '✘ aedilis,  is, m.  édile\n'\
+        '✘ ambitus, us, m. la brigue\n'\
+        '✘ amicitia,  ae, f. amitié\n'\
+        'End of ignored lines list\n'
 
 
 def test_add(testdb, capsys, mocker):
@@ -190,6 +211,30 @@ def test_add(testdb, capsys, mocker):
         '  9 |    amicus,  i, m.    |         ami         \n'\
         ' 10 |    amor,  oris, m.   |        amour        \n'\
         ' 11 |    anima,  ae, f.    |      coeur, âme     \n'
+    f = os.path.join(TESTS_DATADIR, 'latin_parse_err.txt')
+    commands.add('latin2', f, '<Latin>:<Français>')
+    m.assert_called_with('latin2')
+    captured = capsys.readouterr()
+    assert captured.err == \
+        'WARNING: following lines do not match the pattern '\
+        '"<Latin>:<Français>" and have been ignored:\n'\
+        '✘ aedilis,  is, m.  édile\n'\
+        '✘ ambitus, us, m. la brigue\n'\
+        '✘ amicitia,  ae, f. amitié\n'\
+        'End of ignored lines list\n'
+    commands.show('latin2')
+    captured = capsys.readouterr()
+    assert captured.out == \
+        ' id |         Latin        |       Français      \n'\
+        '----+----------------------+---------------------\n'\
+        '  1 |    actio, onis, f.   | procès , plaidoirie \n'\
+        '  2 | admiratio,  onis, f. |      admiration     \n'\
+        '  3 |   adventus,  us, m.  |       arrivée       \n'\
+        '  4 |  aetas, atis, f âge  |         vie         \n'\
+        '  5 |   ambitio, onis, f.  |       ambition      \n'\
+        '  6 |    amicus,  i, m.    |         ami         \n'\
+        '  7 |    amor,  oris, m.   |        amour        \n'\
+        '  8 |    anima,  ae, f.    |      coeur, âme     \n'
 
 
 def test_generate(mocker):
