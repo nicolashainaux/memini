@@ -35,7 +35,7 @@ def _print_lines_not_matching_pattern(errors, pattern):
     message = term.darkorange(f'WARNING: following lines do not match the '
                               f'pattern "{pattern}" and have been '
                               f'ignored:\n')
-    message += '\n'.join(term.darkorange('*') + line
+    message += '\n'.join(term.darkorange('✘ ') + line
                          for line in errors)
     message += term.darkorange('\nEnd of ignored lines list\n')
     sys.stderr.write(message)
