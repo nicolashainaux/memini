@@ -19,7 +19,7 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-from unittest.mock import patch, PropertyMock
+from unittest.mock import patch
 
 from vocashaker.core import terminal
 
@@ -61,13 +61,16 @@ def test_hcenter():
 
 
 def test_allocate_widths(mocker):
-    m = patch('blessed.Terminal.width', new_callable=PropertyMock)
-    with m as mock_width:
-        mock_width.return_value = 168
-        assert terminal._allocate_widths([80, 120]) == [80, 87]
-        mock_width.return_value = 80
-        assert terminal._allocate_widths([90, 90]) == [39, 39]
-        assert terminal._allocate_widths([20, 40, 40]) == [20, 29, 29]
+    mocker.patch('blessed.Terminal.width',
+                 new_callable=mocker.PropertyMock,
+                 return_value=168)
+    assert terminal._allocate_widths([80, 120]) == [80, 87]
+
+    mocker.patch('blessed.Terminal.width',
+                 new_callable=mocker.PropertyMock,
+                 return_value=80)
+    assert terminal._allocate_widths([90, 90]) == [39, 39]
+    assert terminal._allocate_widths([20, 40, 40]) == [20, 29, 29]
 
 
 def test_expand_rows():
