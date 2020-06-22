@@ -20,7 +20,6 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import re
-import warnings
 
 from vocashaker.core.errors import MissingSeparatorError, LineDoesNotMatchError
 
@@ -59,8 +58,8 @@ def parse_line(pattern, line):
 def parse_file(filename, pattern):
     """Parse one entire file of data lines, according to pattern"""
     result = []
+    nomatch = []
     with open(filename) as f:
-        nomatch = []
         for line in f.readlines():
             if line.strip():
                 try:
@@ -69,8 +68,4 @@ def parse_file(filename, pattern):
                     nomatch.append(line.strip())
                 else:
                     result.append(to_add)
-    if nomatch:
-        warnings.warn(f'WARNING: the following lines did not '
-                      f'match the pattern "{pattern}":\n'
-                      + '\n'.join(nomatch))
-    return result
+    return (result, nomatch)

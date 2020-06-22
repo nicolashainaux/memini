@@ -19,12 +19,26 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+import sys
 import shutil
+
+import blessed
 
 from .prefs import DEFAULT_Q_NB
 from . import database, template, terminal, parser, document
 from .errors import NoSuchTableError, DestinationExistsError, NotFoundError
 from .errors import CommandError
+
+
+def _print_lines_not_matching_pattern(errors, pattern):
+    term = blessed.Terminal()
+    message = term.darkorange(f'WARNING: following lines do not match the '
+                              f'pattern "{pattern}" and have been '
+                              f'ignored:\n')
+    message += '\n'.join(term.darkorange('*') + line
+                         for line in errors)
+    message += term.darkorange('\nEnd of ignored lines list\n')
+    sys.stderr.write(message)
 
 
 def parse(filename, pattern):
@@ -33,7 +47,10 @@ def parse(filename, pattern):
     anything.
     """
     _, titles = parser.parse_pattern(pattern)
-    print(terminal.tabulate([titles] + parser.parse_file(filename, pattern)))
+    parsed, errors = parser.parse_file(filename, pattern)
+    print(terminal.tabulate([titles] + parsed))
+    if errors:
+        _print_lines_not_matching_pattern(errors, pattern)
 
 
 def add(name, file_name, pattern):
@@ -43,10 +60,12 @@ def add(name, file_name, pattern):
     Before doing so, check if the name is already used. If yes, ask if the
     lines should be appended to the existing table or not (cancel).
     """
-    rows = parser.parse_file(file_name, pattern)
+    rows, errors = parser.parse_file(file_name, pattern)
     _, titles = parser.parse_pattern(pattern)
     database.create_table(name, titles, rows)
     template.create(name)
+    if errors:
+        _print_lines_not_matching_pattern(errors, pattern)
 
 
 def delete(name):
