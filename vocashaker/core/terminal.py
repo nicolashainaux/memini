@@ -19,11 +19,11 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-import os
+import shutil
 from textwrap import wrap
 from itertools import zip_longest
 
-import blessed
+from .prefs import TERMINAL_SIZE_FALLBACK
 
 
 def ask_yes_no(question, default=False):
@@ -64,7 +64,7 @@ def _allocate_widths(widths):
     Allocate space in a "smart" way if the total required width is larger
     than the terminal's.
     """
-    term_width = blessed.Terminal().width
+    term_width = shutil.get_terminal_size(TERMINAL_SIZE_FALLBACK).columns
     cols_nb = len(widths)
     if sum(widths) >= term_width:
         # The text to tabulate is larger than the terminal:

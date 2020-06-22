@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 from unittest.mock import patch
+from collections import namedtuple
 
 from vocashaker.core import terminal
 
@@ -61,14 +62,12 @@ def test_hcenter():
 
 
 def test_allocate_widths(mocker):
-    mocker.patch('blessed.Terminal.width',
-                 new_callable=mocker.PropertyMock,
-                 return_value=168)
+    TSize = namedtuple('TSize', 'columns lines')
+    t1 = TSize(168, 44)
+    mocker.patch('shutil.get_terminal_size', return_value=t1)
     assert terminal._allocate_widths([80, 120]) == [80, 87]
-
-    mocker.patch('blessed.Terminal.width',
-                 new_callable=mocker.PropertyMock,
-                 return_value=80)
+    t2 = TSize(80, 40)
+    mocker.patch('shutil.get_terminal_size', return_value=t2)
     assert terminal._allocate_widths([90, 90]) == [39, 39]
     assert terminal._allocate_widths([20, 40, 40]) == [20, 29, 29]
 
