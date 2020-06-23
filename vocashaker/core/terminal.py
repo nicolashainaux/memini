@@ -38,7 +38,7 @@ def ask_yes_no(question, default=False):
     result = None
     yn = '[Y/n]' if default else '[y/N]'
     while result is None:
-        answer = input('{} {} '.format(question, yn))
+        answer = input(f'{question} {yn} ')
         if answer.lower() in ['y', 'yes']:
             result = True
         elif answer.lower() in ['n', 'no']:

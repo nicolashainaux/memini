@@ -29,25 +29,23 @@ class VocaShakerError(Exception):
 class MissingSeparatorError(VocaShakerError):
     """When a pattern is provided with missing separator."""
     def __init__(self, pattern, missing_tag_position):
-        msg = 'Missing separator in pattern:\n{}\n{}'\
-            .format(pattern, ' ' * (missing_tag_position + 1) + '^')
+        arrow = ' ' * (missing_tag_position + 1) + '^'
+        msg = f'Missing separator in pattern:\n{pattern}\n{arrow}'
         super().__init__(msg)
 
 
 class LineDoesNotMatchError(VocaShakerError):
     """When a line does not match the provided pattern."""
     def __init__(self, line, pattern):
-        msg = 'This line: {}\ndoes not match provided pattern: {}'\
-            .format(line, pattern)
+        msg = f'This line: {line}\ndoes not match provided pattern: {pattern}'
         super().__init__(msg)
 
 
 class DestinationExistsError(VocaShakerError):
     """When a destination table or template already exists."""
     def __init__(self, name, kind='table'):
-        msg = 'Action cancelled: a {} named "{}" already exists. '\
-            'Please rename or remove it before using this name.'\
-            .format(kind, name)
+        msg = f'Action cancelled: a {kind} named "{name}" already exists. '\
+            'Please rename or remove it before using this name.'
         super().__init__(msg)
 
 
@@ -72,60 +70,59 @@ class CommandError(VocaShakerError):
 class NoSuchTableError(VocaShakerError):
     """When the provided name does not match any table."""
     def __init__(self, name):
-        msg = 'Cannot find a table named "{}"'.format(name)
+        msg = f'Cannot find a table named "{name}"'
         super().__init__(msg)
 
 
 class NoSuchRowError(VocaShakerError):
     """When the provided name does not match any row."""
     def __init__(self, id_, name):
-        msg = 'Cannot find a row number {} in "{}"'.format(id_, name)
+        msg = f'Cannot find a row number {id_} in "{name}"'
         super().__init__(msg)
 
 
 class ColumnsDoNotMatchError(VocaShakerError):
     """When the columns number does not match."""
     def __init__(self, expected, found, table_name, col_titles, data):
-        col_titles = ['"{}"'.format(c) for c in col_titles]
-        col_list = '{} and {}'.format(', '.join(col_titles[:-1]),
-                                      col_titles[-1])
-        msg = '"{}" requires {} columns, but "{}" has {} columns ({}).'\
-            .format(data, found, table_name, expected, col_list)
+        col_titles = [f'"{c}"' for c in col_titles]
+        comma_sep_cols_but_the_last = ', '.join(col_titles[:-1])
+        the_last = col_titles[-1]
+        col_list = f'{comma_sep_cols_but_the_last} and {the_last}'
+        msg = f'"{data}" requires {found} columns, but "{table_name}" '\
+            f'has {expected} columns ({col_list}).'
         super().__init__(msg)
 
 
 class TooManyRowsRequiredError(VocaShakerError):
     """When the user requires more rows than a table does contain."""
     def __init__(self, n_required, n_rows, table_name):
-        msg = '{} rows are required from "{}", but it only contains {} rows.'\
-            .format(n_required, table_name, n_rows)
+        msg = f'{n_required} rows are required from "{table_name}", '\
+            f'but it only contains {n_rows} rows.'
         super().__init__(msg)
 
 
 class SchemeSyntaxError(VocaShakerError):
     """When the user provides a scheme that contains unexpected chars."""
     def __init__(self, scheme):
-        msg = 'Incorrect scheme: "{}". A scheme should contain underscore '\
-            'and star chars ("_" and "*"), plus possibly one digit as last '\
-            'char.'.format(scheme)
+        msg = f'Incorrect scheme: "{scheme}". A scheme should contain '\
+            f'underscore and star chars ("_" and "*"), plus possibly one '\
+            f'digit as last char.'
         super().__init__(msg)
 
 
 class SchemeLogicalError(VocaShakerError):
     """When the user provides a scheme with too few or too many blanks."""
     def __init__(self, scheme, blanks_nb, cols_nb, blanks_required):
-        start = 'Incorrect scheme: "{}". '.format(scheme)
+        start = f'Incorrect scheme: "{scheme}". '
         if blanks_nb == 0:
             end = 'A scheme should contain at least one possible blank '\
                 'column ("_").'
         elif blanks_required >= cols_nb:
-            end = 'It shows {} columns, hence {} of them at most can be '\
-                'blank, not more ({}).'.format(str(cols_nb), str(cols_nb - 1),
-                                               str(blanks_required))
+            end = f'It shows {cols_nb} columns, hence {cols_nb - 1} of them '\
+                f'at most can be blank, not more ({blanks_required}).'
         elif blanks_required > blanks_nb:
-            end = 'It shows less possible blank columns ({} "_") '\
-                'than it requires ({}).'.format(str(blanks_nb),
-                                                str(blanks_required))
+            end = f'It shows less possible blank columns ({blanks_nb} "_") '\
+                f'than it requires ({blanks_required}).'
         msg = start + end
         super().__init__(msg)
 
@@ -136,6 +133,6 @@ class SchemeColumnsMismatchError(VocaShakerError):
     columns in the table.
     """
     def __init__(self, scheme, cols_nb):
-        msg = 'The provided scheme ({}) does not have the same number of '\
-            'columns as the table ({}).'.format(scheme, str(cols_nb))
+        msg = f'The provided scheme ({scheme}) does not have the same number '\
+            f'of columns as the table ({cols_nb}).'
         super().__init__(msg)

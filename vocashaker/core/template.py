@@ -32,8 +32,7 @@ from vocashaker.core.database import get_cols
 
 def path(table_name):
     """Return the path to template matching table_name."""
-    return os.path.join(USER_TEMPLATES_PATH,
-                        '{}.{}'.format(table_name, TEMPLATE_EXT))
+    return os.path.join(USER_TEMPLATES_PATH, f'{table_name}.{TEMPLATE_EXT}')
 
 
 def list_():
@@ -50,13 +49,12 @@ def _prepare_content(table_name):
     """Return the content of content.xml to write, matching table_name."""
     cols_titles = get_cols(table_name)
     cols_nb = len(cols_titles)
-    src = os.path.join(DATADIR, 'content{}.xml'.format(cols_nb))
+    src = os.path.join(DATADIR, f'content{cols_nb}.xml')
     with open(src, 'r') as f:
         contentxml = f.read()
     contentxml = contentxml.replace('__TITLE__', table_name)
     for i in range(cols_nb):
-        contentxml = contentxml.replace('__COL{}__'.format(str(i + 1)),
-                                        cols_titles[i])
+        contentxml = contentxml.replace(f'__COL{str(i + 1)}__', cols_titles[i])
     return contentxml
 
 

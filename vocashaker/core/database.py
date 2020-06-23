@@ -71,8 +71,7 @@ def _assert_table_exists(name):
 
 def _assert_row_exists(table_name, id_):
     """Raise an exception if no such row in the table exists."""
-    cmd = 'SELECT EXISTS(SELECT 1 FROM {} WHERE id={});'\
-        .format(table_name, id_)
+    cmd = f'SELECT EXISTS(SELECT 1 FROM {table_name} WHERE id={id_});'
     row_exists = shared.db.execute(cmd).fetchall()[0][0]
     if not row_exists:
         raise NoSuchRowError(id_, table_name)
@@ -95,19 +94,19 @@ def _exec(table_name, cmd, id_=None):
 
 def rename_table(name, new_name):
     """Change a table's name."""
-    _exec(name, 'ALTER TABLE `{}` RENAME TO `{}`;'.format(name, new_name))
+    _exec(name, f'ALTER TABLE `{name}` RENAME TO `{new_name}`;')
 
 
 def get_cols(table_name, include_id=False):
     """List all columns of a given table."""
-    cursor = _exec(table_name, 'SELECT * from {};'.format(table_name))
+    cursor = _exec(table_name, f'SELECT * from {table_name};')
     start = 0 if include_id else 1
     return [_[0] for _ in cursor.description][start:-1]
 
 
 def get_rows_nb(table_name):
     """Return rows' number of a given table."""
-    cmd = 'SELECT COUNT(*) FROM {};'.format(table_name)
+    cmd = f'SELECT COUNT(*) FROM {table_name};'
     return tuple(_exec(table_name, cmd))[0][0]
 
 
@@ -115,7 +114,7 @@ def get_table(name, include_headers=False):
     """Return a list of all table's lines."""
     headers = []
     cols = ','.join(get_cols(name, include_id=True))
-    content = _exec(name, 'SELECT {} FROM {};'.format(cols, name)).fetchall()
+    content = _exec(name, f'SELECT {cols} FROM {name};').fetchall()
     content = [(str(t[0]), ) + t[1:] for t in content]
     if include_headers:
         headers = [tuple(get_cols(name, include_id=True))]
@@ -142,18 +141,18 @@ def table_to_text(name, pattern):
 
 def remove_table(name):
     """Remove table name."""
-    _exec(name, 'DROP TABLE {};'.format(name))
+    _exec(name, f'DROP TABLE {name};')
 
 
 def create_table(name, col_titles, content):
     """Create table name using given col_titles and content."""
     titles = ' TEXT, '.join(col_titles) + ' TEXT, '
-    cmd = 'CREATE TABLE {} (id INTEGER PRIMARY KEY, {}timestamp INTEGER)'\
-        .format(name, titles)
+    cmd = f'CREATE TABLE {name} (id INTEGER PRIMARY KEY, '\
+        f'{titles}timestamp INTEGER)'
     _exec(None, cmd)
     titles = ', '.join(col_titles) + ', timestamp'
     qmarks = '?, ' * len(col_titles) + '?'
-    cmd = 'INSERT INTO {}({}) VALUES({})'.format(name, titles, qmarks)
+    cmd = f'INSERT INTO {name}({titles}) VALUES({qmarks})'
     content = [item + (0, ) for item in content]
     shared.db.executemany(cmd, content)
 
@@ -162,20 +161,20 @@ def add_row(table_name, row):
     """Add row to the table."""
     cols = get_cols(table_name)
     if len(cols) != len(row):
-        data = ["'{}'".format(item) for item in row]
+        data = [f"'{item}'" for item in row]
         data = ', '.join(data)
         raise ColumnsDoNotMatchError(len(cols), len(row),
                                      table_name, cols, data)
     titles = ', '.join(cols + ['timestamp'])
-    row = ['"{}"'.format(item) for item in row]
+    row = [f'"{item}"' for item in row]
     values = ', '.join(row + ['0'])
-    cmd = 'INSERT INTO {}({}) VALUES({})'.format(table_name, titles, values)
+    cmd = f'INSERT INTO {table_name}({titles}) VALUES({values})'
     _exec(table_name, cmd)
 
 
 def remove_row(table_name, id_):
     """Remove row matching id_ in the table."""
-    cmd = 'DELETE FROM {} WHERE id = {};'.format(table_name, id_)
+    cmd = f'DELETE FROM {table_name} WHERE id = {id_};'
     _exec(table_name, cmd, id_=id_)
 
 
@@ -197,16 +196,16 @@ def remove_rows(table_name, id_span):
 
 def _timestamp(table_name, id_):
     """Set timestamp to entry matching id_ in the table."""
-    cmd = """UPDATE {} SET timestamp = strftime('%Y-%m-%d %H:%M:%f')
-WHERE id = {};""".format(table_name, id_)
+    cmd = f"""UPDATE {table_name} SET timestamp = strftime('%Y-%m-%d %H:%M:%f')
+WHERE id = {id_};"""
     _exec(table_name, cmd, id_=id_)
 
 
 def _reset(table_name, n):
     """Reset the n oldest timestamped entries."""
-    cmd = """UPDATE {table_name} SET timestamp=0
+    cmd = f"""UPDATE {table_name} SET timestamp=0
 WHERE id IN (SELECT id FROM {table_name} WHERE timestamp != 0
-ORDER BY timestamp LIMIT {n});""".format(table_name=table_name, n=n)
+ORDER BY timestamp LIMIT {n});"""
     _exec(table_name, cmd)
 
 
@@ -222,12 +221,12 @@ def draw_rows(table_name, n, oldest_prevail=False):
         raise TooManyRowsRequiredError(n, rows_nb, table_name)
     timestamps_clause = ''
     if oldest_prevail:  # If timestamps must be taken into account
-        cmd = 'SELECT COUNT(*) FROM {} WHERE timestamp=0;'.format(table_name)
+        cmd = f'SELECT COUNT(*) FROM {table_name} WHERE timestamp=0;'
         free_nb = tuple(_exec(table_name, cmd))[0][0]
         if n > free_nb:
             _reset(table_name, n - free_nb)
         timestamps_clause = 'WHERE timestamp=0 '
     cols_list = ','.join(get_cols(table_name))
-    cmd = 'SELECT {} FROM {} {}ORDER BY random() LIMIT {};'\
-        .format(cols_list, table_name, timestamps_clause, n)
+    cmd = f'SELECT {cols_list} FROM {table_name} {timestamps_clause}'\
+        f'ORDER BY random() LIMIT {n};'
     return _exec(table_name, cmd).fetchall()

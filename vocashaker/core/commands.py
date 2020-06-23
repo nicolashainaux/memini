@@ -85,17 +85,16 @@ def delete(name):
     """
     if database.table_exists(name) or template.exists(name):
         if database.table_exists(name):
-            do_delete = terminal.ask_yes_no('Delete table "{}"?'.format(name))
+            do_delete = terminal.ask_yes_no(f'Delete table "{name}"?')
             if do_delete:
                 database.remove_table(name)
         if template.exists(name):
-            do_delete = terminal.ask_yes_no('Delete template "{}"?'
-                                            .format(name))
+            do_delete = terminal.ask_yes_no(f'Delete template "{name}"?')
             if do_delete:
                 template.remove(name)
     else:
-        raise NotFoundError('No table nor template named "{}" can be found '
-                            'to be deleted.'.format(name))
+        raise NotFoundError(f'No table nor template named "{name}" can be '
+                            f'found to be deleted.')
 
 
 def remove(name, id_span):
