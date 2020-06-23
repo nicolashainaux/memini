@@ -50,9 +50,10 @@ def list_(what):
 
 
 @run.command('parse')
+@click.option('--errors-only', is_flag=True, default=False, show_default=True)
 @click.argument('filename', type=click.Path(exists=True))
 @click.argument('pattern')
-def parse(filename, pattern):
+def parse(filename, pattern, errors_only):
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
-        commands.parse(filename, pattern)
+        commands.parse(filename, pattern, errors_only)

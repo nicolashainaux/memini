@@ -166,6 +166,10 @@ def test_parse(capsys, mocker):
         '    amicus,  i, m.    |         ami         \n'\
         '    amor,  oris, m.   |        amour        \n'\
         '    anima,  ae, f.    |      coeur, âme     \n'
+    commands.parse(f, '<Latin>:<Français>', errors_only=True)
+    captured = capsys.readouterr()
+    assert captured.out == ''
+    assert captured.err == 'No parsing errors ☺\n'
 
     f = os.path.join(TESTS_DATADIR, 'latin_parse_err.txt')
     commands.parse(f, '<Latin>:<Français>')
@@ -188,6 +192,13 @@ def test_parse(capsys, mocker):
         '✘ ambitus, us, m. la brigue\n'\
         '✘ amicitia,  ae, f. amitié\n'\
         'End of ignored lines list\n'
+    commands.parse(f, '<Latin>:<Français>', errors_only=True)
+    captured = capsys.readouterr()
+    assert captured.out == ''
+    assert captured.err == \
+        'aedilis,  is, m.  édile\n'\
+        'ambitus, us, m. la brigue\n'\
+        'amicitia,  ae, f. amitié\n'
 
 
 def test_add(testdb, capsys, mocker):

@@ -30,27 +30,37 @@ from .errors import NoSuchTableError, DestinationExistsError, NotFoundError
 from .errors import CommandError
 
 
-def _print_lines_not_matching_pattern(errors, pattern):
+def _print_lines_not_matching_pattern(errors, pattern, decorate=True):
     term = blessed.Terminal()
-    message = term.darkorange(f'WARNING: following lines do not match the '
-                              f'pattern "{pattern}" and have been '
-                              f'ignored:\n')
-    message += '\n'.join(term.darkorange('✘ ') + line
-                         for line in errors)
-    message += term.darkorange('\nEnd of ignored lines list\n')
+    msg_start = ''
+    msg_prepend_lines = ''
+    msg_end = ''
+    if decorate:
+        msg_start = term.darkorange(f'WARNING: following lines do not match '
+                                    f'the pattern "{pattern}" and have been '
+                                    f'ignored:\n')
+        msg_prepend_lines = term.darkorange('✘ ')
+        msg_end = term.darkorange('End of ignored lines list\n')
+    msg_content = '\n'.join(msg_prepend_lines + line for line in errors)
+    message = f'{msg_start}{msg_content}\n{msg_end}'
     sys.stderr.write(message)
 
 
-def parse(filename, pattern):
+def parse(filename, pattern, errors_only=False):
     """
     Parse file using provided pattern and output the result. Do not store
     anything.
     """
     _, titles = parser.parse_pattern(pattern)
     parsed, errors = parser.parse_file(filename, pattern)
-    print(terminal.tabulate([titles] + parsed))
+    if not errors_only:
+        print(terminal.tabulate([titles] + parsed))
     if errors:
-        _print_lines_not_matching_pattern(errors, pattern)
+        _print_lines_not_matching_pattern(errors, pattern,
+                                          decorate=not errors_only)
+    elif errors_only:
+        term = blessed.Terminal()
+        sys.stderr.write(term.chartreuse3('No parsing errors ☺\n'))
 
 
 def add(name, file_name, pattern):
