@@ -187,6 +187,7 @@ def _intspan2sqllist(s):
 
 def remove_rows(table_name, id_span):
     """Remove rows matching the ids from id_span from the table."""
+    _assert_table_exists(table_name)
     for id_ in list(intspan(id_span)):
         _assert_row_exists(table_name, id_)
     values = _intspan2sqllist(id_span)
