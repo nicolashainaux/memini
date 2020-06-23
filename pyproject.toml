@@ -19,6 +19,7 @@ pyfakefs = "^3.6"
 
 [tool.poetry.scripts]
 vocashaker = "vocashaker:run"
+vosh = "vocashaker:run"
 
 [build-system]
 requires = ["poetry>=0.12"]
