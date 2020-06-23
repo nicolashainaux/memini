@@ -23,7 +23,7 @@ import click
 import blessed
 
 from vocashaker.core.env import USER_DB_PATH
-from vocashaker.core.errors import CommandError, EmptyFileError
+from vocashaker.core.errors import CommandError, EmptyFileError, NotFoundError
 from vocashaker.core import shared
 from vocashaker.core import database
 from vocashaker.core import commands
@@ -32,6 +32,16 @@ from vocashaker.core import commands
 shared.init()
 
 __all__ = ['run']
+
+
+def echo_warning(s):
+    term = blessed.Terminal()
+    click.echo(term.darkorange('Warning: ') + str(s))
+
+
+def echo_error(s):
+    term = blessed.Terminal()
+    click.echo(term.color_rgb(197, 0, 11) + 'Error: ' + term.normal + str(s))
 
 
 @click.group()
@@ -47,7 +57,7 @@ def list_(what):
         try:
             commands.list_(what)
         except CommandError as e:
-            click.echo(str(e))
+            echo_error(str(e))
 
 
 @run.command('parse')
@@ -60,5 +70,15 @@ def parse(filename, pattern, errors_only):
         try:
             commands.parse(filename, pattern, errors_only)
         except EmptyFileError as e:
-            term = blessed.Terminal()
-            click.echo(term.darkorange('Warning: ') + str(e))
+            echo_warning(str(e))
+
+
+@run.command('delete')
+@click.argument('name')
+def delete(name):
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.delete(name)
+        except NotFoundError as e:
+            echo_error(str(e))
