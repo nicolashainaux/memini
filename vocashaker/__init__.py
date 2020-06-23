@@ -24,6 +24,7 @@ import blessed
 
 from vocashaker.core.env import USER_DB_PATH
 from vocashaker.core.errors import CommandError, EmptyFileError, NotFoundError
+from vocashaker.core.errors import NoSuchTableError, NoSuchRowError
 from vocashaker.core import shared
 from vocashaker.core import database
 from vocashaker.core import commands
@@ -81,4 +82,16 @@ def delete(name):
         try:
             commands.delete(name)
         except NotFoundError as e:
+            echo_error(str(e))
+
+
+@run.command('remove')
+@click.argument('name')
+@click.argument('span')
+def remove(name, span):
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.remove(name, span)
+        except (NoSuchTableError, NoSuchRowError) as e:
             echo_error(str(e))
