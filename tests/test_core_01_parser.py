@@ -24,6 +24,7 @@ import pytest
 from vocashaker.core.parser import parse_pattern, parse_line, parse_file
 from vocashaker.core.errors import MissingSeparatorError
 from vocashaker.core.errors import LineDoesNotMatchError
+from vocashaker.core.errors import EmptyFileError
 
 
 def test_parse_pattern():
@@ -50,7 +51,7 @@ def test_parse_line():
         'does not match provided pattern: <Latin>:<Français>'
 
 
-def test_parse_file(mocker):
+def test_parse_clean_file(mocker):
     content = """gaudium,  i, n. : joie
 
 jungo,  is, ere, junxi, junctum : joindre
@@ -75,6 +76,8 @@ solvo,  is, ere, vi, solutum : détacher, payer
     assert result[0] == expected
     assert result[1] == []
 
+
+def test_parse_file_with_errors(mocker):
     content = """gaudium,  i, n. : joie
 
 jungo,  is, ere, junxi, junctum joindre
@@ -91,3 +94,13 @@ solvo,  is, ere, vi, solutum détacher, payer
     assert result[0] == expected
     assert result[1] == ['jungo,  is, ere, junxi, junctum joindre',
                          'solvo,  is, ere, vi, solutum détacher, payer']
+
+
+def test_parse_empty_file(mocker):
+    content = ''
+    m = mocker.patch('builtins.open', mocker.mock_open(read_data=content))
+    with pytest.raises(EmptyFileError) as excinfo:
+        parse_file('empty_file.txt', '<Latin>:<Français>')
+    assert str(excinfo.value) == 'The provided file seems empty, could not '\
+        'find a single line to parse.'
+    m.assert_called_once_with('empty_file.txt')

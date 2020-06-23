@@ -22,6 +22,7 @@
 import re
 
 from vocashaker.core.errors import MissingSeparatorError, LineDoesNotMatchError
+from vocashaker.core.errors import EmptyFileError
 
 
 def parse_pattern(pattern, sep_list=False):
@@ -68,4 +69,7 @@ def parse_file(filename, pattern):
                     nomatch.append(line.strip())
                 else:
                     result.append(to_add)
+    if not result and not nomatch:
+        raise EmptyFileError('The provided file seems empty, could not find '
+                             'a single line to parse.')
     return (result, nomatch)

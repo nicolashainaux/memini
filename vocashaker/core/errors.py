@@ -57,6 +57,12 @@ class NotFoundError(VocaShakerError):
         super().__init__(msg)
 
 
+class EmptyFileError(VocaShakerError):
+    """When an empty file has been given to parse, for instance."""
+    def __init__(self, msg):
+        super().__init__(msg)
+
+
 class CommandError(VocaShakerError):
     """When the user mistyped a command."""
     def __init__(self, msg):

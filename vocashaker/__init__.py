@@ -20,9 +20,10 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import click
+import blessed
 
 from vocashaker.core.env import USER_DB_PATH
-from vocashaker.core.errors import CommandError
+from vocashaker.core.errors import CommandError, EmptyFileError
 from vocashaker.core import shared
 from vocashaker.core import database
 from vocashaker.core import commands
@@ -56,4 +57,8 @@ def list_(what):
 def parse(filename, pattern, errors_only):
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
-        commands.parse(filename, pattern, errors_only)
+        try:
+            commands.parse(filename, pattern, errors_only)
+        except EmptyFileError as e:
+            term = blessed.Terminal()
+            click.echo(term.darkorange('Warning: ') + str(e))
