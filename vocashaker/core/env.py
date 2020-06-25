@@ -41,6 +41,8 @@ __myname__ = pp['__myname__']
 __authors__ = pp['__authors__']
 __version__ = pp['__version__']
 
+MESSAGE = f'This is {PROG_NAME}, version {__version__}'
+
 USER_LOCAL_SHARE = os.path.join(str(Path.home()), '.local', 'share',
                                 __myname__)
 USER_DB_NAME = 'data.db'
