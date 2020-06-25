@@ -53,6 +53,8 @@ USER_DB_PATH = os.path.join(USER_LOCAL_SHARE, USER_DB_NAME)
 USER_TEMPLATES_DIRNAME = 'templates'
 USER_TEMPLATES_PATH = os.path.join(USER_LOCAL_SHARE, USER_TEMPLATES_DIRNAME)
 TEMPLATE_EXT = 'odt'
+if not os.path.exists(USER_TEMPLATES_PATH):
+    Path(USER_TEMPLATES_PATH).mkdir(parents=True, exist_ok=True)
 
 TESTS_DIR = os.path.join(ROOTDIR[:-len(__myname__) - 1], 'tests')
 TESTS_DATADIR = os.path.join(TESTS_DIR, 'data')
