@@ -101,7 +101,7 @@ def remove(name, span):
 
 @run.command('create')
 @click.argument('name')
-@click.argument('file_name')
+@click.argument('file_name', type=click.Path())
 @click.argument('pattern')
 def create(name, file_name, pattern):
     with database.Manager(USER_DB_PATH) as db:
@@ -114,7 +114,7 @@ def create(name, file_name, pattern):
 
 @run.command('add')
 @click.argument('name')
-@click.argument('file_name')
+@click.argument('file_name', type=click.Path(exists=True))
 @click.argument('pattern')
 def add(name, file_name, pattern):
     with database.Manager(USER_DB_PATH) as db:
