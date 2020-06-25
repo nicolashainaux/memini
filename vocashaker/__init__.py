@@ -107,5 +107,5 @@ def create(name, file_name, pattern):
         shared.db = db
         try:
             commands.create(name, file_name, pattern)
-        except (NoSuchTableError, NoSuchRowError, DestinationExistsError) as e:
+        except DestinationExistsError as e:
             echo_error(str(e))
