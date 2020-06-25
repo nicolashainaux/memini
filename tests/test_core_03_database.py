@@ -29,8 +29,7 @@ from vocashaker.core.database import list_tables, table_exists
 from vocashaker.core.database import _assert_table_exists, _assert_row_exists
 from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table, get_cols
-from vocashaker.core.database import add_row, remove_row, draw_rows
-from vocashaker.core.database import insert_rows
+from vocashaker.core.database import remove_row, draw_rows, insert_rows
 from vocashaker.core.database import get_rows_nb
 from vocashaker.core.database import remove_rows
 from vocashaker.core.database import _timestamp, _reset, _full_reset

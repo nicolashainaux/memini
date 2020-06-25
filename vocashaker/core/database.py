@@ -170,21 +170,6 @@ def insert_rows(table_name, rows, col_titles=None):
     shared.db.executemany(cmd, content)
 
 
-def add_row(table_name, row):
-    """Add row to the table."""
-    cols = get_cols(table_name)
-    if len(cols) != len(row):
-        data = [f"'{item}'" for item in row]
-        data = ', '.join(data)
-        raise ColumnsDoNotMatchError(len(cols), len(row),
-                                     table_name, cols, data)
-    titles = ', '.join(cols + ['timestamp'])
-    row = [f'"{item}"' for item in row]
-    values = ', '.join(row + ['0'])
-    cmd = f'INSERT INTO {table_name}({titles}) VALUES({values})'
-    _exec(table_name, cmd)
-
-
 def remove_row(table_name, id_):
     """Remove row matching id_ in the table."""
     cmd = f'DELETE FROM {table_name} WHERE id = {id_};'
