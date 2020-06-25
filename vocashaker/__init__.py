@@ -56,6 +56,12 @@ def run():
 @run.command('list')
 @click.argument('what')
 def list_(what):
+    """
+    List known tables or templates.
+
+    List known tables or templates. What to list exactly is set by argument
+    WHAT (that may be "tables" or "templates").
+    """
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
@@ -65,10 +71,21 @@ def list_(what):
 
 
 @run.command('parse')
-@click.option('--errors-only', is_flag=True, default=False, show_default=True)
+@click.option('--errors-only', is_flag=True, default=False, show_default=True,
+              help='if true, only the lines that do not match the pattern '
+              'will be shown')
 @click.argument('filename', type=click.Path(exists=True))
 @click.argument('pattern')
 def parse(filename, pattern, errors_only):
+    """
+    Parse a file a show result in console.
+
+    Parse the file FILENAME using the provided PATTERN. The result will be
+    displayed in the console. No new table will be created.
+
+    It will highlight possible parsing errors. You can get a clean output of
+    the lines producing errors by setting option --errors-only to true.
+    """
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
@@ -80,6 +97,11 @@ def parse(filename, pattern, errors_only):
 @run.command('delete')
 @click.argument('name')
 def delete(name):
+    """
+    Delete a table.
+
+    Delete the table NAME. The matching default template will be deleted too.
+    """
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
@@ -92,6 +114,13 @@ def delete(name):
 @click.argument('name')
 @click.argument('span')
 def remove(name, span):
+    """
+    Remove rows from a table.
+
+    Remove rows from the table NAME. SPAN is the list of lines' numbers to be
+    removed. It can be provided as a single int or as an int range, like
+    "2-6,9" that would remove rows 2, 3, 4, 5, 6 and 9.
+    """
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
@@ -102,26 +131,38 @@ def remove(name, span):
 
 @run.command('create')
 @click.argument('name')
-@click.argument('file_name', type=click.Path())
+@click.argument('filename', type=click.Path())
 @click.argument('pattern')
-def create(name, file_name, pattern):
+def create(name, filename, pattern):
+    """
+    Create a new table.
+
+    Create a table NAME. The data will be read from file FILENAME
+    and parsed according to the provided PATTERN.
+    """
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
-            commands.create(name, file_name, pattern)
+            commands.create(name, filename, pattern)
         except DestinationExistsError as e:
             echo_error(str(e))
 
 
 @run.command('add')
 @click.argument('name')
-@click.argument('file_name', type=click.Path(exists=True))
+@click.argument('filename', type=click.Path(exists=True))
 @click.argument('pattern')
-def add(name, file_name, pattern):
+def add(name, filename, pattern):
+    """
+    Add new rows in an existing table.
+
+    Add new rows in the table NAME. The data will be read from file FILENAME
+    and parsed according to the provided PATTERN.
+    """
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
-            commands.add(name, file_name, pattern)
+            commands.add(name, filename, pattern)
         except (NoSuchTableError, ColumnsDoNotMatchError) as e:
             echo_error(str(e))
 
@@ -129,6 +170,11 @@ def add(name, file_name, pattern):
 @run.command('show')
 @click.argument('name')
 def show(name):
+    """
+    Show content of a table.
+
+    Display content of table NAME in standard output.
+    """
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
@@ -141,6 +187,12 @@ def show(name):
 @click.argument('name1')
 @click.argument('name2')
 def rename(name1, name2):
+    """
+    Rename a table.
+
+    Rename table NAME1 as NAME2. The default template associated with NAME1
+    is also renamed to match the new name.
+    """
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
@@ -152,8 +204,14 @@ def rename(name1, name2):
 @run.command('generate')
 @click.argument('name')
 @click.option('-n', '--questions-number', default=DEFAULT_Q_NB, type=int,
-              show_default=True)
+              show_default=True, help='number of questions')
 def generate(name, questions_number):
+    """
+    Generate a new document.
+
+    Generate a new document using the data from table NAME. The number of lines
+    in the document's table can be specified via option -n.
+    """
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
