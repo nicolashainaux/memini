@@ -23,7 +23,7 @@ import click
 import blessed
 
 from vocashaker.core.prefs import DEFAULT_Q_NB
-from vocashaker.core.env import USER_DB_PATH
+from vocashaker.core.env import USER_DB_PATH, __version__, PROG_NAME
 from vocashaker.core.errors import CommandError, EmptyFileError, NotFoundError
 from vocashaker.core.errors import NoSuchTableError, NoSuchRowError
 from vocashaker.core.errors import DestinationExistsError
@@ -49,6 +49,8 @@ def echo_error(s):
 
 
 @click.group()
+@click.version_option(version=__version__, prog_name=PROG_NAME,
+                      message=f'This is {PROG_NAME}, version {__version__}')
 def run():
     pass
 
