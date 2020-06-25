@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
+import sys
 from pathlib import Path
 
 import toml
@@ -41,7 +42,9 @@ __myname__ = pp['__myname__']
 __authors__ = pp['__authors__']
 __version__ = pp['__version__']
 
-MESSAGE = f'This is {PROG_NAME}, version {__version__}'
+PYVER = sys.version.replace('\n', ' ')
+MESSAGE = f'This is {PROG_NAME}, version {__version__}, '\
+    f'running under python {PYVER}'
 
 USER_LOCAL_SHARE = os.path.join(str(Path.home()), '.local', 'share',
                                 __myname__)
