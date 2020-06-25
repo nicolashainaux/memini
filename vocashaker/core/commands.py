@@ -27,7 +27,7 @@ import blessed
 from .prefs import DEFAULT_Q_NB
 from . import database, template, terminal, parser, document
 from .errors import NoSuchTableError, DestinationExistsError, NotFoundError
-from .errors import CommandError
+from .errors import CommandError, ColumnsDoNotMatchError
 
 
 def _print_lines_not_matching_pattern(errors, pattern, decorate=True):
@@ -78,6 +78,26 @@ def create(name, file_name, pattern):
     titles = list(titles)
     database.create_table(name, titles, rows)
     template.create(name)
+    if errors:
+        _print_lines_not_matching_pattern(errors, pattern)
+
+
+def add(name, file_name, pattern):
+    """
+    Add the result of parsing file_name using provided pattern to existing
+    table named "name".
+    """
+    if not database.table_exists(name):
+        raise NoSuchTableError(name)
+    rows, errors = parser.parse_file(file_name, pattern)
+    _, titles = parser.parse_pattern(pattern)
+    titles = list(titles)
+    table_col_titles = database.get_cols(name)
+    cols_nb = len(table_col_titles)
+    if len(titles) != cols_nb:
+        raise ColumnsDoNotMatchError(cols_nb, len(titles), name,
+                                     table_col_titles, pattern)
+    database.insert_rows(name, rows)
     if errors:
         _print_lines_not_matching_pattern(errors, pattern)
 

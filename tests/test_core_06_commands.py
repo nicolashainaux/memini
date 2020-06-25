@@ -30,6 +30,7 @@ from vocashaker.core import commands
 from vocashaker.core import database
 from vocashaker.core.errors import NoSuchTableError, DestinationExistsError
 from vocashaker.core.errors import NotFoundError, CommandError
+from vocashaker.core.errors import ColumnsDoNotMatchError
 
 
 def test_list_(testdb, capsys, fs):
@@ -268,6 +269,72 @@ def test_create_already_existing_table_or_template(testdb, capsys, fs):
     assert str(excinfo.value) == 'Action cancelled: a template named '\
         '"already_in_use" already exists. Please rename or remove it '\
         'before using this name.'
+
+
+def test_add(testdb, capsys, mocker):
+    f = os.path.join(TESTS_DATADIR, 'latin_add.txt')
+    commands.add('table1', f, '<Latin>:<Français>')
+    commands.show('table1')
+    captured = capsys.readouterr()
+    assert captured.out == \
+        ' id |         col1        |                col2                \n'\
+        '----+---------------------+------------------------------------\n'\
+        '  1 |  adventus,  us, m.  |               arrivée              \n'\
+        '  2 |     aqua , ae, f    |                 eau                \n'\
+        '  3 |   candidus,  a, um  |                blanc               \n'\
+        '  4 |    sol, solis, m    |               soleil               \n'\
+        '  5 |  judex,  dicis, m.  |                juge                \n'\
+        '  6 |   judicium,  i, n.  |         jugement, décision         \n'\
+        '  7 |     jus, uris, n    |                droit               \n'\
+        '  8 |   justitia, ae, f.  |           justice (vertu)          \n'\
+        '  9 |   juvenis, is , m   |      homme jeune (30 à45 ans)      \n'\
+        ' 10 | juventus,  utis, f. |              jeunesse              \n'\
+        ' 11 |   labor,  oris, m.  | peine, souffrance, travail pénible \n'\
+        ' 12 |   lacrima,  ae, f.  |                larme               \n'\
+        ' 13 |   laetitia, ae, f.  |               la joie              \n'
+
+
+def test_add_parse_err(testdb, capsys, mocker):
+    f = os.path.join(TESTS_DATADIR, 'latin_add_parse_err.txt')
+    commands.add('table1', f, '<Latin>:<Français>')
+    commands.show('table1')
+    captured = capsys.readouterr()
+    assert captured.out == \
+        ' id |         col1        |                col2                \n'\
+        '----+---------------------+------------------------------------\n'\
+        '  1 |  adventus,  us, m.  |               arrivée              \n'\
+        '  2 |     aqua , ae, f    |                 eau                \n'\
+        '  3 |   candidus,  a, um  |                blanc               \n'\
+        '  4 |    sol, solis, m    |               soleil               \n'\
+        '  5 |  judex,  dicis, m.  |                juge                \n'\
+        '  6 |   judicium,  i, n.  |         jugement, décision         \n'\
+        '  7 |     jus, uris, n    |                droit               \n'\
+        '  8 |   justitia, ae, f.  |           justice (vertu)          \n'\
+        '  9 |   juvenis, is , m   |      homme jeune (30 à45 ans)      \n'\
+        ' 10 | juventus,  utis, f. |              jeunesse              \n'\
+        ' 11 |   labor,  oris, m.  | peine, souffrance, travail pénible \n'\
+        ' 12 |   lacrima,  ae, f.  |                larme               \n'
+    assert captured.err == \
+        'WARNING: following lines do not match the pattern '\
+        '"<Latin>:<Français>" and have been ignored:\n'\
+        '✘ laetitia, ae, f. la joie\n'\
+        'End of ignored lines list\n'
+
+
+def test_add_to_nonexistent_table(testdb):
+    f = os.path.join(TESTS_DATADIR, 'latin_add.txt')
+    with pytest.raises(NoSuchTableError) as excinfo:
+        commands.add('table3', f, '<Latin>:<Français>')
+    assert str(excinfo.value) == 'Cannot find a table named "table3"'
+
+
+def test_add_with_cols_nb_mismatch(testdb):
+    f = os.path.join(TESTS_DATADIR, 'latin_add.txt')
+    with pytest.raises(ColumnsDoNotMatchError) as excinfo:
+        commands.add('table1', f, '<Latin>:<Français>:<Superflu>')
+    assert str(excinfo.value) == '"<Latin>:<Français>:<Superflu>" '\
+        'requires 3 columns, but "table1" has 2 columns '\
+        '("col1" and "col2").'
 
 
 def test_generate(mocker):

@@ -26,6 +26,7 @@ from vocashaker.core.env import USER_DB_PATH
 from vocashaker.core.errors import CommandError, EmptyFileError, NotFoundError
 from vocashaker.core.errors import NoSuchTableError, NoSuchRowError
 from vocashaker.core.errors import DestinationExistsError
+from vocashaker.core.errors import ColumnsDoNotMatchError
 from vocashaker.core import shared
 from vocashaker.core import database
 from vocashaker.core import commands
@@ -108,4 +109,17 @@ def create(name, file_name, pattern):
         try:
             commands.create(name, file_name, pattern)
         except DestinationExistsError as e:
+            echo_error(str(e))
+
+
+@run.command('add')
+@click.argument('name')
+@click.argument('file_name')
+@click.argument('pattern')
+def add(name, file_name, pattern):
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.add(name, file_name, pattern)
+        except (NoSuchTableError, ColumnsDoNotMatchError) as e:
             echo_error(str(e))
