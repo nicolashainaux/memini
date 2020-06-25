@@ -207,16 +207,35 @@ def rename(name1, name2):
 @click.argument('name')
 @click.option('-n', '--questions-number', default=DEFAULT_Q_NB, type=int,
               show_default=True, help='number of questions')
-def generate(name, questions_number):
+@click.option('-s', '--scheme', default=None, type=str, help='scheme to use')
+def generate(name, questions_number, scheme):
     """
     Generate a new document.
 
-    Generate a new document using the data from table NAME. The number of lines
-    in the document's table can be specified via option -n.
+    Generate a new document using the data from table NAME.
+
+    The number of lines in the document's table can be specified via option -n.
+
+    The --scheme option allows to specify which columns may be blanked in the
+    questions. A scheme consists of underscore (_) and star (*) characters
+    (one of them for each column) and ends with a number. A _ tells the column
+    may be blank, a * tells it will never be blank. The number tells how many
+    cells per row, at most, will be blank. The exact default scheme depends on
+    the number of columns: for 2 columns it's __1, for 3 columns it's ___2 and
+    for 4 columns it's ___3. They all mean any cell in a row may be blank; all
+    cells but one will be blank.
+
+    Scheme examples:
+
+    - if you have a table of 3 columns and you wish the two last columns to
+    always be blank, use *__2.
+
+    - if you have 2 columns and you wish the first one to be always blank and
+    the second one always filled, then use _*1.
     """
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
-            commands.generate(name, nb=questions_number)
+            commands.generate(name, nb=questions_number, scheme=scheme)
         except (NoSuchTableError, DestinationExistsError) as e:
             echo_error(str(e))

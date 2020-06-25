@@ -96,13 +96,14 @@ def _process_data(data, scheme=None):
     return result
 
 
-def generate(table_name, n, oldest_prevail=False):
+def generate(table_name, n, scheme=None, oldest_prevail=False):
     """
     Generate a new document using n data from the table and the matching
     template.
     """
     data = _process_data(database.draw_rows(table_name, n,
-                                            oldest_prevail=oldest_prevail))
+                                            oldest_prevail=oldest_prevail),
+                         scheme=scheme)
     basic = Template(source='', filepath=template.path(table_name))
     basic_generated = basic.generate(o=data).render()
     with open(f'{table_name}.{TEMPLATE_EXT}', 'wb') as f:
