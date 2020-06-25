@@ -157,6 +157,23 @@ def create_table(name, col_titles, content):
     shared.db.executemany(cmd, content)
 
 
+def insert_rows(table_name, rows, col_titles=None):
+    """Insert rows to the table."""
+    if col_titles is None:
+        col_titles = get_cols(table_name)
+    for row in rows:
+        if len(col_titles) != len(row):
+            data = [f"'{item}'" for item in row]
+            data = ', '.join(data)
+            raise ColumnsDoNotMatchError(len(col_titles), len(row),
+                                         table_name, col_titles, data)
+    titles = ', '.join(col_titles + ['timestamp'])
+    qmarks = '?, ' * len(col_titles) + '?'
+    cmd = f'INSERT INTO {table_name}({titles}) VALUES({qmarks})'
+    content = [item + (0, ) for item in rows]
+    shared.db.executemany(cmd, content)
+
+
 def add_row(table_name, row):
     """Add row to the table."""
     cols = get_cols(table_name)

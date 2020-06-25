@@ -30,6 +30,7 @@ from vocashaker.core.database import _assert_table_exists, _assert_row_exists
 from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table, get_cols
 from vocashaker.core.database import add_row, remove_row, draw_rows
+from vocashaker.core.database import insert_rows
 from vocashaker.core.database import get_rows_nb
 from vocashaker.core.database import remove_rows
 from vocashaker.core.database import _timestamp, _reset, _full_reset
@@ -157,6 +158,35 @@ def test_create_table(testdb, mocker):
             ('4', 'schmelzen', 'schmolz, ist geschmolzen', 'fondre'),
             ('5', 'ziegen', 'zog, hat OU ist gezogen', 'tirer OU déménager'),
             ]
+
+
+def test_insert_rows(testdb):
+    insert_rows('table1', [('spes, ei f', 'espoir')])
+    assert get_table('table1') \
+        == [('1', 'adventus,  us, m.', 'arrivée'),
+            ('2', 'aqua , ae, f', 'eau'),
+            ('3', 'candidus,  a, um', 'blanc'),
+            ('4', 'sol, solis, m', 'soleil'),
+            ('5', 'spes, ei f', 'espoir')]
+    with pytest.raises(NoSuchTableError) as excinfo:
+        insert_rows('table3', [('spes, ei', 'f', 'espoir')])
+    assert str(excinfo.value) == 'Cannot find a table named "table3"'
+    with pytest.raises(ColumnsDoNotMatchError) as excinfo:
+        insert_rows('table1', [('spes, ei', 'f', 'espoir')])
+    assert str(excinfo.value) == '"\'spes, ei\', \'f\', \'espoir\'" '\
+        'requires 3 columns, but "table1" has 2 columns ("col1" and "col2").'
+    insert_rows('table1', [('amor,  oris, m.', 'amour'),
+                           ('anima,  ae, f.', 'coeur, âme'),
+                           ('hiems, mis,f', 'hiver')])
+    assert get_table('table1') \
+        == [('1', 'adventus,  us, m.', 'arrivée'),
+            ('2', 'aqua , ae, f', 'eau'),
+            ('3', 'candidus,  a, um', 'blanc'),
+            ('4', 'sol, solis, m', 'soleil'),
+            ('5', 'spes, ei f', 'espoir'),
+            ('6', 'amor,  oris, m.', 'amour'),
+            ('7', 'anima,  ae, f.', 'coeur, âme'),
+            ('8', 'hiems, mis,f', 'hiver')]
 
 
 def test_add_row(testdb):
