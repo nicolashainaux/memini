@@ -181,4 +181,4 @@ def generate(name, nb=DEFAULT_Q_NB):
     Create a new document using default template and drawing data from the
     table matching name.
     """
-    document.generate(name, nb=nb)
+    document.generate(name, nb)
