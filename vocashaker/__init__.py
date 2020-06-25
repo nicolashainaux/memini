@@ -80,7 +80,7 @@ def list_(what):
 @click.argument('pattern')
 def parse(filename, pattern, errors_only):
     """
-    Parse a file a show result in console.
+    Parse a file and show result in console.
 
     Parse the file FILENAME using the provided PATTERN. The result will be
     displayed in the console. No new table will be created.
