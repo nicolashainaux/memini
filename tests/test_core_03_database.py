@@ -143,7 +143,7 @@ def test_remove_table(testdb, mocker):
 
 
 def test_create_table(testdb, mocker):
-    create_table('table3', ('infinitif', 'passé', 'français'),
+    create_table('table3', ['infinitif', 'passé', 'français'],
                  [('bieten', 'bot, hat geboten', 'offrir'),
                   ('bleiben', 'blieb, ist geblieben', 'rester'),
                   ('gelingen', 'gelang, ist gelungen', 'réussir'),
@@ -187,23 +187,6 @@ def test_insert_rows(testdb):
             ('6', 'amor,  oris, m.', 'amour'),
             ('7', 'anima,  ae, f.', 'coeur, âme'),
             ('8', 'hiems, mis,f', 'hiver')]
-
-
-def test_add_row(testdb):
-    add_row('table1', ('spes, ei f', 'espoir'))
-    assert get_table('table1') \
-        == [('1', 'adventus,  us, m.', 'arrivée'),
-            ('2', 'aqua , ae, f', 'eau'),
-            ('3', 'candidus,  a, um', 'blanc'),
-            ('4', 'sol, solis, m', 'soleil'),
-            ('5', 'spes, ei f', 'espoir')]
-    with pytest.raises(NoSuchTableError) as excinfo:
-        add_row('table3', ('spes, ei', 'f', 'espoir'))
-    assert str(excinfo.value) == 'Cannot find a table named "table3"'
-    with pytest.raises(ColumnsDoNotMatchError) as excinfo:
-        add_row('table1', ('spes, ei', 'f', 'espoir'))
-    assert str(excinfo.value) == '"\'spes, ei\', \'f\', \'espoir\'" '\
-        'requires 3 columns, but "table1" has 2 columns ("col1" and "col2").'
 
 
 def test_remove_row(testdb):

@@ -150,11 +150,7 @@ def create_table(name, col_titles, content):
     cmd = f'CREATE TABLE {name} (id INTEGER PRIMARY KEY, '\
         f'{titles}timestamp INTEGER)'
     _exec(None, cmd)
-    titles = ', '.join(col_titles) + ', timestamp'
-    qmarks = '?, ' * len(col_titles) + '?'
-    cmd = f'INSERT INTO {name}({titles}) VALUES({qmarks})'
-    content = [item + (0, ) for item in content]
-    shared.db.executemany(cmd, content)
+    insert_rows(name, content, col_titles=col_titles)
 
 
 def insert_rows(table_name, rows, col_titles=None):
