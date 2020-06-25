@@ -22,6 +22,7 @@
 import click
 import blessed
 
+from vocashaker.core.prefs import DEFAULT_Q_NB
 from vocashaker.core.env import USER_DB_PATH
 from vocashaker.core.errors import CommandError, EmptyFileError, NotFoundError
 from vocashaker.core.errors import NoSuchTableError, NoSuchRowError
@@ -122,4 +123,40 @@ def add(name, file_name, pattern):
         try:
             commands.add(name, file_name, pattern)
         except (NoSuchTableError, ColumnsDoNotMatchError) as e:
+            echo_error(str(e))
+
+
+@run.command('show')
+@click.argument('name')
+def show(name):
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.show(name)
+        except NoSuchTableError as e:
+            echo_error(str(e))
+
+
+@run.command('rename')
+@click.argument('name1')
+@click.argument('name2')
+def rename(name1, name2):
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.rename(name1, name2)
+        except (NoSuchTableError, DestinationExistsError) as e:
+            echo_error(str(e))
+
+
+@run.command('generate')
+@click.argument('name')
+@click.option('-n', '--questions-number', default=DEFAULT_Q_NB, type=int,
+              show_default=True)
+def generate(name, questions_number):
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.generate(name, nb=questions_number)
+        except (NoSuchTableError, DestinationExistsError) as e:
             echo_error(str(e))
