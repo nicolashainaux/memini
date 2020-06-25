@@ -46,8 +46,11 @@ PYVER = sys.version.replace('\n', ' ')
 MESSAGE = f'This is {PROG_NAME}, version {__version__}, '\
     f'running under python {PYVER}'
 
-USER_LOCAL_SHARE = os.path.join(str(Path.home()), '.local', 'share',
-                                __myname__)
+USER_LOCAL_SHARE_FALLBACK = os.path.join(str(Path.home()), '.local', 'share',
+                                         __myname__)
+USER_LOCAL_SHARE = os.getenv('XDG_DATA_HOME', USER_LOCAL_SHARE_FALLBACK)
+# USER_CONFIG_FALLBACK = os.path.join(str(Path.home()), '.config', __myname__)
+# USER_CONFIG = os.getenv('XDG_CONFIG_HOME', USER_CONFIG_FALLBACK)
 USER_DB_NAME = 'data.db'
 USER_DB_PATH = os.path.join(USER_LOCAL_SHARE, USER_DB_NAME)
 USER_TEMPLATES_DIRNAME = 'templates'
