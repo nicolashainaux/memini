@@ -25,6 +25,7 @@ import blessed
 from vocashaker.core.env import USER_DB_PATH
 from vocashaker.core.errors import CommandError, EmptyFileError, NotFoundError
 from vocashaker.core.errors import NoSuchTableError, NoSuchRowError
+from vocashaker.core.errors import DestinationExistsError
 from vocashaker.core import shared
 from vocashaker.core import database
 from vocashaker.core import commands
@@ -94,4 +95,17 @@ def remove(name, span):
         try:
             commands.remove(name, span)
         except (NoSuchTableError, NoSuchRowError) as e:
+            echo_error(str(e))
+
+
+@run.command('create')
+@click.argument('name')
+@click.argument('file_name')
+@click.argument('pattern')
+def create(name, file_name, pattern):
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.create(name, file_name, pattern)
+        except (NoSuchTableError, NoSuchRowError, DestinationExistsError) as e:
             echo_error(str(e))

@@ -63,15 +63,19 @@ def parse(filename, pattern, errors_only=False):
         sys.stderr.write(term.chartreuse3('No parsing errors ☺\n'))
 
 
-def add(name, file_name, pattern):
+def create(name, file_name, pattern):
     """
-    Parse file using pattern and create a new table filled with the result.
-    Create the associated default template.
-    Before doing so, check if the name is already used. If yes, ask if the
-    lines should be appended to the existing table or not (cancel).
+    Create a new table filled with the result of parsing file_name using
+    provided pattern. Create the associated default template.
+    Abort if the name is already used.
     """
+    if database.table_exists(name):
+        raise DestinationExistsError(name, kind='table')
+    elif template.exists(name):
+        raise DestinationExistsError(name, kind='template')
     rows, errors = parser.parse_file(file_name, pattern)
     _, titles = parser.parse_pattern(pattern)
+    titles = list(titles)
     database.create_table(name, titles, rows)
     template.create(name)
     if errors:

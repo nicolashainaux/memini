@@ -201,10 +201,10 @@ def test_parse(capsys, mocker):
         'amicitia,  ae, f. amitié\n'
 
 
-def test_add(testdb, capsys, mocker):
+def test_create(testdb, capsys, mocker):
     m = mocker.patch('vocashaker.core.template.create')
     f = os.path.join(TESTS_DATADIR, 'latin.txt')
-    commands.add('latin', f, '<Latin>:<Français>')
+    commands.create('latin', f, '<Latin>:<Français>')
     m.assert_called_with('latin')
     commands.show('latin')
     captured = capsys.readouterr()
@@ -222,8 +222,12 @@ def test_add(testdb, capsys, mocker):
         '  9 |    amicus,  i, m.    |         ami         \n'\
         ' 10 |    amor,  oris, m.   |        amour        \n'\
         ' 11 |    anima,  ae, f.    |      coeur, âme     \n'
+
+
+def test_create_with_parse_errors(testdb, capsys, mocker):
+    m = mocker.patch('vocashaker.core.template.create')
     f = os.path.join(TESTS_DATADIR, 'latin_parse_err.txt')
-    commands.add('latin2', f, '<Latin>:<Français>')
+    commands.create('latin2', f, '<Latin>:<Français>')
     m.assert_called_with('latin2')
     captured = capsys.readouterr()
     assert captured.err == \
@@ -246,6 +250,24 @@ def test_add(testdb, capsys, mocker):
         '  6 |    amicus,  i, m.    |         ami         \n'\
         '  7 |    amor,  oris, m.   |        amour        \n'\
         '  8 |    anima,  ae, f.    |      coeur, âme     \n'
+
+
+def test_create_already_existing_table_or_template(testdb, capsys, fs):
+    fs.create_file('some_source.txt')
+
+    with pytest.raises(DestinationExistsError) as excinfo:
+        commands.create('table1', 'some_source.txt', '<Latin>:<Français>')
+    assert str(excinfo.value) == 'Action cancelled: a table named '\
+        '"table1" already exists. Please rename or remove it '\
+        'before using this name.'
+
+    fs.create_file(template.path('already_in_use'))
+    with pytest.raises(DestinationExistsError) as excinfo:
+        commands.create('already_in_use', 'some_source.txt',
+                        '<Latin>:<Français>')
+    assert str(excinfo.value) == 'Action cancelled: a template named '\
+        '"already_in_use" already exists. Please rename or remove it '\
+        'before using this name.'
 
 
 def test_generate(mocker):
