@@ -136,3 +136,12 @@ class SchemeColumnsMismatchError(VocaShakerError):
         msg = f'The provided scheme ({scheme}) does not have the same number '\
             f'of columns as the table ({cols_nb}).'
         super().__init__(msg)
+
+
+class CommandCancelledError(VocaShakerError):
+    """
+    When the user cancels a command.
+    """
+    def __init__(self, cmd):
+        msg = f'Command {cmd} has been cancelled.'
+        super().__init__(msg)

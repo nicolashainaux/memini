@@ -340,4 +340,4 @@ def test_add_with_cols_nb_mismatch(testdb):
 def test_generate(mocker):
     m = mocker.patch('vocashaker.core.document.generate')
     commands.generate('table1', 4)
-    m.assert_called_with('table1', 4, scheme=None)
+    m.assert_called_with('table1', 4, scheme=None, force=False, output=None)

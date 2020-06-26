@@ -25,6 +25,7 @@ from unittest.mock import patch
 from vocashaker.core.env import TEMPLATE_EXT, TEST_TEMPLATE1_PATH
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
 from vocashaker.core.errors import SchemeColumnsMismatchError
+from vocashaker.core.errors import CommandCancelledError
 from vocashaker.core.document import _default_scheme, _parse_scheme
 from vocashaker.core.document import _process_data, generate
 
@@ -149,3 +150,13 @@ def test_generate(mocker):
     with patch('builtins.open', mo, create=True):
         generate('table1', 5)
     mo.assert_called_with('table1.{}'.format(TEMPLATE_EXT), 'wb')
+
+
+def test_generate_to_existing_destination(fs, mocker):
+    fs.create_file('some_dest.odt')
+    m = mocker.patch('vocashaker.core.terminal.ask_yes_no', return_value=False)
+    with pytest.raises(CommandCancelledError) as excinfo:
+        generate('table1', 5, output='some_dest.odt')
+    m.assert_called_with('Output file some_dest.odt already exists, overwrite'
+                         ' it?')
+    assert str(excinfo.value) == 'Command generate has been cancelled.'

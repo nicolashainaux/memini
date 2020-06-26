@@ -30,6 +30,7 @@ from vocashaker.core.errors import DestinationExistsError
 from vocashaker.core.errors import ColumnsDoNotMatchError
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
 from vocashaker.core.errors import SchemeColumnsMismatchError
+from vocashaker.core.errors import CommandCancelledError
 from vocashaker.core import shared
 from vocashaker.core import database
 from vocashaker.core import commands
@@ -38,6 +39,11 @@ from vocashaker.core import commands
 shared.init()
 
 __all__ = ['run']
+
+
+def echo_info(s):
+    term = blessed.Terminal()
+    click.echo(term.lightskyblue('Info: ') + str(s))
 
 
 def echo_warning(s):
@@ -210,7 +216,11 @@ def rename(name1, name2):
 @click.option('-n', '--questions-number', default=DEFAULT_Q_NB, type=int,
               show_default=True, help='number of questions')
 @click.option('-s', '--scheme', default=None, type=str, help='scheme to use')
-def generate(name, questions_number, scheme):
+@click.option('-o', '--output', default=None, type=click.Path(),
+              help='set output file name')
+@click.option('-f', '--force', default=False, is_flag=True, show_default=True,
+              help='overwrite already existing file without asking')
+def generate(name, questions_number, scheme, output, force):
     """
     Generate a new document.
 
@@ -238,7 +248,10 @@ def generate(name, questions_number, scheme):
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
-            commands.generate(name, nb=questions_number, scheme=scheme)
+            commands.generate(name, nb=questions_number, scheme=scheme,
+                              output=output, force=force)
         except (NoSuchTableError, DestinationExistsError, SchemeSyntaxError,
                 SchemeLogicalError, SchemeColumnsMismatchError) as e:
             echo_error(str(e))
+        except CommandCancelledError as e:
+            echo_info(str(e))

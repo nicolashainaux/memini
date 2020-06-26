@@ -19,17 +19,19 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+import os
 import re
 import random
 
 from relatorio.templates.opendocument import Template
 
 
-from vocashaker.core import database, template
+from vocashaker.core import database, template, terminal
 from vocashaker.core.env import TEMPLATE_EXT
 from vocashaker.core.prefs import BLANK_CHAR, FILLED_CHAR
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
 from vocashaker.core.errors import SchemeColumnsMismatchError
+from vocashaker.core.errors import CommandCancelledError
 
 
 def _default_scheme(n):
@@ -96,15 +98,23 @@ def _process_data(data, scheme=None):
     return result
 
 
-def generate(table_name, n, scheme=None, oldest_prevail=False):
+def generate(table_name, n, scheme=None, oldest_prevail=False, output=None,
+             force=False):
     """
     Generate a new document using n data from the table and the matching
     template.
     """
+    if output is None:
+        output = f'{table_name}.{TEMPLATE_EXT}'
+    if os.path.exists(output) and not force:
+        overwrite = terminal.ask_yes_no(f'Output file {output} already '
+                                        f'exists, overwrite it?')
+        if not overwrite:
+            raise CommandCancelledError('generate')
     data = _process_data(database.draw_rows(table_name, n,
                                             oldest_prevail=oldest_prevail),
                          scheme=scheme)
     basic = Template(source='', filepath=template.path(table_name))
     basic_generated = basic.generate(o=data).render()
-    with open(f'{table_name}.{TEMPLATE_EXT}', 'wb') as f:
+    with open(output, 'wb') as f:
         f.write(basic_generated.getvalue())
