@@ -19,6 +19,10 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
+import os
+
+from .env import PROG_NAME
+
 
 class VocaShakerError(Exception):
     """Basic exception for errors raised by VocaShaker."""
@@ -139,9 +143,17 @@ class SchemeColumnsMismatchError(VocaShakerError):
 
 
 class CommandCancelledError(VocaShakerError):
-    """
-    When the user cancels a command.
-    """
+    """When the user cancels a command."""
     def __init__(self, cmd):
         msg = f'Command {cmd} has been cancelled.'
+        super().__init__(msg)
+
+
+class NotATemplateError(VocaShakerError):
+    """
+    When a provided file is not recognized as a template created by VocaShaker.
+    """
+    def __init__(self, filename):
+        msg = f'This file: {os.path.basename(filename)} does not look like a '\
+            f'{PROG_NAME} template.'
         super().__init__(msg)

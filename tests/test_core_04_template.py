@@ -22,10 +22,13 @@
 import os
 from unittest.mock import patch
 
+import pytest
+
 from vocashaker.core import template, prefs
-from vocashaker.core.env import TEST_BUILT_TABLE1_CONTENTXML_PATH
+from vocashaker.core.env import TEST_BUILT_TABLE1_CONTENTXML_PATH, PROG_NAME
 from vocashaker.core.env import CONTENTXML_PATH, TESTS_DATADIR
 from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT
+from vocashaker.core.errors import NotATemplateError
 
 
 def test_path():
@@ -84,3 +87,27 @@ def test_check():
     assert template._check(correct_template)
     wrong_template = os.path.join(TESTS_DATADIR, 'template_faked.odt')
     assert not template._check(wrong_template)
+
+
+def test_get_cols_nb():
+    t2 = os.path.join(TESTS_DATADIR, 'template1.odt')
+    assert template.get_cols_nb(t2) == 2
+    t3 = os.path.join(TESTS_DATADIR, 'template3.odt')
+    assert template.get_cols_nb(t3) == 3
+    t4 = os.path.join(TESTS_DATADIR, 'template4.odt')
+    assert template.get_cols_nb(t4) == 4
+
+    ft = os.path.join(TESTS_DATADIR, 'template_faked.odt')
+    with pytest.raises(NotATemplateError) as excinfo:
+        template.get_cols_nb(ft)
+    assert str(excinfo.value) == 'This file: template_faked.odt does not look'\
+        f' like a {PROG_NAME} template.'
+
+    ft = os.path.join(TESTS_DATADIR, 'defect_template.odt')
+    with pytest.raises(NotATemplateError) as excinfo:
+        template.get_cols_nb(ft)
+    assert str(excinfo.value) == 'This file: defect_template.odt does not '\
+        f'look like a {PROG_NAME} template.'
+
+    mt = os.path.join(TESTS_DATADIR, 'modified_template.odt')
+    assert template.get_cols_nb(mt) == 2

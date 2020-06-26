@@ -25,6 +25,7 @@ import shutil
 import zipfile
 import subprocess
 
+from vocashaker.core.errors import NotATemplateError
 from vocashaker.core.prefs import EDITOR
 from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT, TEMPLATE_DIR
 from vocashaker.core.env import CONTENTXML_PATH, DATADIR
@@ -87,3 +88,20 @@ def _check(filename):
         return True
     else:
         return False
+
+
+def get_cols_nb(filename):
+    """Find out the number of columns in the provided template."""
+    if not _check(filename):
+        raise NotATemplateError(filename)
+    with zipfile.ZipFile(filename) as z:
+        with z.open('content.xml') as f:
+            content_xml = f.readlines()
+    content_xml = ''.join([str(line.strip()) for line in content_xml])
+    if '<text:span text:style-name="T1">row.col4</text:span>' in content_xml:
+        return 4
+    if '<text:span text:style-name="T1">row.col3</text:span>' in content_xml:
+        return 3
+    if '<text:span text:style-name="T1">row.col2</text:span>' in content_xml:
+        return 2
+    raise NotATemplateError(filename)
