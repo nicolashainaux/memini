@@ -75,7 +75,6 @@ def create(name, file_name, pattern):
         raise DestinationExistsError(name, kind='template')
     rows, errors = parser.parse_file(file_name, pattern)
     _, titles = parser.parse_pattern(pattern)
-    titles = list(titles)
     database.create_table(name, titles, rows)
     template.create(name)
     if errors:
@@ -91,7 +90,6 @@ def add(name, file_name, pattern):
         raise NoSuchTableError(name)
     rows, errors = parser.parse_file(file_name, pattern)
     _, titles = parser.parse_pattern(pattern)
-    titles = list(titles)
     table_col_titles = database.get_cols(name)
     cols_nb = len(table_col_titles)
     if len(titles) != cols_nb:

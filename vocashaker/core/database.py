@@ -163,7 +163,7 @@ def insert_rows(table_name, rows, col_titles=None):
             data = ', '.join(data)
             raise ColumnsDoNotMatchError(len(col_titles), len(row),
                                          table_name, col_titles, data)
-    titles = ', '.join(col_titles + ['timestamp'])
+    titles = ', '.join(list(col_titles) + ['timestamp'])
     qmarks = '?, ' * len(col_titles) + '?'
     cmd = f'INSERT INTO {table_name}({titles}) VALUES({qmarks})'
     content = [item + (0, ) for item in rows]
