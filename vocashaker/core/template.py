@@ -22,6 +22,7 @@
 import os
 import glob
 import shutil
+import zipfile
 import subprocess
 
 from vocashaker.core.prefs import EDITOR
@@ -75,3 +76,14 @@ def edit(table_name):
 def remove(table_name):
     """Remove the template (.odt) file."""
     os.remove(path(table_name))
+
+
+def _check(filename):
+    """Check the filename is a template file created by me."""
+    with zipfile.ZipFile(filename) as z:
+        with z.open('meta.xml') as f:
+            meta_xml = f.readlines()
+    if b'        <meta:initial-creator>vocashaker\n' in meta_xml:
+        return True
+    else:
+        return False

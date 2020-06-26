@@ -24,7 +24,7 @@ from unittest.mock import patch
 
 from vocashaker.core import template, prefs
 from vocashaker.core.env import TEST_BUILT_TABLE1_CONTENTXML_PATH
-from vocashaker.core.env import CONTENTXML_PATH
+from vocashaker.core.env import CONTENTXML_PATH, TESTS_DATADIR
 from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT
 
 
@@ -77,3 +77,10 @@ def test_create(testdb, mocker):
     m1.assert_called_with(CONTENTXML_PATH, 'w')
     m2.assert_called_with('table1')
     m3.assert_called_with(CONTENTXML_PATH)
+
+
+def test_check():
+    correct_template = os.path.join(TESTS_DATADIR, 'template1.odt')
+    assert template._check(correct_template)
+    wrong_template = os.path.join(TESTS_DATADIR, 'template_faked.odt')
+    assert not template._check(wrong_template)
