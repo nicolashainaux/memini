@@ -28,6 +28,8 @@ from vocashaker.core.errors import CommandError, EmptyFileError, NotFoundError
 from vocashaker.core.errors import NoSuchTableError, NoSuchRowError
 from vocashaker.core.errors import DestinationExistsError
 from vocashaker.core.errors import ColumnsDoNotMatchError
+from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
+from vocashaker.core.errors import SchemeColumnsMismatchError
 from vocashaker.core import shared
 from vocashaker.core import database
 from vocashaker.core import commands
@@ -237,5 +239,6 @@ def generate(name, questions_number, scheme):
         shared.db = db
         try:
             commands.generate(name, nb=questions_number, scheme=scheme)
-        except (NoSuchTableError, DestinationExistsError) as e:
+        except (NoSuchTableError, DestinationExistsError, SchemeSyntaxError,
+                SchemeLogicalError, SchemeColumnsMismatchError) as e:
             echo_error(str(e))
