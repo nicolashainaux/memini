@@ -28,7 +28,6 @@ from vocashaker.core.errors import SchemeColumnsMismatchError
 from vocashaker.core.errors import CommandCancelledError, NotFoundError
 from vocashaker.core.document import _default_scheme, _parse_scheme
 from vocashaker.core.document import _process_data, generate
-from vocashaker.core import template
 
 
 def test_default_scheme():
