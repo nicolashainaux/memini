@@ -13,7 +13,7 @@ before_install:
   - sudo apt-get -qq update
   - curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py > ../get-poetry.py
   - sudo python ../get-poetry.py --yes
-  - sudo source $HOME/.poetry/env
+  - sudo . $HOME/.poetry/env
 install:
     - "sudo poetry install"
 script:
