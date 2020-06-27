@@ -218,9 +218,11 @@ def rename(name1, name2):
 @click.option('-s', '--scheme', default=None, type=str, help='scheme to use')
 @click.option('-o', '--output', default=None, type=click.Path(),
               help='set output file name')
+@click.option('-t', '--template', default=None, type=str,
+              help='set alternative template')
 @click.option('-f', '--force', default=False, is_flag=True, show_default=True,
               help='overwrite already existing file without asking')
-def generate(name, questions_number, scheme, output, force):
+def generate(name, questions_number, scheme, output, force, template):
     """
     Generate a new document.
 
@@ -249,9 +251,10 @@ def generate(name, questions_number, scheme, output, force):
         shared.db = db
         try:
             commands.generate(name, nb=questions_number, scheme=scheme,
-                              output=output, force=force)
+                              output=output, force=force, tpl=template)
         except (NoSuchTableError, DestinationExistsError, SchemeSyntaxError,
-                SchemeLogicalError, SchemeColumnsMismatchError) as e:
+                SchemeLogicalError, SchemeColumnsMismatchError,
+                NotFoundError) as e:
             echo_error(str(e))
         except CommandCancelledError as e:
             echo_info(str(e))

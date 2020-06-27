@@ -174,9 +174,11 @@ def rename(name1, name2):
     database.rename_table(name1, name2)
 
 
-def generate(name, nb=DEFAULT_Q_NB, scheme=None, output=None, force=False):
+def generate(name, nb=DEFAULT_Q_NB, scheme=None, output=None, force=False,
+             tpl=None):
     """
     Create a new document using default template and drawing data from the
     table matching name.
     """
-    document.generate(name, nb, scheme=scheme, output=output, force=force)
+    document.generate(name, nb, scheme=scheme, output=output, force=force,
+                      tpl=tpl)
