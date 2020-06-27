@@ -16,6 +16,8 @@ blessed = "^1.17.8"
 pytest = "^3.0"
 pytest-mock = "^1.10"
 pyfakefs = "^3.6"
+coverage = "^5.1"
+coveralls = "^2.0.0"
 
 [tool.poetry.scripts]
 vocashaker = "vocashaker:run"
