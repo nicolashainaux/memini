@@ -15,7 +15,7 @@ before_install:
   - sudo python ../get-poetry.py --yes
   - source $HOME/.poetry/env
 install:
-    - "poetry install"
+    - "sudo poetry install"
 script:
     - "coverage run --source=vocashaker -m pytest -x -vv"
 after_success:
