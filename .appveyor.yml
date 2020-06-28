@@ -14,7 +14,6 @@ environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
       PYVER: "C:\\Python36-x64"
-      PY: "3.6"
     # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     #   PYVER: "C:\\Python37-x64"
     # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
@@ -27,7 +26,7 @@ install:
   # We need wheel installed to build wheels
   - cmd: "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON%"
   - cmd: "set PATH=%USERPROFILE%\\.poetry\\bin;%PATH%"
-  - cmd: "poetry env use %PY%"
+  - cmd: "poetry env use %PYTHON%"
   - cmd: "poetry install"
   - sh: "sudo apt-get -y update"
   - sh: "sudo apt-get install -y python3-venv"
