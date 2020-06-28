@@ -13,9 +13,9 @@ max_jobs: 1
 environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      PYVER: "C:\\Python36-x64"
-      PYVER: "C:\\Python37-x64"
-      PYVER: "C:\\Python38-x64"
+    - PYVER: "C:\\Python36-x64"
+    - PYVER: "C:\\Python37-x64"
+    - PYVER: "C:\\Python38-x64"
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
   global:
     PYTHON: '%PYVER%\python.exe'
