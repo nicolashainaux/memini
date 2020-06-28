@@ -22,18 +22,21 @@ install:
   # - cmd: "%PYTHON%\\python.exe -m pip install wheel pytest"
   - sh: "sudo apt-get -y update"
   - sh: "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py > ../get-poetry.py"
-  - sh: "python --version"
-  - sh: "sudo python ../get-poetry.py --yes"
+  - sh: "python3 --version"
+  - sh: "sudo python3 ../get-poetry.py --yes"
+  - sh: "echo $HOME"
+  - sh: "echo $PATH"
+  - sh: "source $HOME/.poetry/env"
   - sh: "sudo $HOME/.poetry/bin/poetry install"
 
 build: off
 
-# test_script:
-#   # Note that you must use the environment variable %PYTHON% to refer to
-#   # the interpreter you're using - Appveyor does not do anything special
-#   # to put the Python version you want to use on PATH.
-#   # - cmd: "%PYTHON%\\python.exe setup.py test"
-#   - sh: "pytest --cov=mathmakerlib tests/"
+test_script:
+  # Note that you must use the environment variable %PYTHON% to refer to
+  # the interpreter you're using - Appveyor does not do anything special
+  # to put the Python version you want to use on PATH.
+  # - cmd: "%PYTHON%\\python.exe setup.py test"
+  - sh: "coverage run --source=vocashaker -m pytest -x -vv"
 
 # after_test:
 #   # This step builds your wheels.
