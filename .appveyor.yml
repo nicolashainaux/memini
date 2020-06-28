@@ -26,6 +26,7 @@ install:
   - sh: "sudo python3 ../get-poetry.py --yes"
   - sh: "echo $HOME"
   - sh: "echo $PATH"
+  - sh: sudo find / -name "*.poetry*"
   - sh: "source $HOME/.poetry/env"
   - sh: "sudo $HOME/.poetry/bin/poetry install"
 
