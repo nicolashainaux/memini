@@ -24,6 +24,10 @@ install:
   - sh: "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py > ../get-poetry.py"
   - sh: "python3 ../get-poetry.py --yes"
   - sh: "source $HOME/.poetry/env"
+  - sh: "poetry env use 3.8"
+  - sh: "poetry install"
+  - sh: "sudo ln -s $HOME/venv3.7/bin/python3.7 /usr/local/bin/python3.7"
+  - sh: "poetry env use 3.7"
   - sh: "poetry install"
 
 build: off
@@ -33,8 +37,7 @@ test_script:
   # the interpreter you're using - Appveyor does not do anything special
   # to put the Python version you want to use on PATH.
   # - cmd: "%PYTHON%\\python.exe setup.py test"
-  - sh: "sudo ln -s $HOME/venv3.7/bin/python3.7 /usr/local/bin/python3.7"
-  - sh: "poetry env use 3.7"
+  # - sh: "poetry env use 3.7"
   - sh: "poetry run pytest -x -vv"
   - sh: "poetry env use 3.8"
   - sh: "poetry run pytest -x -vv"
