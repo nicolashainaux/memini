@@ -22,13 +22,9 @@ install:
   # - cmd: "%PYTHON%\\python.exe -m pip install wheel pytest"
   - sh: "sudo apt-get -y update"
   - sh: "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py > ../get-poetry.py"
-  - sh: "python3 --version"
-  - sh: "sudo python3 ../get-poetry.py --yes"
-  - sh: "echo $HOME"
-  - sh: "echo $PATH"
-  - sh: sudo find / -name "*.poetry*"
+  - sh: "python3 ../get-poetry.py --yes"
   - sh: "source $HOME/.poetry/env"
-  - sh: "sudo $HOME/.poetry/bin/poetry install"
+  - sh: "poetry install"
 
 build: off
 
