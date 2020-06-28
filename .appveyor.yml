@@ -33,7 +33,7 @@ test_script:
   # the interpreter you're using - Appveyor does not do anything special
   # to put the Python version you want to use on PATH.
   # - cmd: "%PYTHON%\\python.exe setup.py test"
-  - sh: "ls $HOME/venv3.7"
+  - sh: "ln -s $HOME/venv3.7/bin/python3.7 /usr/local/bin/python3.7"
   - sh: "poetry env use 3.7"
   - sh: "poetry run pytest -x -vv"
   - sh: "poetry env use 3.8"
