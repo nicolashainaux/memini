@@ -82,7 +82,7 @@ def remove(table_name):
 def _check(filename):
     """Check the filename is a template file created by me."""
     with zipfile.ZipFile(filename) as z:
-        with z.open('meta.xml', encoding=ENCODING) as f:
+        with z.open('meta.xml') as f:
             meta_xml = f.readlines()
     if b'        <meta:initial-creator>vocashaker\n' in meta_xml:
         return True

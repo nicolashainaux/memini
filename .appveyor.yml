@@ -49,9 +49,9 @@ test_script:
   # Note that you must use the environment variable %PYTHON% to refer to
   # the interpreter you're using - Appveyor does not do anything special
   # to put the Python version you want to use on PATH.
-  - cmd: poetry run pytest -x -vv
+  - cmd: poetry run pytest -vv
   - sh: poetry env use $PYVER
-  - sh: poetry run pytest -x -vv
+  - sh: poetry run pytest -vv
 
 # after_test:
 #   # This step builds your wheels.
