@@ -61,7 +61,7 @@ test_script:
   - sh: poetry run coverage run --source=vocashaker -m pytest -vv
 
 after_test:
-    - sh: coveralls
+    - sh: poetry run coveralls
 #   # This step builds your wheels.
 #   - cmd: "%PYTHON%\\python.exe setup.py bdist_wheel"
 #   - sh: "codecov"
