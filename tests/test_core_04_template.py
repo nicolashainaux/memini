@@ -63,7 +63,7 @@ def test_edit(mocker):
 
 def test_prepare_content(testdb):
     created = template._prepare_content('table1')
-    with open(TEST_BUILT_TABLE1_CONTENTXML_PATH, 'r') as f:
+    with open(TEST_BUILT_TABLE1_CONTENTXML_PATH, 'r', encoding='utf8') as f:
         expected = f.read()
     assert created == expected
 
@@ -77,7 +77,7 @@ def test_create(testdb, mocker):
     mocker.patch('shutil.move')
     with patch('builtins.open', m1, create=True):
         template.create('table1')
-    m1.assert_called_with(CONTENTXML_PATH, 'w')
+    m1.assert_called_with(CONTENTXML_PATH, 'w', encoding=prefs.ENCODING)
     m2.assert_called_with('table1')
     m3.assert_called_with(CONTENTXML_PATH)
 
