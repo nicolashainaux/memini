@@ -12,8 +12,8 @@ max_jobs: 1
 # https://www.appveyor.com/docs/linux-images-software#python
 environment:
   matrix:
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      PYVER: "C:\\Python36-x64"
+    # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+    #   PYVER: "C:\\Python36-x64"
     # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     #   PYVER: "C:\\Python37-x64"
     # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
@@ -40,7 +40,7 @@ install:
   - sh: "source $HOME/.poetry/env"
   - sh: echo $PYVER
   - sh: echo %PYVER%
-  - sh: 'if "$PYVER!=3.8" sudo ln -s $HOME/venv$PYVER/bin/python$PYVER /usr/local/bin/python$PYVER'
+  - sh: if [ "$PYVER" != "3.8" ]; then sudo ln -s $HOME/venv$PYVER/bin/python$PYVER /usr/local/bin/python$PYVER; fi
   - sh: "poetry env use $PYVER"
   - sh: "poetry install"
 
