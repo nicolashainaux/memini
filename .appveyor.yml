@@ -13,25 +13,23 @@ max_jobs: 1
 environment:
   matrix:
     - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      PYVER: "C:\\Python36-x64"
-    # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-    #   PYVER: "C:\\Python37-x64"
-    # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-    #   PYVER: "C:\\Python38-x64"
-    # - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
-    #   PYVER: '3.6'
-    # - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
-    #   PYVER: '3.7'
+      PYTHON36: "C:\\Python36-x64\\python.exe"
+      PYTHON37: "C:\\Python37-x64\\python.exe"
+      PYTHON38: "C:\\Python38-x64\\python.exe"
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
-      PYVER: '3.8'
-  global:
-    PYTHON: '%PYVER%\python.exe'
+      PYTHON36: "$HOME/venv3.6/bin/python3.6"
+      PYTHON37: "$HOME/venv3.7/bin/python3.7"
+      PYTHON38: "$HOME/venv3.8/bin/python3.8"
 
 install:
   - cmd: set PYTHONIOENCODING=utf-8
-  - cmd: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON%
+  - cmd: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON38%
   - cmd: set PATH=%USERPROFILE%\\.poetry\\bin;%PATH%
-  - cmd: poetry env use %PYTHON%
+  - cmd: poetry env use %PYTHON36%
+  - cmd: poetry install
+  - cmd: poetry env use %PYTHON37%
+  - cmd: poetry install
+  - cmd: poetry env use %PYTHON38%
   - cmd: poetry install
   # Ubuntu
   # We need wheel installed to build wheels
@@ -39,18 +37,27 @@ install:
   - sh: sudo apt-get install -y python3-venv
   - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
   - sh: source $HOME/.poetry/env
-  - sh: if [ "$PYVER" != "3.8" ]; then sudo ln -s $HOME/venv$PYVER/bin/python$PYVER /usr/local/bin/python$PYVER; fi
-  - sh: poetry env use $PYVER
+  - sh: poetry env use $PYTHON36
+  - sh: poetry install
+  - sh: poetry env use $PYTHON37
+  - sh: poetry install
+  - sh: poetry env use $PYTHON38
   - sh: poetry install
 
 build: off
 
 test_script:
-  # Note that you must use the environment variable %PYTHON% to refer to
-  # the interpreter you're using - Appveyor does not do anything special
-  # to put the Python version you want to use on PATH.
+  - cmd: poetry env use %PYTHON36%
   - cmd: poetry run pytest -vv
-  - sh: poetry env use $PYVER
+  - cmd: poetry env use %PYTHON37%
+  - cmd: poetry run pytest -vv
+  - cmd: poetry env use %PYTHON38%
+  - cmd: poetry run pytest -vv
+  - sh: poetry env use $PYTHON36
+  - sh: poetry run pytest -vv
+  - sh: poetry env use $PYTHON37
+  - sh: poetry run pytest -vv
+  - sh: poetry env use $PYTHON38
   - sh: poetry run pytest -vv
 
 # after_test:
