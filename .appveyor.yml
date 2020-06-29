@@ -18,26 +18,28 @@ environment:
     #   PYVER: "C:\\Python37-x64"
     # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     #   PYVER: "C:\\Python38-x64"
+    # - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
+    #   PYVER: '3.6'
+    # - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
+    #   PYVER: '3.7'
     - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
+      PYVER: '3.8'
   global:
     PYTHON: '%PYVER%\python.exe'
 
 install:
   # We need wheel installed to build wheels
-  - cmd: "set PYTHONIOENCODING=utf-8"
+  # - cmd: "set PYTHONIOENCODING=utf-8"
   - cmd: "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON%"
   - cmd: "set PATH=%USERPROFILE%\\.poetry\\bin;%PATH%"
   - cmd: "poetry env use %PYTHON%"
   - cmd: "poetry install"
   - sh: "sudo apt-get -y update"
   - sh: "sudo apt-get install -y python3-venv"
-  - sh: "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py > ../get-poetry.py"
-  - sh: "python3 ../get-poetry.py --yes"
+  - sh: "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3"
   - sh: "source $HOME/.poetry/env"
-  - sh: "poetry env use 3.8"
-  - sh: "poetry install"
-  - sh: "sudo ln -s $HOME/venv3.7/bin/python3.7 /usr/local/bin/python3.7"
-  - sh: "poetry env use 3.7"
+  - sh: "if $PYVER!=3.8 sudo ln -s $HOME/venv$PYVER/bin/python$PYVER /usr/local/bin/python$PYVER"
+  - sh: "poetry env use $PYVER"
   - sh: "poetry install"
 
 build: off
