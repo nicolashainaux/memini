@@ -29,7 +29,7 @@ environment:
 
 install:
   # We need wheel installed to build wheels
-  # - cmd: "set PYTHONIOENCODING=utf-8"
+  - cmd: "set PYTHONIOENCODING=utf-8"
   - cmd: "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON%"
   - cmd: "set PATH=%USERPROFILE%\\.poetry\\bin;%PATH%"
   - cmd: "poetry env use %PYTHON%"
@@ -38,7 +38,9 @@ install:
   - sh: "sudo apt-get install -y python3-venv"
   - sh: "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3"
   - sh: "source $HOME/.poetry/env"
-  - sh: "if $PYVER!=3.8 sudo ln -s $HOME/venv$PYVER/bin/python$PYVER /usr/local/bin/python$PYVER"
+  - sh: echo $PYVER
+  - sh: echo %PYVER%
+  - sh: 'if "$PYVER!=3.8" sudo ln -s $HOME/venv$PYVER/bin/python$PYVER /usr/local/bin/python$PYVER'
   - sh: "poetry env use $PYVER"
   - sh: "poetry install"
 
