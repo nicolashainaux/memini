@@ -149,6 +149,12 @@ def test_remove(mocker):
     m.assert_called_with('table2', '2,3')
 
 
+def test_win_encoding(capsys):
+    print('éléphant')
+    captured = capsys.readouterr()
+    assert captured.out == 'éléphant'
+
+
 def test_parse(capsys, mocker):
     f = os.path.join(TESTS_DATADIR, 'latin.txt')
     commands.parse(f, '<Latin>:<Français>')
