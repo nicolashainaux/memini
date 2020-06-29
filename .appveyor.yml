@@ -12,8 +12,8 @@ max_jobs: 1
 # https://www.appveyor.com/docs/linux-images-software#python
 environment:
   matrix:
-    # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-    #   PYVER: "C:\\Python36-x64"
+    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+      PYVER: "C:\\Python36-x64"
     # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
     #   PYVER: "C:\\Python37-x64"
     # - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
@@ -28,21 +28,20 @@ environment:
     PYTHON: '%PYVER%\python.exe'
 
 install:
+  - cmd: set PYTHONIOENCODING=utf-8
+  - cmd: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON%
+  - cmd: set PATH=%USERPROFILE%\\.poetry\\bin;%PATH%
+  - cmd: poetry env use %PYTHON%
+  - cmd: poetry install
+  # Ubuntu
   # We need wheel installed to build wheels
-  - cmd: "set PYTHONIOENCODING=utf-8"
-  - cmd: "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON%"
-  - cmd: "set PATH=%USERPROFILE%\\.poetry\\bin;%PATH%"
-  - cmd: "poetry env use %PYTHON%"
-  - cmd: "poetry install"
-  - sh: "sudo apt-get -y update"
-  - sh: "sudo apt-get install -y python3-venv"
-  - sh: "curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3"
-  - sh: "source $HOME/.poetry/env"
-  - sh: echo $PYVER
-  - sh: echo %PYVER%
+  - sh: sudo apt-get -y update
+  - sh: sudo apt-get install -y python3-venv
+  - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
+  - sh: source $HOME/.poetry/env
   - sh: if [ "$PYVER" != "3.8" ]; then sudo ln -s $HOME/venv$PYVER/bin/python$PYVER /usr/local/bin/python$PYVER; fi
-  - sh: "poetry env use $PYVER"
-  - sh: "poetry install"
+  - sh: poetry env use $PYVER
+  - sh: poetry install
 
 build: off
 
@@ -50,10 +49,9 @@ test_script:
   # Note that you must use the environment variable %PYTHON% to refer to
   # the interpreter you're using - Appveyor does not do anything special
   # to put the Python version you want to use on PATH.
-  - cmd: "poetry run pytest -x -vv"
-  - sh: "poetry run pytest -x -vv"
-  - sh: "poetry env use 3.8"
-  - sh: "poetry run pytest -x -vv"
+  - cmd: poetry run pytest -x -vv
+  - sh: poetry env use $PYVER
+  - sh: poetry run pytest -x -vv
 
 # after_test:
 #   # This step builds your wheels.

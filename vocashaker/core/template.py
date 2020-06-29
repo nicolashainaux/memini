@@ -26,7 +26,7 @@ import zipfile
 import subprocess
 
 from vocashaker.core.errors import NotATemplateError
-from vocashaker.core.prefs import EDITOR
+from vocashaker.core.prefs import EDITOR, ENCODING
 from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT, TEMPLATE_DIR
 from vocashaker.core.env import CONTENTXML_PATH, DATADIR
 from vocashaker.core.database import get_cols
@@ -52,7 +52,7 @@ def _prepare_content(table_name):
     cols_titles = get_cols(table_name)
     cols_nb = len(cols_titles)
     src = os.path.join(DATADIR, f'content{cols_nb}.xml')
-    with open(src, 'r') as f:
+    with open(src, 'r', encoding=ENCODING) as f:
         contentxml = f.read()
     contentxml = contentxml.replace('__TITLE__', table_name)
     for i in range(cols_nb):
@@ -62,7 +62,7 @@ def _prepare_content(table_name):
 
 def create(table_name):
     """Create the template (.odt) file."""
-    with open(CONTENTXML_PATH, 'w') as f:
+    with open(CONTENTXML_PATH, 'w', encoding=ENCODING) as f:
         f.write(_prepare_content(table_name))
     zipped = shutil.make_archive(table_name, 'zip', TEMPLATE_DIR)
     shutil.move(zipped, path(table_name))
@@ -82,7 +82,7 @@ def remove(table_name):
 def _check(filename):
     """Check the filename is a template file created by me."""
     with zipfile.ZipFile(filename) as z:
-        with z.open('meta.xml') as f:
+        with z.open('meta.xml', encoding=ENCODING) as f:
             meta_xml = f.readlines()
     if b'        <meta:initial-creator>vocashaker\n' in meta_xml:
         return True

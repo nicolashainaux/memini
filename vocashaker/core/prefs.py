@@ -20,9 +20,10 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 EDITOR = 'soffice'
+DEFAULT_Q_NB = 20
+ENCODING = 'utf8'
+
+
 BLANK_CHAR = '_'
 FILLED_CHAR = '*'
-
-DEFAULT_Q_NB = 20
-
 TERMINAL_SIZE_FALLBACK = (80, 24)

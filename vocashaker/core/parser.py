@@ -21,6 +21,7 @@
 
 import re
 
+from vocashaker.core.prefs import ENCODING
 from vocashaker.core.errors import MissingSeparatorError, LineDoesNotMatchError
 from vocashaker.core.errors import EmptyFileError
 
@@ -60,7 +61,7 @@ def parse_file(filename, pattern):
     """Parse one entire file of data lines, according to pattern"""
     result = []
     nomatch = []
-    with open(filename) as f:
+    with open(filename, encoding=ENCODING) as f:
         for line in f.readlines():
             if line.strip():
                 try:
