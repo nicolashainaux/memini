@@ -54,6 +54,7 @@ def echo_warning(s):
 def echo_error(s):
     term = blessed.Terminal()
     click.echo(term.color_rgb(197, 0, 11) + 'Error: ' + term.normal + str(s))
+    exit(1)
 
 
 @click.group()
