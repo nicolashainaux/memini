@@ -6,20 +6,6 @@ max_jobs: 1
 # Branch dev overrides several settings after this default configuration.
 # Deployment will be added for branch master only.
 
-# For Python versions available on Appveyor, see
-# https://www.appveyor.com/docs/windows-images-software/#python
-# https://www.appveyor.com/docs/linux-images-software#python
-environment:
-  matrix:
-    - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-      PYTHON36: "C:\\Python36-x64\\python.exe"
-      PYTHON37: "C:\\Python37-x64\\python.exe"
-      PYTHON38: "C:\\Python38-x64\\python.exe"
-    - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
-      PYTHON36: "$HOME/venv3.6/bin/python3.6"
-      PYTHON37: "$HOME/venv3.7/bin/python3.7"
-      PYTHON38: "$HOME/venv3.8/bin/python3.8"
-
 install:
   - cmd: set PYTHONIOENCODING=utf-8
   - cmd: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON38%
@@ -60,6 +46,25 @@ test_script:
   - sh: poetry run pytest -vv
 
 for:
+-
+    branches:
+        only:
+            - master
+            - pre-release
+    # For Python versions available on Appveyor, see
+    # https://www.appveyor.com/docs/windows-images-software/#python
+    # https://www.appveyor.com/docs/linux-images-software#python
+    environment:
+      matrix:
+        - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
+          PYTHON36: "C:\\Python36-x64\\python.exe"
+          PYTHON37: "C:\\Python37-x64\\python.exe"
+          PYTHON38: "C:\\Python38-x64\\python.exe"
+        - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
+          PYTHON36: "$HOME/venv3.6/bin/python3.6"
+          PYTHON37: "$HOME/venv3.7/bin/python3.7"
+          PYTHON38: "$HOME/venv3.8/bin/python3.8"
+
 -
     branches:
         only:
