@@ -1,11 +1,10 @@
 version: build{build}
 
-branches:
-  only:
-  - master
-  - pre-release
-
 max_jobs: 1
+
+# Default configuration is actually for master and pre-release branches.
+# Branch dev overrides several settings after this default configuration.
+# Deployment will be added for branch master only.
 
 # For Python versions available on Appveyor, see
 # https://www.appveyor.com/docs/windows-images-software/#python
@@ -58,10 +57,46 @@ test_script:
   - sh: poetry env use $PYTHON37
   - sh: poetry run pytest -vv
   - sh: poetry env use $PYTHON38
-  - sh: poetry run coverage run --source=vocashaker -m pytest -vv
+  - sh: poetry run pytest -vv
 
-after_test:
-    - sh: poetry run coveralls
+for:
+-
+    branches:
+        only:
+            - dev
+    # For Python versions available on Appveyor, see
+    # https://www.appveyor.com/docs/windows-images-software/#python
+    # https://www.appveyor.com/docs/linux-images-software#python
+    environment:
+      matrix:
+        - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
+
+    install:
+      # We need wheel installed to build wheels
+      - sh: sudo apt-get -y update
+      - sh: sudo apt-get install -y python3-venv
+      - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
+      - sh: source $HOME/.poetry/env
+      - sh: poetry env use 3.8
+      - sh: poetry install
+
+    test_script:
+      - sh: poetry run coverage run --source=vocashaker -m pytest -vv
+
+    after_test:
+        # COVERALLS_REPO_TOKEN's value is secret and cannot be published. It is:
+        # - taken from coveralls.io > vocashaker > settings
+        # - set directly in ci.appveyor.com > vocashaker > settings > environment
+        #   (Ubuntu2004)
+        - sh: poetry run coveralls
+
+    # branches:
+    #     only:
+    #         - master
+    #
+    # ADD DEPLOYMENT PART
+
+
 #   # This step builds your wheels.
 #   - cmd: "%PYTHON%\\python.exe setup.py bdist_wheel"
 #   - sh: "codecov"
