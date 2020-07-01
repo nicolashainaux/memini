@@ -239,7 +239,9 @@ def edit(name):
               help='set alternative template')
 @click.option('-f', '--force', default=False, is_flag=True, show_default=True,
               help='overwrite already existing file without asking')
-def generate(name, questions_number, scheme, output, force, template):
+@click.option('-e', '--edit', default=False, is_flag=True, show_default=True,
+              help='edit document as soon as it has been generated')
+def generate(name, questions_number, scheme, output, force, template, edit):
     """
     Generate a new document.
 
@@ -268,7 +270,8 @@ def generate(name, questions_number, scheme, output, force, template):
         shared.db = db
         try:
             commands.generate(name, nb=questions_number, scheme=scheme,
-                              output=output, force=force, tpl=template)
+                              output=output, force=force, tpl=template,
+                              edit=edit)
         except (NoSuchTableError, DestinationExistsError, SchemeSyntaxError,
                 SchemeLogicalError, SchemeColumnsMismatchError,
                 NotFoundError) as e:

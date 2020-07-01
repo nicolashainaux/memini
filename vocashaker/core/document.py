@@ -100,7 +100,7 @@ def _process_data(data, scheme=None):
 
 
 def generate(table_name, n, scheme=None, oldest_prevail=False, output=None,
-             force=False, tpl=None):
+             force=False, tpl=None, edit_after=False):
     """
     Generate a new document using n data from the table and the matching
     template.
@@ -125,6 +125,8 @@ def generate(table_name, n, scheme=None, oldest_prevail=False, output=None,
     basic_generated = basic.generate(o=data).render()
     with open(output, 'wb') as f:
         f.write(basic_generated.getvalue())
+    if edit_after:
+        edit(output)
 
 
 def edit(name):
