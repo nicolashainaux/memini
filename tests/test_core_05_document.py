@@ -22,12 +22,13 @@
 import pytest
 from unittest.mock import patch
 
+from vocashaker.core.prefs import EDITOR
 from vocashaker.core.env import TEMPLATE_EXT, TEST_TEMPLATE1_PATH
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
 from vocashaker.core.errors import SchemeColumnsMismatchError
 from vocashaker.core.errors import CommandCancelledError, NotFoundError
 from vocashaker.core.document import _default_scheme, _parse_scheme
-from vocashaker.core.document import _process_data, generate
+from vocashaker.core.document import _process_data, generate, edit
 
 
 def test_default_scheme():
@@ -127,6 +128,16 @@ def test_process_data(mocker):
     for row in result['rows']:
         assert list(row.keys()) == ['col1', 'col2', 'col3']
         assert list(row.values())[:-1].count('') == 1
+
+
+def test_edit(mocker, fs):
+    fs.create_file('document1.odt')
+    mock_popen = mocker.patch('subprocess.Popen')
+    edit('document1.odt')
+    mock_popen.assert_called_with([EDITOR, 'document1.odt'])
+    with pytest.raises(NotFoundError) as excinfo:
+        edit('document2.odt')
+    assert str(excinfo.value) == 'The file "document2.odt" cannot be found.'
 
 
 def test_generate(mocker):

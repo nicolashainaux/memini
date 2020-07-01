@@ -22,13 +22,14 @@
 import os
 import re
 import random
+import subprocess
 
 from relatorio.templates.opendocument import Template
 
 
 from vocashaker.core import database, template, terminal
 from vocashaker.core.env import TEMPLATE_EXT
-from vocashaker.core.prefs import BLANK_CHAR, FILLED_CHAR
+from vocashaker.core.prefs import BLANK_CHAR, FILLED_CHAR, EDITOR
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
 from vocashaker.core.errors import SchemeColumnsMismatchError
 from vocashaker.core.errors import CommandCancelledError, NotFoundError
@@ -124,3 +125,10 @@ def generate(table_name, n, scheme=None, oldest_prevail=False, output=None,
     basic_generated = basic.generate(o=data).render()
     with open(output, 'wb') as f:
         f.write(basic_generated.getvalue())
+
+
+def edit(name):
+    """Run the editor on provided file, if it exists."""
+    if not os.path.isfile(name):
+        raise NotFoundError(f'The file "{name}" cannot be found.')
+    _ = subprocess.Popen([EDITOR, name])
