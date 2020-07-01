@@ -215,7 +215,11 @@ def rename(name1, name2):
 @run.command('edit')
 @click.argument('name')
 def edit(name):
-    """Run editor (e.g. LibreOffice) on "name" template."""
+    """
+    Edit a template.
+
+    Run editor (e.g. LibreOffice) on "name" template.
+    """
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
