@@ -174,6 +174,15 @@ def rename(name1, name2):
     database.rename_table(name1, name2)
 
 
+def edit(name):
+    """
+    Edit template named "name".
+    """
+    if not template.exists(name):
+        raise NotFoundError(f'Cannot find any template "{name}".')
+    template.edit(name)
+
+
 def generate(name, nb=DEFAULT_Q_NB, scheme=None, output=None, force=False,
              tpl=None):
     """

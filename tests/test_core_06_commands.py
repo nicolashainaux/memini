@@ -337,6 +337,17 @@ def test_add_with_cols_nb_mismatch(testdb):
         '("col1" and "col2").'
 
 
+def test_edit(fs, mocker):
+    m = mocker.patch('vocashaker.core.template.edit')
+    fs.create_file(template.path('tpl1'))
+    assert os.path.isfile(template.path('tpl1'))
+    commands.edit('tpl1')
+    m.assert_called_with('tpl1')
+    with pytest.raises(NotFoundError) as excinfo:
+        commands.edit('tpl2.odt')
+    assert str(excinfo.value) == 'Cannot find any template "tpl2.odt".'
+
+
 def test_generate(mocker):
     m = mocker.patch('vocashaker.core.document.generate')
     commands.generate('table1', 4)

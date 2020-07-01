@@ -61,7 +61,7 @@ def echo_error(s):
 @click.version_option(version=__version__, prog_name=PROG_NAME,
                       message=MESSAGE)
 def run():
-    pass
+    """Empty function written only to create a group of commands."""
 
 
 @run.command('list')
@@ -209,6 +209,18 @@ def rename(name1, name2):
         try:
             commands.rename(name1, name2)
         except (NoSuchTableError, DestinationExistsError) as e:
+            echo_error(str(e))
+
+
+@run.command('edit')
+@click.argument('name')
+def edit(name):
+    """Run editor (e.g. LibreOffice) on "name" template."""
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.edit(name)
+        except NotFoundError as e:
             echo_error(str(e))
 
 
