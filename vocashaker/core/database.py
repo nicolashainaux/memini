@@ -220,6 +220,14 @@ def _full_reset(table_name):
     _reset(table_name, get_rows_nb(table_name))
 
 
+def serialize(rows):
+    return {i: list(row) for i, row in enumerate(rows)}
+
+
+def deserialize(data):
+    return [tuple(v) for v in data.values()]
+
+
 def draw_rows(table_name, n, oldest_prevail=False):
     """Return n rows, randomly chosen."""
     rows_nb = get_rows_nb(table_name)

@@ -33,7 +33,7 @@ from vocashaker.core.database import remove_row, draw_rows, insert_rows
 from vocashaker.core.database import get_rows_nb, copy_table
 from vocashaker.core.database import remove_rows
 from vocashaker.core.database import _timestamp, _reset, _full_reset
-from vocashaker.core.database import _intspan2sqllist
+from vocashaker.core.database import _intspan2sqllist, serialize, deserialize
 from vocashaker.core.errors import NoSuchTableError
 from vocashaker.core.errors import NoSuchRowError
 from vocashaker.core.errors import ColumnsDoNotMatchError
@@ -262,6 +262,24 @@ def test_reset(testdb):
     stamped = shared.db.execute('SELECT id FROM table1 WHERE timestamp != 0;')\
         .fetchall()
     assert len(stamped) == 0
+
+
+def test_serialize():
+    data = [('adventus,  us, m.', 'arrivée'),
+            ('candidus,  a, um', 'blanc'),
+            ('sol, solis, m', 'soleil')]
+    assert serialize(data) == {
+        0: ['adventus,  us, m.', 'arrivée'],
+        1: ['candidus,  a, um', 'blanc'],
+        2: ['sol, solis, m', 'soleil']
+        }
+
+
+def test_deserialize():
+    data = [('adventus,  us, m.', 'arrivée'),
+            ('candidus,  a, um', 'blanc'),
+            ('sol, solis, m', 'soleil')]
+    assert deserialize(serialize(data)) == data
 
 
 def test_draw_rows(testdb):
