@@ -145,10 +145,12 @@ def list_(kind):
         print('\n'.join(database.list_tables()))
     elif kind == 'templates':
         print('\n'.join(template.list_()))
+    elif kind == 'sweepstakes':
+        print('\n'.join(database.list_sweepstakes()))
     else:
-        raise CommandError(f'Sorry, I can only list "tables" or "templates". '
-                           f'Please use one of these two keywords. '
-                           f'I will not try to list "{kind}".')
+        raise CommandError(f'Sorry, I can only list "tables", "templates" or '
+                           f'"sweepstakes". Please use one of these three '
+                           f'keywords. I will not try to list "{kind}".')
 
 
 def show(name):

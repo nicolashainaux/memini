@@ -68,10 +68,10 @@ def run():
 @click.argument('what')
 def list_(what):
     """
-    List known tables or templates.
+    List known tables, templates or sweepstakes.
 
-    List known tables or templates. What to list exactly is set by argument
-    WHAT (that may be "tables" or "templates").
+    List known tables, templates or sweepstakes. What to list exactly is set
+    by argument WHAT (that may be "tables", "templates" or "sweepstakes").
     """
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db

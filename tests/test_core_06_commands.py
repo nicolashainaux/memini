@@ -24,7 +24,7 @@ from unittest.mock import call
 
 import pytest
 
-from vocashaker.core.env import TESTS_DATADIR
+from vocashaker.core.env import TESTS_DATADIR, USER_SWEEPSTAKES_PATH
 from vocashaker.core import template
 from vocashaker.core import commands
 from vocashaker.core import database
@@ -33,7 +33,14 @@ from vocashaker.core.errors import NotFoundError, CommandError
 from vocashaker.core.errors import ColumnsDoNotMatchError
 
 
-def test_list_(testdb, capsys, fs):
+@pytest.fixture
+def sweepstakes():
+    return [os.path.join(USER_SWEEPSTAKES_PATH, '0_2020-07-02@15:13:22.json'),
+            os.path.join(USER_SWEEPSTAKES_PATH, '1_2020-07-02@15:13:23.json'),
+            os.path.join(USER_SWEEPSTAKES_PATH, '2_2020-07-02@15:13:24.json')]
+
+
+def test_list_(testdb, capsys, fs, sweepstakes):
     fs.create_file(template.path('template1'))
     fs.create_file(template.path('template2'))
     commands.list_('tables')
@@ -42,11 +49,19 @@ def test_list_(testdb, capsys, fs):
     commands.list_('templates')
     captured = capsys.readouterr()
     assert captured.out == 'template1.odt\ntemplate2.odt\n'
+    for sw in sweepstakes:
+        fs.create_file(sw)
+    commands.list_('sweepstakes')
+    captured = capsys.readouterr()
+    assert captured.out == \
+        '0_2020-07-02@15:13:22.json\n'\
+        '1_2020-07-02@15:13:23.json\n'\
+        '2_2020-07-02@15:13:24.json\n'
     with pytest.raises(CommandError) as excinfo:
         commands.list_('foo')
-    assert str(excinfo.value) == 'Sorry, I can only list "tables" or '\
-        '"templates". Please use one of these two keywords. '\
-        'I will not try to list "foo".'
+    assert str(excinfo.value) == 'Sorry, I can only list "tables", '\
+        '"templates" or "sweepstakes". Please use one of these three '\
+        'keywords. I will not try to list "foo".'
 
 
 def test_rename(testdb, fs, mocker):
