@@ -158,9 +158,10 @@ def show(name):
     print(terminal.tabulate(database.get_table(name, include_headers=True)))
 
 
-def rename(name1, name2):
+def _check_moveable(name1, name2):
     """
-    Rename table name1 as name2. Also rename the associated default template.
+    Check table name1 does exist, but not name2. Check no template name2
+    already exists. Create template name1 if it does not exist yet.
     """
     if not database.table_exists(name1):
         raise NoSuchTableError(name1)
@@ -170,8 +171,24 @@ def rename(name1, name2):
         raise DestinationExistsError(name2, kind='table')
     elif template.exists(name2):
         raise DestinationExistsError(name2, kind='template')
+
+
+def rename(name1, name2):
+    """
+    Rename table name1 as name2. Also rename the associated default template.
+    """
+    _check_moveable(name1, name2)
     shutil.move(template.path(name1), template.path(name2))
     database.rename_table(name1, name2)
+
+
+def duplicate(name1, name2):
+    """
+    Rename table name1 as name2. Duplicate the associated default template.
+    """
+    _check_moveable(name1, name2)
+    shutil.copy(template.path(name1), template.path(name2))
+    database.copy_table(name1, name2)
 
 
 def edit(name):

@@ -26,7 +26,7 @@ from intspan import intspan
 
 from . import shared
 from .errors import NoSuchTableError, ColumnsDoNotMatchError, NoSuchRowError
-from .errors import TooManyRowsRequiredError
+from .errors import TooManyRowsRequiredError, DestinationExistsError
 from .parser import parse_pattern
 
 
@@ -95,6 +95,14 @@ def _exec(table_name, cmd, id_=None):
 def rename_table(name, new_name):
     """Change a table's name."""
     _exec(name, f'ALTER TABLE `{name}` RENAME TO `{new_name}`;')
+
+
+def copy_table(name1, name2):
+    """Copy table name1 as name2."""
+    if table_exists(name2):
+        raise DestinationExistsError(name2)
+    _exec(name1, f'CREATE TABLE `{name2}` AS SELECT * FROM `{name1}` WHERE 0;')
+    _exec(None, f'INSERT INTO `{name2}` SELECT * FROM `{name1}`;')
 
 
 def get_cols(table_name, include_id=False):

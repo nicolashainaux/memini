@@ -143,6 +143,20 @@ def test_show(testdb, capsys):
         "  4 |  give |  gave, given  |   donner  \n"
 
 
+def test_duplicate(testdb, fs, capsys):
+    fs.create_file(template.path('table1'))
+    commands.duplicate('table1', 'table3')
+    assert os.path.exists(template.path('table1'))
+    assert os.path.exists(template.path('table3'))
+    assert database.table_exists('table1')
+    assert database.table_exists('table3')
+    commands.show('table1')
+    table1_content = capsys.readouterr().out
+    commands.show('table3')
+    table3_content = capsys.readouterr().out
+    assert table1_content == table3_content
+
+
 def test_remove(mocker):
     m = mocker.patch('vocashaker.core.database.remove_rows')
     commands.remove('table2', '2,3')

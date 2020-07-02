@@ -212,6 +212,24 @@ def rename(name1, name2):
             echo_error(str(e))
 
 
+@run.command('duplicate')
+@click.argument('name1')
+@click.argument('name2')
+def duplicate(name1, name2):
+    """
+    Duplicate a table.
+
+    Duplicate table NAME1 as NAME2. The default template associated with NAME1
+    is also duplicated.
+    """
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.duplicate(name1, name2)
+        except (NoSuchTableError, DestinationExistsError) as e:
+            echo_error(str(e))
+
+
 @run.command('edit')
 @click.argument('name')
 def edit(name):

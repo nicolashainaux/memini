@@ -30,7 +30,7 @@ from vocashaker.core.database import _assert_table_exists, _assert_row_exists
 from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table, get_cols
 from vocashaker.core.database import remove_row, draw_rows, insert_rows
-from vocashaker.core.database import get_rows_nb
+from vocashaker.core.database import get_rows_nb, copy_table
 from vocashaker.core.database import remove_rows
 from vocashaker.core.database import _timestamp, _reset, _full_reset
 from vocashaker.core.database import _intspan2sqllist
@@ -38,6 +38,7 @@ from vocashaker.core.errors import NoSuchTableError
 from vocashaker.core.errors import NoSuchRowError
 from vocashaker.core.errors import ColumnsDoNotMatchError
 from vocashaker.core.errors import TooManyRowsRequiredError
+from vocashaker.core.errors import DestinationExistsError
 
 
 def test_Manager():
@@ -73,15 +74,6 @@ def test_assert_row_exists(testdb):
     with pytest.raises(NoSuchRowError) as excinfo:
         _assert_row_exists('table1', 10)
     assert str(excinfo.value) == 'Cannot find a row number 10 in "table1"'
-
-
-def test_rename_table(testdb):
-    rename_table('table1', 'table4')
-    assert not table_exists('table1')
-    assert table_exists('table4')
-    with pytest.raises(NoSuchTableError) as excinfo:
-        rename_table('table1', 'table4')
-    assert str(excinfo.value) == 'Cannot find a table named "table1"'
 
 
 def test_get_cols(testdb):
@@ -131,6 +123,29 @@ sol, solis, m : soleil"""
 break, broke, broken : casser
 do, did, done : faire
 give, gave, given : donner"""
+
+
+def test_rename_table(testdb):
+    table1_content = table_to_text('table1', '<Latin> : <Français>')
+    rename_table('table1', 'table4')
+    assert not table_exists('table1')
+    assert table_exists('table4')
+    with pytest.raises(NoSuchTableError) as excinfo:
+        rename_table('table1', 'table4')
+    assert str(excinfo.value) == 'Cannot find a table named "table1"'
+    assert table1_content == table_to_text('table4', '<Latin> : <Français>')
+
+
+def test_copy_table(testdb):
+    copy_table('table1', 'table4')
+    assert table_exists('table1')
+    assert table_exists('table4')
+    assert table_to_text('table1', '<Latin> : <Français>') \
+        == table_to_text('table4', '<Latin> : <Français>')
+    with pytest.raises(DestinationExistsError) as excinfo:
+        copy_table('table4', 'table2')
+    assert str(excinfo.value) == 'Action cancelled: a table named "table2" '\
+        'already exists. Please rename or remove it before using this name.'
 
 
 def test_remove_table(testdb, mocker):
