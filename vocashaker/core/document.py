@@ -33,6 +33,7 @@ from vocashaker.core.prefs import BLANK_CHAR, FILLED_CHAR, EDITOR
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
 from vocashaker.core.errors import SchemeColumnsMismatchError
 from vocashaker.core.errors import CommandCancelledError, NotFoundError
+from vocashaker.core.errors import ColumnsDoNotMatchError
 
 
 def _default_scheme(n):
@@ -100,7 +101,7 @@ def _process_data(data, scheme=None):
 
 
 def generate(table_name, n, scheme=None, oldest_prevail=False, output=None,
-             force=False, tpl=None, edit_after=False):
+             force=False, tpl=None, edit_after=False, use_previous=None):
     """
     Generate a new document using n data from the table and the matching
     template.
@@ -118,9 +119,16 @@ def generate(table_name, n, scheme=None, oldest_prevail=False, output=None,
                                         f'exists, overwrite it?')
         if not overwrite:
             raise CommandCancelledError('generate')
-    data = _process_data(database.draw_rows(table_name, n,
-                                            oldest_prevail=oldest_prevail),
-                         scheme=scheme)
+    if use_previous in (None, 'None'):
+        rows = database.draw_rows(table_name, n, oldest_prevail=oldest_prevail)
+    else:
+        rows = database.load_sweepstake(int(use_previous))
+        if len(rows[0]) != len(database.get_cols(table_name)):
+            raise ColumnsDoNotMatchError(
+                len(database.get_cols(table_name)), len(rows[0]),
+                table_name, database.get_cols(table_name),
+                database._get_sweepstake_name(use_previous))
+    data = _process_data(rows, scheme=scheme)
     basic = Template(source='', filepath=template.path(tpl_name))
     basic_generated = basic.generate(o=data).render()
     with open(output, 'wb') as f:

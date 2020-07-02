@@ -22,7 +22,7 @@
 import click
 import blessed
 
-from vocashaker.core.prefs import DEFAULT_Q_NB
+from vocashaker.core.prefs import DEFAULT_Q_NB, SWEEPSTAKES_MAX
 from vocashaker.core.env import USER_DB_PATH, __version__, PROG_NAME, MESSAGE
 from vocashaker.core.errors import CommandError, EmptyFileError, NotFoundError
 from vocashaker.core.errors import NoSuchTableError, NoSuchRowError
@@ -30,13 +30,15 @@ from vocashaker.core.errors import DestinationExistsError
 from vocashaker.core.errors import ColumnsDoNotMatchError
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
 from vocashaker.core.errors import SchemeColumnsMismatchError
-from vocashaker.core.errors import CommandCancelledError
+from vocashaker.core.errors import CommandCancelledError, NoSuchSweepstakeError
 from vocashaker.core import shared
 from vocashaker.core import database
 from vocashaker.core import commands
 
 
 shared.init()
+
+SW_CHOICES = [str(_) for _ in range(SWEEPSTAKES_MAX + 1)]
 
 __all__ = ['run']
 
@@ -259,7 +261,11 @@ def edit(name):
               help='overwrite already existing file without asking')
 @click.option('-e', '--edit', default=False, is_flag=True, show_default=True,
               help='edit document as soon as it has been generated')
-def generate(name, questions_number, scheme, output, force, template, edit):
+@click.option('--use-previous', type=click.Choice(['None', *SW_CHOICES]),
+              default='None', show_default=True,
+              help='use a previous sweepstake')
+def generate(name, questions_number, scheme, output, force, template, edit,
+             use_previous):
     """
     Generate a new document.
 
@@ -289,10 +295,11 @@ def generate(name, questions_number, scheme, output, force, template, edit):
         try:
             commands.generate(name, nb=questions_number, scheme=scheme,
                               output=output, force=force, tpl=template,
-                              edit=edit)
+                              edit=edit, use_previous=use_previous)
         except (NoSuchTableError, DestinationExistsError, SchemeSyntaxError,
                 SchemeLogicalError, SchemeColumnsMismatchError,
-                NotFoundError) as e:
+                NoSuchSweepstakeError, NotFoundError,
+                ColumnsDoNotMatchError) as e:
             echo_error(str(e))
         except CommandCancelledError as e:
             echo_info(str(e))

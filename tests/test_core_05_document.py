@@ -26,6 +26,7 @@ from vocashaker.core.prefs import EDITOR
 from vocashaker.core.env import TEMPLATE_EXT, TEST_TEMPLATE1_PATH
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
 from vocashaker.core.errors import SchemeColumnsMismatchError
+from vocashaker.core.errors import ColumnsDoNotMatchError
 from vocashaker.core.errors import CommandCancelledError, NotFoundError
 from vocashaker.core.document import _default_scheme, _parse_scheme
 from vocashaker.core.document import _process_data, generate, edit
@@ -205,3 +206,23 @@ def test_generate_from_alternative_template(mocker):
     with patch('builtins.open', mo, create=True):
         generate('table1', 5, tpl='template1')
     mo.assert_called_with(f'table1.{TEMPLATE_EXT}', 'wb')
+
+
+def test_generate_using_previous_sweepstake(testdb, mocker):
+    mt = mocker.patch('vocashaker.core.template.path')
+    mt.return_value = TEST_TEMPLATE1_PATH
+    mls = mocker.patch('vocashaker.core.database.load_sweepstake')
+    mls.return_value = [('adventus,  us, m.', 'arrivée'),
+                        ('candidus,  a, um', 'blanc'),
+                        ('sol, solis, m', 'soleil')]
+    mo = mocker.mock_open()
+    with patch('builtins.open', mo, create=True):
+        generate('table1', 3, use_previous=0)
+    mo.assert_called_with(f'table1.{TEMPLATE_EXT}', 'wb')
+
+    mgsn = mocker.patch('vocashaker.core.database._get_sweepstake_name')
+    mgsn.return_value = '0_my_sweepstake'
+    with pytest.raises(ColumnsDoNotMatchError) as excinfo:
+        generate('table2', 3, use_previous=0)
+    assert str(excinfo.value) == '"0_my_sweepstake" requires 2 columns, '\
+        'but "table2" has 3 columns ("col1", "col2" and "col3").'
