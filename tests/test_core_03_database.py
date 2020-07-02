@@ -380,7 +380,8 @@ def test_store_load_sweepstakes(fs):
     assert load_sweepstake() == data
 
 
-def test_draw_rows(testdb):
+def test_draw_rows(testdb, fs):
+    fs.create_dir(USER_SWEEPSTAKES_PATH)
     with pytest.raises(NoSuchTableError) as excinfo:
         draw_rows('table3', 2)
     assert str(excinfo.value) == 'Cannot find a table named "table3"'

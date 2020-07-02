@@ -296,4 +296,6 @@ def draw_rows(table_name, n, oldest_prevail=False):
     cols_list = ','.join(get_cols(table_name))
     cmd = f'SELECT {cols_list} FROM {table_name} {timestamps_clause}'\
         f'ORDER BY random() LIMIT {n};'
-    return _exec(table_name, cmd).fetchall()
+    rows = _exec(table_name, cmd).fetchall()
+    store_sweepstake(rows)
+    return rows
