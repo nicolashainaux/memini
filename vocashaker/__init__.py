@@ -61,7 +61,7 @@ def echo_error(s):
 @click.version_option(version=__version__, prog_name=PROG_NAME,
                       message=MESSAGE)
 def run():
-    """Empty function written only to create a group of commands."""
+    """Manage vocabulary tables and generate training or test sheets."""
 
 
 @run.command('list')
