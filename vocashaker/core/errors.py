@@ -85,6 +85,13 @@ class NoSuchRowError(VocaShakerError):
         super().__init__(msg)
 
 
+class NoSuchSweepstakeError(VocaShakerError):
+    """When the provided id does not match any sweepstake."""
+    def __init__(self, sw_id):
+        msg = f'Cannot find a sweepstake starting with "{sw_id}"'
+        super().__init__(msg)
+
+
 class ColumnsDoNotMatchError(VocaShakerError):
     """When the columns number does not match."""
     def __init__(self, expected, found, table_name, col_titles, data):

@@ -22,6 +22,7 @@
 EDITOR = 'soffice'
 DEFAULT_Q_NB = 20
 ENCODING = 'utf8'
+SWEEPSTAKES_MAX = 9
 
 
 BLANK_CHAR = '_'
