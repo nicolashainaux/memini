@@ -33,7 +33,7 @@ from vocashaker.core.errors import NotATemplateError
 
 def test_path():
     expected = os.path.join(USER_TEMPLATES_PATH,
-                            'NAME.{}'.format(TEMPLATE_EXT))
+                            f'NAME.{TEMPLATE_EXT}')
     assert template.path('NAME') == expected
 
 

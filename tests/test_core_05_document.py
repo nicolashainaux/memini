@@ -158,7 +158,7 @@ def test_generate(mocker):
                                   {'col1': 'sol, solis, m', 'col2': 'soleil'},
                                   {'col1': 'spes, ei f', 'col2': 'espoir'}]}
     mo = mocker.mock_open()
-    table1_odt = 'table1.{}'.format(TEMPLATE_EXT)
+    table1_odt = f'table1.{TEMPLATE_EXT}'
     with patch('builtins.open', mo, create=True):
         generate('table1', 5)
     mo.assert_called_with(table1_odt, 'wb')
@@ -204,4 +204,4 @@ def test_generate_from_alternative_template(mocker):
     mo = mocker.mock_open()
     with patch('builtins.open', mo, create=True):
         generate('table1', 5, tpl='template1')
-    mo.assert_called_with('table1.{}'.format(TEMPLATE_EXT), 'wb')
+    mo.assert_called_with('table1.{TEMPLATE_EXT}', 'wb')
