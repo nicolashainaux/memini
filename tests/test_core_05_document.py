@@ -204,4 +204,4 @@ def test_generate_from_alternative_template(mocker):
     mo = mocker.mock_open()
     with patch('builtins.open', mo, create=True):
         generate('table1', 5, tpl='template1')
-    mo.assert_called_with('table1.{TEMPLATE_EXT}', 'wb')
+    mo.assert_called_with(f'table1.{TEMPLATE_EXT}', 'wb')
