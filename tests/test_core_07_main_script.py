@@ -25,7 +25,7 @@ from click.testing import CliRunner
 
 from vocashaker.core.env import TEST_DB_PATH
 from vocashaker import run, list_, parse, delete, remove, create, add, show
-from vocashaker import rename, generate, edit, duplicate
+from vocashaker import rename, generate, edit, duplicate, dump
 
 
 class TDBManager:
@@ -117,6 +117,14 @@ def test_show(mocker):
     mocker.patch('vocashaker.core.database.Manager', return_value=TDBManager())
     runner = CliRunner()
     result = runner.invoke(show, ['table3'])
+    assert result.output.startswith('Error: ')
+    assert result.exit_code == 1
+
+
+def test_dump(mocker):
+    mocker.patch('vocashaker.core.database.Manager', return_value=TDBManager())
+    runner = CliRunner()
+    result = runner.invoke(dump, ['0'])
     assert result.output.startswith('Error: ')
     assert result.exit_code == 1
 

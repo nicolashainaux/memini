@@ -158,6 +158,19 @@ def test_show(testdb, capsys):
         "  4 |  give |  gave, given  |   donner  \n"
 
 
+def test_dump(testdb, capsys, fs):
+    data = [('adventus,  us, m.', 'arrivée'),
+            ('candidus,  a, um', 'blanc'),
+            ('sol, solis, m', 'soleil')]
+    fs.create_dir(USER_SWEEPSTAKES_PATH)
+    database.store_sweepstake(data)
+    commands.dump(0)
+    captured = capsys.readouterr()
+    assert captured.out == "('adventus,  us, m.', 'arrivée')\n"\
+        "('candidus,  a, um', 'blanc')\n"\
+        "('sol, solis, m', 'soleil')\n"
+
+
 def test_duplicate(testdb, fs, capsys):
     fs.create_file(template.path('table1'))
     commands.duplicate('table1', 'table3')

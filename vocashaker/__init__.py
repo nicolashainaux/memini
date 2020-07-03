@@ -196,6 +196,22 @@ def show(name):
             echo_error(str(e))
 
 
+@run.command('dump')
+@click.argument('sw_id')
+def dump(sw_id):
+    """
+    Display content of a sweepstake.
+
+    Display content of sweepstake #SW_ID in standard output.
+    """
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.dump(sw_id)
+        except NoSuchSweepstakeError as e:
+            echo_error(str(e))
+
+
 @run.command('rename')
 @click.argument('name1')
 @click.argument('name2')

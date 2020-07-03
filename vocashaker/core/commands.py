@@ -160,6 +160,11 @@ def show(name):
     print(terminal.tabulate(database.get_table(name, include_headers=True)))
 
 
+def dump(sw_id):
+    """Print content of sweepstake sw_id to standard output."""
+    print('\n'.join(str(row) for row in database.load_sweepstake(sw_id)))
+
+
 def _check_moveable(name1, name2):
     """
     Check table name1 does exist, but not name2. Check no template name2
