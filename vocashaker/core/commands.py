@@ -159,6 +159,11 @@ def show(name, sort=False):
                                                sort=sort)))
 
 
+def sort(name, col_nb=1):
+    """Sort the content of the table matching name."""
+    database.sort_table(name, col_nb)
+
+
 def dump(sw_id):
     """Print content of sweepstake sw_id to standard output."""
     print('\n'.join(str(row) for row in database.load_sweepstake(sw_id)))

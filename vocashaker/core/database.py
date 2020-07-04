@@ -105,12 +105,26 @@ def rename_table(name, new_name):
     _exec(name, f'ALTER TABLE `{name}` RENAME TO `{new_name}`;')
 
 
-def copy_table(name1, name2):
+def copy_table(name1, name2, sort=False):
     """Copy table name1 as name2."""
     if table_exists(name2):
         raise DestinationExistsError(name2)
-    _exec(name1, f'CREATE TABLE `{name2}` AS SELECT * FROM `{name1}` WHERE 0;')
-    _exec(None, f'INSERT INTO `{name2}` SELECT * FROM `{name1}`;')
+    orderby = ''
+    if sort:
+        if sort not in [n + 1 for n in range(len(get_cols(name1)))]:
+            raise NoSuchColumnError(sort, name1)
+        orderby = f' ORDER BY {get_cols(name1, include_id=True)[sort]}'
+    create_table(name2, get_cols(name1))
+    titles = ', '.join(get_cols(name1))
+    _exec(None, f'INSERT INTO {name2} ({titles}) '
+                f'SELECT {titles} FROM {name1}{orderby};')
+
+
+def sort_table(name, n):
+    """Sort table "name" using column number n"""
+    copy_table(name, name + '_copy', sort=n)
+    remove_table(name)
+    rename_table(name + '_copy', name)
 
 
 def get_cols(table_name, include_id=False):
@@ -164,13 +178,14 @@ def remove_table(name):
     _exec(name, f'DROP TABLE {name};')
 
 
-def create_table(name, col_titles, content):
+def create_table(name, col_titles, content=None):
     """Create table name using given col_titles and content."""
     titles = ' TEXT, '.join(col_titles) + ' TEXT, '
     cmd = f'CREATE TABLE {name} (id INTEGER PRIMARY KEY, '\
         f'{titles}timestamp INTEGER)'
     _exec(None, cmd)
-    insert_rows(name, content, col_titles=col_titles)
+    if content is not None:
+        insert_rows(name, content, col_titles=col_titles)
 
 
 def insert_rows(table_name, rows, col_titles=None):

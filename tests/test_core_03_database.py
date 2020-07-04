@@ -33,7 +33,7 @@ from vocashaker.core.database import _assert_table_exists, _assert_row_exists
 from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table, get_cols
 from vocashaker.core.database import remove_row, draw_rows, insert_rows
-from vocashaker.core.database import get_rows_nb, copy_table
+from vocashaker.core.database import get_rows_nb, copy_table, sort_table
 from vocashaker.core.database import remove_rows
 from vocashaker.core.database import _timestamp, _reset, _full_reset
 from vocashaker.core.database import _intspan2sqllist, _serialize, _deserialize
@@ -196,6 +196,27 @@ def test_copy_table(testdb):
         copy_table('table4', 'table2')
     assert str(excinfo.value) == 'Action cancelled: a table named "table2" '\
         'already exists. Please rename or remove it before using this name.'
+
+
+def test_sort_table(testdb):
+    sort_table('table1', 2)
+    assert table_exists('table1')
+    assert not table_exists('table1_copy')
+    assert get_table('table1') \
+        == [('1', 'adventus,  us, m.', 'arrivée'),
+            ('2', 'candidus,  a, um', 'blanc'),
+            ('3', 'aqua , ae, f', 'eau'),
+            ('4', 'sol, solis, m', 'soleil')]
+    with pytest.raises(NoSuchColumnError) as excinfo:
+        sort_table('table1', 3)
+    assert str(excinfo.value) == 'Cannot find a column number 3 in "table1"'
+    sort_table('table2', 3)
+    assert get_table('table2', include_headers=True) \
+        == [('id', 'col1', 'col2', 'col3'),
+            ('1', 'break', 'broke, broken', 'casser'),
+            ('2', 'begin', 'began, begun', 'commencer'),
+            ('3', 'give', 'gave, given', 'donner'),
+            ('4', 'do', 'did, done', 'faire')]
 
 
 def test_remove_table(testdb, mocker):

@@ -206,6 +206,25 @@ def show(name, sort):
             echo_error(str(e))
 
 
+@run.command('sort')
+@click.argument('name')
+@click.option('-n', '--col-nb', default='1', type=click.Choice([*COL_NBS]),
+              help='sort a table using n-th column')
+def sort(name, col_nb):
+    """
+    Sort content of a table.
+
+    Sort content of table NAME.
+    """
+    col_nb = int(col_nb)
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.sort(name, col_nb=col_nb)
+        except (NoSuchTableError, NoSuchColumnError) as e:
+            echo_error(str(e))
+
+
 @run.command('dump')
 @click.argument('sw_id')
 def dump(sw_id):
