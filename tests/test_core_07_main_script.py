@@ -119,6 +119,14 @@ def test_show(mocker):
     result = runner.invoke(show, ['table3'])
     assert result.output.startswith('Error: ')
     assert result.exit_code == 1
+    result = runner.invoke(show, ['table1', '--sort', '2'])
+    assert result.output == \
+        ' id |        col1       |   col2  \n'\
+        '----+-------------------+---------\n'\
+        '  1 | adventus,  us, m. | arrivée \n'\
+        '  3 |  candidus,  a, um |  blanc  \n'\
+        '  2 |    aqua , ae, f   |   eau   \n'\
+        '  4 |   sol, solis, m   |  soleil \n'
 
 
 def test_dump(mocker):

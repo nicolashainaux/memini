@@ -79,9 +79,16 @@ class NoSuchTableError(VocaShakerError):
 
 
 class NoSuchRowError(VocaShakerError):
-    """When the provided name does not match any row."""
+    """When the provided id_ does not match any row."""
     def __init__(self, id_, name):
         msg = f'Cannot find a row number {id_} in "{name}"'
+        super().__init__(msg)
+
+
+class NoSuchColumnError(VocaShakerError):
+    """When the provided number does not match any row."""
+    def __init__(self, n, name):
+        msg = f'Cannot find a column number {n} in "{name}"'
         super().__init__(msg)
 
 

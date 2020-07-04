@@ -34,7 +34,7 @@ from .env import USER_SWEEPSTAKES_PATH
 from .prefs import SWEEPSTAKES_MAX
 from .errors import NoSuchTableError, ColumnsDoNotMatchError, NoSuchRowError
 from .errors import TooManyRowsRequiredError, DestinationExistsError
-from .errors import NoSuchSweepstakeError
+from .errors import NoSuchSweepstakeError, NoSuchColumnError
 from .parser import parse_pattern
 
 
@@ -126,12 +126,16 @@ def get_rows_nb(table_name):
     return tuple(_exec(table_name, cmd))[0][0]
 
 
-def get_table(name, include_headers=False):
+def get_table(name, include_headers=False, sort=False):
     """Return a list of all table's lines."""
     headers = []
     cols = ','.join(get_cols(name, include_id=True))
     content = _exec(name, f'SELECT {cols} FROM {name};').fetchall()
     content = [(str(t[0]), ) + t[1:] for t in content]
+    if sort:
+        if sort not in [n for n in range(len(content[0]))]:
+            raise NoSuchColumnError(sort, name)
+        content = sorted(content, key=lambda row: row[sort])
     if include_headers:
         headers = [tuple(get_cols(name, include_id=True))]
     return headers + content

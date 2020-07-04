@@ -24,6 +24,7 @@ import blessed
 
 from vocashaker.core.prefs import DEFAULT_Q_NB, SWEEPSTAKES_MAX
 from vocashaker.core.env import USER_DB_PATH, __version__, PROG_NAME, MESSAGE
+from vocashaker.core.env import MAXCOL_NB
 from vocashaker.core.errors import CommandError, EmptyFileError, NotFoundError
 from vocashaker.core.errors import NoSuchTableError, NoSuchRowError
 from vocashaker.core.errors import DestinationExistsError
@@ -38,7 +39,8 @@ from vocashaker.core import commands
 
 shared.init()
 
-SW_CHOICES = [str(_) for _ in range(SWEEPSTAKES_MAX + 1)]
+SW_CHOICES = [str(n) for n in range(SWEEPSTAKES_MAX + 1)]
+COL_NBS = [str(n) for n in range(MAXCOL_NB)][1:]
 
 __all__ = ['run']
 
@@ -182,16 +184,23 @@ def add(name, filename, pattern):
 
 @run.command('show')
 @click.argument('name')
-def show(name):
+@click.option('-s', '--sort', default='False', show_default=True,
+              type=click.Choice(['False', *COL_NBS], case_sensitive=False),
+              help='sort output according to column')
+def show(name, sort):
     """
     Show content of a table.
 
     Display content of table NAME in standard output.
     """
+    if sort == 'False':
+        sort = False
+    else:
+        sort = int(sort)
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
-            commands.show(name)
+            commands.show(name, sort=sort)
         except NoSuchTableError as e:
             echo_error(str(e))
 

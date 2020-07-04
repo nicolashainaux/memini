@@ -42,7 +42,7 @@ from vocashaker.core.database import list_sweepstakes
 from vocashaker.core.database import _get_sweepstake_name, _rotate_sweepstakes
 from vocashaker.core.database import store_sweepstake, load_sweepstake
 from vocashaker.core.errors import NoSuchTableError
-from vocashaker.core.errors import NoSuchRowError
+from vocashaker.core.errors import NoSuchRowError, NoSuchColumnError
 from vocashaker.core.errors import ColumnsDoNotMatchError
 from vocashaker.core.errors import TooManyRowsRequiredError
 from vocashaker.core.errors import DestinationExistsError
@@ -144,6 +144,15 @@ def test_get_table(testdb):
     with pytest.raises(NoSuchTableError) as excinfo:
         get_table('table3')
     assert str(excinfo.value) == 'Cannot find a table named "table3"'
+    with pytest.raises(NoSuchColumnError) as excinfo:
+        get_table('table1', sort=3)
+    assert str(excinfo.value) == 'Cannot find a column number 3 in "table1"'
+    assert get_table('table2', include_headers=True, sort=3) \
+        == [('id', 'col1', 'col2', 'col3'),
+            ('2', 'break', 'broke, broken', 'casser'),
+            ('1', 'begin', 'began, begun', 'commencer'),
+            ('4', 'give', 'gave, given', 'donner'),
+            ('3', 'do', 'did, done', 'faire')]
 
 
 def test_table_to_text(testdb):

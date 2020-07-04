@@ -26,6 +26,7 @@ from pathlib import Path
 import toml
 
 PROG_NAME = 'VocaShaker'
+MAXCOL_NB = 4
 
 __process_name = os.path.basename(__file__)
 __abspath = os.path.abspath(__file__)

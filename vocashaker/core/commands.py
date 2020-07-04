@@ -153,11 +153,12 @@ def list_(kind):
                            f'keywords. I will not try to list "{kind}".')
 
 
-def show(name):
+def show(name, sort=False):
     """Print the content of the table matching name."""
     if not database.table_exists(name):
         raise NoSuchTableError(name)
-    print(terminal.tabulate(database.get_table(name, include_headers=True)))
+    print(terminal.tabulate(database.get_table(name, include_headers=True,
+                                               sort=sort)))
 
 
 def dump(sw_id):
