@@ -211,7 +211,7 @@ def test_generate_from_alternative_template(mocker):
 def test_generate_using_previous_sweepstake(testdb, mocker):
     mt = mocker.patch('vocashaker.core.template.path')
     mt.return_value = TEST_TEMPLATE1_PATH
-    mls = mocker.patch('vocashaker.core.database.load_sweepstake')
+    mls = mocker.patch('vocashaker.core.sweepstakes.load_sweepstake')
     mls.return_value = [('adventus,  us, m.', 'arrivée'),
                         ('candidus,  a, um', 'blanc'),
                         ('sol, solis, m', 'soleil')]
@@ -220,7 +220,7 @@ def test_generate_using_previous_sweepstake(testdb, mocker):
         generate('table1', 3, use_previous=0)
     mo.assert_called_with(f'table1.{TEMPLATE_EXT}', 'wb')
 
-    mgsn = mocker.patch('vocashaker.core.database._get_sweepstake_name')
+    mgsn = mocker.patch('vocashaker.core.sweepstakes._get_sweepstake_name')
     mgsn.return_value = '0_my_sweepstake'
     with pytest.raises(ColumnsDoNotMatchError) as excinfo:
         generate('table2', 3, use_previous=0)

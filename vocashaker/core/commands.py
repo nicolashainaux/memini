@@ -25,7 +25,7 @@ import shutil
 import blessed
 
 from .prefs import DEFAULT_Q_NB
-from . import database, template, terminal, parser, document
+from . import database, template, terminal, parser, document, sweepstakes
 from .errors import NoSuchTableError, DestinationExistsError, NotFoundError
 from .errors import CommandError, ColumnsDoNotMatchError
 
@@ -146,7 +146,7 @@ def list_(kind):
     elif kind == 'templates':
         print('\n'.join(template.list_()))
     elif kind == 'sweepstakes':
-        print('\n'.join(database.list_sweepstakes()))
+        print('\n'.join(sweepstakes.list_sweepstakes()))
     else:
         raise CommandError(f'Sorry, I can only list "tables", "templates" or '
                            f'"sweepstakes". Please use one of these three '
@@ -166,7 +166,7 @@ def sort(name, col_nb=1):
 
 def dump(sw_id):
     """Print content of sweepstake sw_id to standard output."""
-    print('\n'.join(str(row) for row in database.load_sweepstake(sw_id)))
+    print('\n'.join(str(row) for row in sweepstakes.load_sweepstake(sw_id)))
 
 
 def _check_moveable(name1, name2):

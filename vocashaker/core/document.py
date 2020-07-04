@@ -27,7 +27,7 @@ import subprocess
 from relatorio.templates.opendocument import Template
 
 
-from vocashaker.core import database, template, terminal
+from vocashaker.core import database, template, terminal, sweepstakes
 from vocashaker.core.env import TEMPLATE_EXT
 from vocashaker.core.prefs import BLANK_CHAR, FILLED_CHAR, EDITOR
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
@@ -122,12 +122,12 @@ def generate(table_name, n, scheme=None, oldest_prevail=False, output=None,
     if use_previous in (None, 'None'):
         rows = database.draw_rows(table_name, n, oldest_prevail=oldest_prevail)
     else:
-        rows = database.load_sweepstake(int(use_previous))
+        rows = sweepstakes.load_sweepstake(int(use_previous))
         if len(rows[0]) != len(database.get_cols(table_name)):
             raise ColumnsDoNotMatchError(
                 len(database.get_cols(table_name)), len(rows[0]),
                 table_name, database.get_cols(table_name),
-                database._get_sweepstake_name(use_previous))
+                sweepstakes._get_sweepstake_name(use_previous))
     data = _process_data(rows, scheme=scheme)
     basic = Template(source='', filepath=template.path(tpl_name))
     basic_generated = basic.generate(o=data).render()

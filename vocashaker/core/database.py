@@ -19,23 +19,17 @@
 # along with VocaShaker; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-import os
-import json
-import shutil
 import sqlite3
-import datetime
-from glob import glob
 from itertools import zip_longest, chain
 
 from intspan import intspan
 
 from . import shared
-from .env import USER_SWEEPSTAKES_PATH
-from .prefs import SWEEPSTAKES_MAX
 from .errors import NoSuchTableError, ColumnsDoNotMatchError, NoSuchRowError
 from .errors import TooManyRowsRequiredError, DestinationExistsError
-from .errors import NoSuchSweepstakeError, NoSuchColumnError
+from .errors import NoSuchColumnError
 from .parser import parse_pattern
+from .sweepstakes import store_sweepstake
 
 
 # Inspiration from: https://gist.github.com/miku/6522074
@@ -245,59 +239,6 @@ ORDER BY timestamp LIMIT {n});"""
 def _full_reset(table_name):
     """Reset all entries."""
     _reset(table_name, get_rows_nb(table_name))
-
-
-def _serialize(rows):
-    return {i: list(row) for i, row in enumerate(rows)}
-
-
-def _deserialize(data):
-    return [tuple(v) for v in data.values()]
-
-
-def _new_sweepstake():
-    dt = str(datetime.datetime.now().replace(microsecond=0)).replace(' ', '@')
-    return os.path.join(USER_SWEEPSTAKES_PATH, f'0_{dt}.json')
-
-
-def _get_sweepstakes():
-    return sorted(
-        [f for f in glob(os.path.join(USER_SWEEPSTAKES_PATH, '*.json'))])
-
-
-def list_sweepstakes():
-    return [os.path.basename(sw) for sw in _get_sweepstakes()]
-
-
-def _get_sweepstake_name(sw_id=0):
-    for name in list_sweepstakes():
-        if name.startswith(f'{sw_id}_') and name.endswith('.json'):
-            return os.path.join(USER_SWEEPSTAKES_PATH, name)
-    raise NoSuchSweepstakeError(sw_id=sw_id)
-
-
-def _rotate_sweepstakes():
-    for f in reversed(sorted(_get_sweepstakes())):
-        b = os.path.basename(f)
-        f_id = int(b.split('_')[0])
-        if f_id >= SWEEPSTAKES_MAX:
-            os.remove(f)
-        else:
-            new_name = os.path.join(USER_SWEEPSTAKES_PATH,
-                                    str(f_id + 1) + f"_{b.split('_')[1]}")
-            shutil.move(f, new_name)
-
-
-def store_sweepstake(rows):
-    _rotate_sweepstakes()
-    with open(_new_sweepstake(), 'w') as f:
-        json.dump(_serialize(rows), f, indent=4)
-        f.write('\n')
-
-
-def load_sweepstake(sw_id=0):
-    with open(_get_sweepstake_name(sw_id), 'r') as f:
-        return _deserialize(json.load(f))
 
 
 def draw_rows(table_name, n, oldest_prevail=False):
