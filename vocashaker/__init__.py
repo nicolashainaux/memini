@@ -27,6 +27,7 @@ from vocashaker.core.env import USER_DB_PATH, __version__, PROG_NAME, MESSAGE
 from vocashaker.core.env import MAXCOL_NB
 from vocashaker.core.errors import CommandError, EmptyFileError, NotFoundError
 from vocashaker.core.errors import NoSuchTableError, NoSuchRowError
+from vocashaker.core.errors import NoSuchColumnError
 from vocashaker.core.errors import DestinationExistsError
 from vocashaker.core.errors import ColumnsDoNotMatchError
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
@@ -201,7 +202,7 @@ def show(name, sort):
         shared.db = db
         try:
             commands.show(name, sort=sort)
-        except NoSuchTableError as e:
+        except (NoSuchTableError, NoSuchColumnError) as e:
             echo_error(str(e))
 
 
