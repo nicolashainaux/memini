@@ -28,19 +28,20 @@ from vocashaker.core.env import TESTS_DATADIR, USER_SWEEPSTAKES_PATH
 from vocashaker.core import template
 from vocashaker.core import commands
 from vocashaker.core import database
+from vocashaker.core import sweepstakes
 from vocashaker.core.errors import NoSuchTableError, DestinationExistsError
 from vocashaker.core.errors import NotFoundError, CommandError
 from vocashaker.core.errors import ColumnsDoNotMatchError
 
 
 @pytest.fixture
-def sweepstakes():
+def sw():
     return [os.path.join(USER_SWEEPSTAKES_PATH, '0_2020-07-02@15:13:22.json'),
             os.path.join(USER_SWEEPSTAKES_PATH, '1_2020-07-02@15:13:23.json'),
             os.path.join(USER_SWEEPSTAKES_PATH, '2_2020-07-02@15:13:24.json')]
 
 
-def test_list_(testdb, capsys, fs, sweepstakes):
+def test_list_(testdb, capsys, fs, sw):
     fs.create_file(template.path('template1'))
     fs.create_file(template.path('template2'))
     commands.list_('tables')
@@ -49,8 +50,8 @@ def test_list_(testdb, capsys, fs, sweepstakes):
     commands.list_('templates')
     captured = capsys.readouterr()
     assert captured.out == 'template1.odt\ntemplate2.odt\n'
-    for sw in sweepstakes:
-        fs.create_file(sw)
+    for s in sw:
+        fs.create_file(s)
     commands.list_('sweepstakes')
     captured = capsys.readouterr()
     assert captured.out == \
@@ -176,7 +177,7 @@ def test_dump(testdb, capsys, fs):
             ('candidus,  a, um', 'blanc'),
             ('sol, solis, m', 'soleil')]
     fs.create_dir(USER_SWEEPSTAKES_PATH)
-    database.store_sweepstake(data)
+    sweepstakes.store_sweepstake(data)
     commands.dump(0)
     captured = capsys.readouterr()
     assert captured.out == "('adventus,  us, m.', 'arrivée')\n"\
