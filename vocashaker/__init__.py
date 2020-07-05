@@ -25,14 +25,7 @@ import blessed
 from vocashaker.core.prefs import DEFAULT_Q_NB, SWEEPSTAKES_MAX
 from vocashaker.core.env import USER_DB_PATH, __version__, PROG_NAME, MESSAGE
 from vocashaker.core.env import MAXCOL_NB
-from vocashaker.core.errors import CommandError, EmptyFileError, NotFoundError
-from vocashaker.core.errors import NoSuchTableError, NoSuchRowError
-from vocashaker.core.errors import NoSuchColumnError
-from vocashaker.core.errors import DestinationExistsError
-from vocashaker.core.errors import ColumnsDoNotMatchError
-from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
-from vocashaker.core.errors import SchemeColumnsMismatchError
-from vocashaker.core.errors import CommandCancelledError, NoSuchSweepstakeError
+from vocashaker.core.errors import VocaShakerError, CommandCancelledError
 from vocashaker.core import shared
 from vocashaker.core import database
 from vocashaker.core import commands
@@ -82,7 +75,7 @@ def list_(what):
         shared.db = db
         try:
             commands.list_(what)
-        except CommandError as e:
+        except VocaShakerError as e:
             echo_error(str(e))
 
 
@@ -106,7 +99,7 @@ def parse(filename, pattern, errors_only):
         shared.db = db
         try:
             commands.parse(filename, pattern, errors_only)
-        except EmptyFileError as e:
+        except VocaShakerError as e:
             echo_warning(str(e))
 
 
@@ -122,7 +115,7 @@ def delete(name):
         shared.db = db
         try:
             commands.delete(name)
-        except NotFoundError as e:
+        except VocaShakerError as e:
             echo_error(str(e))
 
 
@@ -141,7 +134,7 @@ def remove(name, span):
         shared.db = db
         try:
             commands.remove(name, span)
-        except (NoSuchTableError, NoSuchRowError) as e:
+        except VocaShakerError as e:
             echo_error(str(e))
 
 
@@ -160,7 +153,7 @@ def create(name, filename, pattern):
         shared.db = db
         try:
             commands.create(name, filename, pattern)
-        except DestinationExistsError as e:
+        except VocaShakerError as e:
             echo_error(str(e))
 
 
@@ -179,7 +172,7 @@ def add(name, filename, pattern):
         shared.db = db
         try:
             commands.add(name, filename, pattern)
-        except (NoSuchTableError, ColumnsDoNotMatchError) as e:
+        except VocaShakerError as e:
             echo_error(str(e))
 
 
@@ -202,7 +195,7 @@ def show(name, sort):
         shared.db = db
         try:
             commands.show(name, sort=sort)
-        except (NoSuchTableError, NoSuchColumnError) as e:
+        except VocaShakerError as e:
             echo_error(str(e))
 
 
@@ -221,7 +214,7 @@ def sort(name, col_nb):
         shared.db = db
         try:
             commands.sort(name, col_nb=col_nb)
-        except (NoSuchTableError, NoSuchColumnError) as e:
+        except VocaShakerError as e:
             echo_error(str(e))
 
 
@@ -244,7 +237,7 @@ def update(name, row):
         shared.db = db
         try:
             commands.update(name, row)
-        except (NoSuchTableError, NoSuchRowError) as e:
+        except VocaShakerError as e:
             echo_error(str(e))
 
 
@@ -260,7 +253,7 @@ def dump(sw_id):
         shared.db = db
         try:
             commands.dump(sw_id)
-        except NoSuchSweepstakeError as e:
+        except VocaShakerError as e:
             echo_error(str(e))
 
 
@@ -278,7 +271,7 @@ def rename(name1, name2):
         shared.db = db
         try:
             commands.rename(name1, name2)
-        except (NoSuchTableError, DestinationExistsError) as e:
+        except VocaShakerError as e:
             echo_error(str(e))
 
 
@@ -296,7 +289,7 @@ def duplicate(name1, name2):
         shared.db = db
         try:
             commands.duplicate(name1, name2)
-        except (NoSuchTableError, DestinationExistsError) as e:
+        except VocaShakerError as e:
             echo_error(str(e))
 
 
@@ -312,7 +305,7 @@ def edit(name):
         shared.db = db
         try:
             commands.edit(name)
-        except NotFoundError as e:
+        except VocaShakerError as e:
             echo_error(str(e))
 
 
@@ -364,10 +357,7 @@ def generate(name, questions_number, scheme, output, force, template, edit,
             commands.generate(name, nb=questions_number, scheme=scheme,
                               output=output, force=force, tpl=template,
                               edit=edit, use_previous=use_previous)
-        except (NoSuchTableError, DestinationExistsError, SchemeSyntaxError,
-                SchemeLogicalError, SchemeColumnsMismatchError,
-                NoSuchSweepstakeError, NotFoundError,
-                ColumnsDoNotMatchError) as e:
-            echo_error(str(e))
         except CommandCancelledError as e:
             echo_info(str(e))
+        except VocaShakerError as e:
+            echo_error(str(e))
