@@ -102,6 +102,7 @@ def rename_table(name, new_name):
 def update_table(name, id_, content):
     """Change a table's name."""
     col_titles = get_cols(name)
+    _assert_row_exists(name, id_)
     if len(content) != len(col_titles):
         raise ColumnsDoNotMatchError(len(col_titles), len(content), name,
                                      col_titles, content)
