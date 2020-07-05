@@ -32,7 +32,7 @@ from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table, get_cols
 from vocashaker.core.database import remove_row, draw_rows, insert_rows
 from vocashaker.core.database import get_rows_nb, copy_table, sort_table
-from vocashaker.core.database import remove_rows
+from vocashaker.core.database import remove_rows, update_table
 from vocashaker.core.database import _timestamp, _reset, _full_reset
 from vocashaker.core.database import _intspan2sqllist
 from vocashaker.core.errors import NoSuchTableError
@@ -156,6 +156,19 @@ def test_copy_table(testdb):
         copy_table('table4', 'table2')
     assert str(excinfo.value) == 'Action cancelled: a table named "table2" '\
         'already exists. Please rename or remove it before using this name.'
+
+
+def test_update_table(testdb):
+    update_table('table1', 3, ['spes, ei f', 'espoir'])
+    assert get_table('table1') == \
+        [('1', 'adventus,  us, m.', 'arrivée'),
+         ('2', 'aqua , ae, f', 'eau'),
+         ('3', 'spes, ei f', 'espoir'),
+         ('4', 'sol, solis, m', 'soleil')]
+    with pytest.raises(ColumnsDoNotMatchError) as excinfo:
+        update_table('table1', 3, ['spes, ei', 'f', 'espoir'])
+    assert str(excinfo.value) == '"[\'spes, ei\', \'f\', \'espoir\']" '\
+        'requires 3 columns, but "table1" has 2 columns ("col1" and "col2").'
 
 
 def test_sort_table(testdb):

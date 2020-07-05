@@ -99,6 +99,17 @@ def rename_table(name, new_name):
     _exec(name, f'ALTER TABLE `{name}` RENAME TO `{new_name}`;')
 
 
+def update_table(name, id_, content):
+    """Change a table's name."""
+    col_titles = get_cols(name)
+    if len(content) != len(col_titles):
+        raise ColumnsDoNotMatchError(len(col_titles), len(content), name,
+                                     col_titles, content)
+    pairs = zip(col_titles, content)
+    col_values = ', '.join(f'{p[0]}="{p[1]}"' for p in pairs)
+    _exec(name, f'UPDATE {name} SET {col_values} WHERE id={id_};')
+
+
 def copy_table(name1, name2, sort=False):
     """Copy table name1 as name2."""
     if table_exists(name2):
