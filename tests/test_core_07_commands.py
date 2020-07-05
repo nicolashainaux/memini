@@ -158,6 +158,19 @@ def test_show(testdb, capsys):
         "  4 |  give |  gave, given  |   donner  \n"
 
 
+def test_update(testdb, capsys):
+    commands.update('table2', '  2 | take | took, taken |   prendre  ')
+    commands.show('table2')
+    captured = capsys.readouterr()
+    assert captured.out == \
+        " id |  col1  |      col2     |     col3     \n"\
+        "----+--------+---------------+--------------\n"\
+        "  1 |  begin |  began, begun |   commencer  \n"\
+        "  2 |   take |   took, taken |     prendre  \n"\
+        "  3 |   do   |   did, done   |     faire    \n"\
+        "  4 |  give  |  gave, given  |    donner    \n"
+
+
 def test_dump(testdb, capsys, fs):
     data = [('adventus,  us, m.', 'arrivée'),
             ('candidus,  a, um', 'blanc'),

@@ -164,6 +164,14 @@ def sort(name, col_nb=1):
     database.sort_table(name, col_nb)
 
 
+def update(name, rowstr):
+    """Update a row."""
+    cells = rowstr.split('|')
+    id_ = int(cells[0])
+    content = cells[1:]
+    database.update_table(name, id_, content)
+
+
 def dump(sw_id):
     """Print content of sweepstake sw_id to standard output."""
     print('\n'.join(str(row) for row in sweepstakes.load_sweepstake(sw_id)))
