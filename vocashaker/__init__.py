@@ -225,6 +225,29 @@ def sort(name, col_nb):
             echo_error(str(e))
 
 
+@run.command('update')
+@click.argument('name')
+@click.argument('row')
+def update(name, row):
+    """
+    Update a row of a table.
+
+    Update a row of the table NAME. The row must be provided as it should be
+    displayed when using the command "show": the fields are separated by a
+    pipe (this: |) and the first field must be the row id. For instance:
+    vosh update mytable "4 | to speak | spoke, spoken | parler"
+    will put the contents "to speak", "spoke, spoken" and "parler" into row
+    number 4 of table "mytable". Of course the number of fields must match the
+    number of columns in the table.
+    """
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.update(name, row)
+        except (NoSuchTableError, NoSuchRowError) as e:
+            echo_error(str(e))
+
+
 @run.command('dump')
 @click.argument('sw_id')
 def dump(sw_id):

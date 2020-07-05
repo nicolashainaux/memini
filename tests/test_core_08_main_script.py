@@ -25,7 +25,7 @@ from click.testing import CliRunner
 
 from vocashaker.core.env import TEST_DB_PATH
 from vocashaker import run, list_, parse, delete, remove, create, add, show
-from vocashaker import rename, generate, edit, duplicate, dump, sort
+from vocashaker import rename, generate, edit, duplicate, dump, sort, update
 
 
 class TDBManager:
@@ -133,6 +133,14 @@ def test_sort(mocker):
     mocker.patch('vocashaker.core.database.Manager', return_value=TDBManager())
     runner = CliRunner()
     result = runner.invoke(sort, ['table3'])
+    assert result.output.startswith('Error: ')
+    assert result.exit_code == 1
+
+
+def test_update(mocker):
+    mocker.patch('vocashaker.core.database.Manager', return_value=TDBManager())
+    runner = CliRunner()
+    result = runner.invoke(update, ['table3', '1 | a | b | c'])
     assert result.output.startswith('Error: ')
     assert result.exit_code == 1
 
