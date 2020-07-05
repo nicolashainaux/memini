@@ -265,8 +265,8 @@ def test_remove_row(testdb):
     remove_row('table1', 2)
     assert get_table('table1') \
         == [('1', 'adventus,  us, m.', 'arrivée'),
-            ('3', 'candidus,  a, um', 'blanc'),
-            ('4', 'sol, solis, m', 'soleil')]
+            ('2', 'candidus,  a, um', 'blanc'),
+            ('3', 'sol, solis, m', 'soleil')]
 
 
 def test_intspan2sqllist():
@@ -280,7 +280,7 @@ def test_remove_rows(testdb):
     assert str(excinfo.value) == 'Cannot find a row number 5 in "table1"'
     remove_rows('table1', '1-3')
     assert get_table('table1') \
-        == [('4', 'sol, solis, m', 'soleil')]
+        == [('1', 'sol, solis, m', 'soleil')]
 
 
 def test_timestamp(testdb):

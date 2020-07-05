@@ -222,10 +222,19 @@ def insert_rows(table_name, rows, col_titles=None):
     shared.db.executemany(cmd, content)
 
 
+def _reset_table_ids(name):
+    """Reset the ids of a table to remove gaps created by rows removals."""
+    temp_name = _original_name(name)
+    copy_table(name, temp_name)
+    remove_table(name)
+    rename_table(temp_name, name)
+
+
 def remove_row(table_name, id_):
     """Remove row matching id_ in the table."""
     cmd = f'DELETE FROM {table_name} WHERE id = {id_};'
     _exec(table_name, cmd, id_=id_)
+    _reset_table_ids(table_name)
 
 
 def _intspan2sqllist(s):
@@ -242,6 +251,7 @@ def remove_rows(table_name, id_span):
     values = _intspan2sqllist(id_span)
     cmd = f'DELETE FROM {table_name} WHERE id IN {values};'
     _exec(table_name, cmd)
+    _reset_table_ids(table_name)
 
 
 def _timestamp(table_name, id_):
