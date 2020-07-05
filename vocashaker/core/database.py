@@ -126,11 +126,22 @@ def copy_table(name1, name2, sort=False):
                 f'SELECT {titles} FROM {name1}{orderby};')
 
 
+def _original_name(name):
+    """Create a table name that does not already exists in the database."""
+    i = 0
+    new_name = name + '_0'
+    while table_exists(new_name):
+        i += 1
+        new_name = name + f'_{i}'
+    return new_name
+
+
 def sort_table(name, n):
     """Sort table "name" using column number n"""
-    copy_table(name, name + '_copy', sort=n)
+    temp_name = _original_name(name)
+    copy_table(name, temp_name, sort=n)
     remove_table(name)
-    rename_table(name + '_copy', name)
+    rename_table(temp_name, name)
 
 
 def get_cols(table_name, include_id=False):

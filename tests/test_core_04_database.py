@@ -34,7 +34,7 @@ from vocashaker.core.database import remove_row, draw_rows, insert_rows
 from vocashaker.core.database import get_rows_nb, copy_table, sort_table
 from vocashaker.core.database import remove_rows, update_table
 from vocashaker.core.database import _timestamp, _reset, _full_reset
-from vocashaker.core.database import _intspan2sqllist
+from vocashaker.core.database import _intspan2sqllist, _original_name
 from vocashaker.core.errors import NoSuchTableError
 from vocashaker.core.errors import NoSuchRowError, NoSuchColumnError
 from vocashaker.core.errors import ColumnsDoNotMatchError
@@ -169,6 +169,14 @@ def test_update_table(testdb):
         update_table('table1', 3, ['spes, ei', 'f', 'espoir'])
     assert str(excinfo.value) == '"[\'spes, ei\', \'f\', \'espoir\']" '\
         'requires 3 columns, but "table1" has 2 columns ("col1" and "col2").'
+
+
+def test_original_name(testdb):
+    assert _original_name('table1') == 'table1_0'
+    create_table('table2_0', ['col1', 'col2'])
+    create_table('table2_1', ['col1', 'col2'])
+    create_table('table2_2', ['col1', 'col2'])
+    assert _original_name('table2') == 'table2_3'
 
 
 def test_sort_table(testdb):
