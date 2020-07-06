@@ -30,7 +30,7 @@ from vocashaker.core import commands
 from vocashaker.core import database
 from vocashaker.core import sweepstakes
 from vocashaker.core.errors import NoSuchTableError, DestinationExistsError
-from vocashaker.core.errors import NotFoundError, CommandError
+from vocashaker.core.errors import NotFoundError, CommandError, MergeError
 from vocashaker.core.errors import ColumnsDoNotMatchError
 
 
@@ -325,6 +325,117 @@ def test_create_already_existing_table_or_template(testdb, capsys, fs):
     assert str(excinfo.value) == 'Action cancelled: a template named '\
         '"already_in_use" already exists. Please rename or remove it '\
         'before using this name.'
+
+
+def test_merge(mocker, testdb, fs, capsys):
+    f1 = os.path.join(TESTS_DATADIR, 'latin_add.txt')
+    f2 = os.path.join(TESTS_DATADIR, 'latin.txt')
+    fs.add_real_file(f1)
+    fs.add_real_file(f2)
+
+    # No template for source table: automatic creation
+    def create_fake_template3(*args):
+        fs.create_file(template.path('table3'))
+
+    # No template for source table: automatic creation
+    def create_fake_template4(*args):
+        fs.create_file(template.path('table4'))
+
+    # No template for source table: automatic creation
+    def create_fake_template5(*args):
+        fs.create_file(template.path('table5'))
+
+    mocker.patch('vocashaker.core.template.create',
+                 side_effect=create_fake_template3)
+    commands.create('table3', f1, '<Latin>:<Français>')
+
+    mocker.patch('vocashaker.core.template.create',
+                 side_effect=create_fake_template5)
+    commands.create('table5', f2, '<Latin>:<Français>')
+
+    mocker.patch('vocashaker.core.template.create',
+                 side_effect=create_fake_template4)
+    commands.merge(['table1', 'table3'], 'table4')
+
+    commands.show('table4')
+    captured = capsys.readouterr()
+    assert captured.out == \
+        ' id |         col1        |                col2                \n'\
+        '----+---------------------+------------------------------------\n'\
+        '  1 |  adventus,  us, m.  |               arrivée              \n'\
+        '  2 |     aqua , ae, f    |                 eau                \n'\
+        '  3 |   candidus,  a, um  |                blanc               \n'\
+        '  4 |    sol, solis, m    |               soleil               \n'\
+        '  5 |  judex,  dicis, m.  |                juge                \n'\
+        '  6 |   judicium,  i, n.  |         jugement, décision         \n'\
+        '  7 |     jus, uris, n    |                droit               \n'\
+        '  8 |   justitia, ae, f.  |           justice (vertu)          \n'\
+        '  9 |   juvenis, is , m   |      homme jeune (30 à45 ans)      \n'\
+        ' 10 | juventus,  utis, f. |              jeunesse              \n'\
+        ' 11 |   labor,  oris, m.  | peine, souffrance, travail pénible \n'\
+        ' 12 |   lacrima,  ae, f.  |                larme               \n'\
+        ' 13 |   laetitia, ae, f.  |               la joie              \n'
+
+    commands.merge(['table1'], 'table5')
+    commands.show('table5')
+    captured = capsys.readouterr()
+    assert captured.out == \
+        ' id |         Latin        |       Français      \n'\
+        '----+----------------------+---------------------\n'\
+        '  1 |    actio, onis, f.   | procès , plaidoirie \n'\
+        '  2 | admiratio,  onis, f. |      admiration     \n'\
+        '  3 |   adventus,  us, m.  |       arrivée       \n'\
+        '  4 |   aedilis,  is, m.   |        édile        \n'\
+        '  5 |  aetas, atis, f âge  |         vie         \n'\
+        '  6 |   ambitio, onis, f.  |       ambition      \n'\
+        '  7 |    ambitus, us, m.   |      la brigue      \n'\
+        '  8 |   amicitia,  ae, f.  |        amitié       \n'\
+        '  9 |    amicus,  i, m.    |         ami         \n'\
+        ' 10 |    amor,  oris, m.   |        amour        \n'\
+        ' 11 |    anima,  ae, f.    |      coeur, âme     \n'\
+        ' 12 |   adventus,  us, m.  |       arrivée       \n'\
+        ' 13 |     aqua , ae, f     |         eau         \n'\
+        ' 14 |   candidus,  a, um   |        blanc        \n'\
+        ' 15 |     sol, solis, m    |        soleil       \n'
+
+
+def test_merge_errors(mocker, testdb, fs, capsys):
+    with pytest.raises(MergeError) as excinfo:
+        commands.merge([], 'table5')
+    assert str(excinfo.value) == 'At least one table must be provided as '\
+        'source.'
+    with pytest.raises(MergeError) as excinfo:
+        commands.merge(['table1', 'table2', 'table3', 'table4', 'table5'],
+                       'table6')
+    assert str(excinfo.value) == 'One or more tables cannot be found: '\
+        'table3, table4, table5'
+    with pytest.raises(MergeError) as excinfo:
+        commands.merge(['table1', 'table2'], 'table3')
+    assert str(excinfo.value) == 'All tables used as sources must have the '\
+        'same number of columns. Found [2, 3] instead.'
+
+    f1 = os.path.join(TESTS_DATADIR, 'latin_add.txt')
+    fs.add_real_file(f1)
+
+    # No template for source table: automatic creation
+    def create_fake_template3(*args):
+        fs.create_file(template.path('table3'))
+
+    mocker.patch('vocashaker.core.template.create',
+                 side_effect=create_fake_template3)
+    commands.create('table3', f1, '<Latin>:<Français>')
+    with pytest.raises(MergeError) as excinfo:
+        commands.merge(['table1', 'table3'], 'table2')
+    assert str(excinfo.value) == 'Number of columns mismatch: destination '\
+        'table table2 has 3 columns, while source table(s) have 2 columns.'
+
+    # Solitary template (no matching table)
+    fs.create_file(template.path('table4'))
+    with pytest.raises(MergeError) as excinfo:
+        commands.merge(['table1', 'table3'], 'table4')
+    assert str(excinfo.value) == 'Action cancelled: a template matching '\
+        '"table4" already exists, but not the matching table. Please rename '\
+        'or remove it before using this name.'
 
 
 def test_add(testdb, capsys, mocker):

@@ -111,6 +111,12 @@ class ColumnsDoNotMatchError(VocaShakerError):
         super().__init__(msg)
 
 
+class MergeError(Exception):
+    """When an error, or several, prevent from merging tables."""
+    def __init__(self, msg):
+        super().__init__(msg)
+
+
 class TooManyRowsRequiredError(VocaShakerError):
     """When the user requires more rows than a table does contain."""
     def __init__(self, n_required, n_rows, table_name):

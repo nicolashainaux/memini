@@ -27,7 +27,7 @@ import blessed
 from .prefs import DEFAULT_Q_NB
 from . import database, template, terminal, parser, document, sweepstakes
 from .errors import NoSuchTableError, DestinationExistsError, NotFoundError
-from .errors import CommandError, ColumnsDoNotMatchError
+from .errors import CommandError, ColumnsDoNotMatchError, MergeError
 
 
 def _print_lines_not_matching_pattern(errors, pattern, decorate=True):
@@ -127,18 +127,6 @@ def remove(name, id_span):
     database.remove_rows(name, id_span)
 
 
-# def merge(name1, name2, name3=None):
-#     """
-#     If name3 is None, then merge contents of tables name1 and name2
-# into name2.
-#     Ask before doing so.
-#     If name3 is not None, then the merged content goes to a newly created
-# table
-#     named name3 (the matching default template will then be created too).
-#     """
-#     pass
-
-
 def list_(kind):
     """Print the listing of all known tables' or templates' names."""
     if kind == 'tables':
@@ -208,6 +196,57 @@ def duplicate(name1, name2):
     _check_moveable(name1, name2)
     shutil.copy(template.path(name1), template.path(name2))
     database.copy_table(name1, name2)
+
+
+def merge(src, dest):
+    """
+    Merge tables from src into dest.
+
+    If it does not exist, then dest is created and the matching default
+    template too.
+    """
+    # Check sources first
+    if not src:
+        raise MergeError('At least one table must be provided as source.')
+    nonexisting_tables = []
+    for table in src:
+        try:
+            database._assert_table_exists(table)
+        except NoSuchTableError:
+            nonexisting_tables.append(table)
+    if nonexisting_tables:
+        raise MergeError(f"One or more tables cannot be found: "
+                         f"{', '.join(nonexisting_tables)}")
+    src_cols_nb = [len(database.get_cols(table)) for table in src]
+    if not all(n == src_cols_nb[0] for n in src_cols_nb):
+        raise MergeError(f'All tables used as sources must have the same '
+                         f'number of columns. Found {src_cols_nb} instead.')
+    else:
+        src_cols_nb = src_cols_nb[0]
+
+    # Now check dest
+    do_create_dest_template = False
+    if database.table_exists(dest):
+        dest_cols_nb = len(database.get_cols(dest))
+        if src_cols_nb != dest_cols_nb:
+            raise MergeError(f'Number of columns mismatch: destination table '
+                             f'{dest} has {dest_cols_nb} columns, while '
+                             f'source table(s) have {src_cols_nb} columns.')
+        if not template.exists(dest):
+            do_create_dest_template = True
+    else:
+        if template.exists(dest):
+            raise MergeError(f'Action cancelled: a template matching "{dest}" '
+                             f'already exists, but not the matching table. '
+                             f'Please rename or remove it before using this '
+                             f'name.')
+        database.create_table(dest, database.get_cols(src[0]))
+        do_create_dest_template = True
+
+    if do_create_dest_template:
+        template.create(dest)
+    for table in src:
+        database.merge_tables(table, dest)
 
 
 def edit(name):
