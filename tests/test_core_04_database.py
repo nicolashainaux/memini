@@ -32,7 +32,7 @@ from vocashaker.core.database import rename_table, get_table, table_to_text
 from vocashaker.core.database import remove_table, create_table, get_cols
 from vocashaker.core.database import remove_row, draw_rows, insert_rows
 from vocashaker.core.database import get_rows_nb, copy_table, sort_table
-from vocashaker.core.database import remove_rows, update_table
+from vocashaker.core.database import remove_rows, update_table, merge_tables
 from vocashaker.core.database import _timestamp, _reset, _full_reset
 from vocashaker.core.database import _intspan2sqllist, _original_name
 from vocashaker.core.errors import NoSuchTableError
@@ -253,6 +253,29 @@ def test_insert_rows(testdb):
             ('6', 'amor,  oris, m.', 'amour'),
             ('7', 'anima,  ae, f.', 'coeur, âme'),
             ('8', 'hiems, mis,f', 'hiver')]
+
+
+def test_merge_tables(testdb):
+    with pytest.raises(ColumnsDoNotMatchError) as excinfo:
+        merge_tables('table1', 'table2')
+    assert str(excinfo.value) == '"table1" requires 2 columns, but "table2" '\
+        'has 3 columns ("col1", "col2" and "col3").'
+    create_table('table3', ['col3', 'col4'],
+                 [('spes, ei f', 'espoir'),
+                 ('amor,  oris, m.', 'amour'),
+                 ('anima,  ae, f.', 'coeur, âme'),
+                 ('hiems, mis,f', 'hiver')])
+    merge_tables('table1', 'table3')
+    assert get_table('table3') \
+        == [('1', 'spes, ei f', 'espoir'),
+            ('2', 'amor,  oris, m.', 'amour'),
+            ('3', 'anima,  ae, f.', 'coeur, âme'),
+            ('4', 'hiems, mis,f', 'hiver'),
+            ('5', 'adventus,  us, m.', 'arrivée'),
+            ('6', 'aqua , ae, f', 'eau'),
+            ('7', 'candidus,  a, um', 'blanc'),
+            ('8', 'sol, solis, m', 'soleil')
+            ]
 
 
 def test_remove_row(testdb):

@@ -222,6 +222,18 @@ def insert_rows(table_name, rows, col_titles=None):
     shared.db.executemany(cmd, content)
 
 
+def merge_tables(name1, name2):
+    """Insert rows of table name1 table into name2."""
+    if len(get_cols(name1)) != len(get_cols(name2)):
+        raise ColumnsDoNotMatchError(len(get_cols(name2)),
+                                     len(get_cols(name1)), name2,
+                                     get_cols(name2), name1)
+    titles1 = ', '.join(get_cols(name1))
+    titles2 = ', '.join(get_cols(name2))
+    _exec(None, f'INSERT INTO {name2} ({titles2}) '
+                f'SELECT {titles1} FROM {name1};')
+
+
 def _reset_table_ids(name):
     """Reset the ids of a table to remove gaps created by rows removals."""
     temp_name = _original_name(name)
