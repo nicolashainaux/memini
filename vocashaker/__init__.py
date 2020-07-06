@@ -293,6 +293,23 @@ def duplicate(name1, name2):
             echo_error(str(e))
 
 
+@run.command('merge')
+@click.argument('src', nargs=-1)
+@click.argument('dest', nargs=1)
+def merge(src, dest):
+    """
+    Merge tables.
+
+    Append the content of tables from SRC to the DEST table.
+    """
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            commands.merge(src, dest)
+        except VocaShakerError as e:
+            echo_error(str(e))
+
+
 @run.command('edit')
 @click.argument('name')
 def edit(name):
