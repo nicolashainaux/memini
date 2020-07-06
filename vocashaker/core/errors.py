@@ -111,7 +111,7 @@ class ColumnsDoNotMatchError(VocaShakerError):
         super().__init__(msg)
 
 
-class MergeError(Exception):
+class MergeError(VocaShakerError):
     """When an error, or several, prevent from merging tables."""
     def __init__(self, msg):
         super().__init__(msg)
