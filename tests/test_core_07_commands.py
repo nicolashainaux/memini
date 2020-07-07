@@ -376,6 +376,9 @@ def test_merge(mocker, testdb, fs, capsys):
         ' 12 |   lacrima,  ae, f.  |                larme               \n'\
         ' 13 |   laetitia, ae, f.  |               la joie              \n'
 
+    os.remove(template.path('table5'))
+    mocker.patch('vocashaker.core.template.create',
+                 side_effect=create_fake_template5)
     commands.merge(['table1'], 'table5')
     commands.show('table5')
     captured = capsys.readouterr()
