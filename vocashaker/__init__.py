@@ -337,7 +337,7 @@ def edit(name):
               help='set alternative template')
 @click.option('-f', '--force', default=False, is_flag=True, show_default=True,
               help='overwrite already existing file without asking')
-@click.option('-e', '--edit', default=False, is_flag=True, show_default=True,
+@click.option('-e', '--edit', default=True, is_flag=True, show_default=True,
               help='edit document as soon as it has been generated')
 @click.option('--use-previous', type=click.Choice(['None', *SW_CHOICES]),
               default='None', show_default=True,

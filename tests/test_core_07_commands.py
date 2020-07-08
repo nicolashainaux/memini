@@ -522,4 +522,4 @@ def test_generate(mocker):
     m = mocker.patch('vocashaker.core.document.generate')
     commands.generate('table1', 4)
     m.assert_called_with('table1', 4, scheme=None, force=False, output=None,
-                         tpl=None, edit_after=False, use_previous=None)
+                         tpl=None, edit_after=True, use_previous=None)

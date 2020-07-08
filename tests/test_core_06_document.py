@@ -161,12 +161,12 @@ def test_generate(mocker):
     mo = mocker.mock_open()
     table1_odt = f'table1.{TEMPLATE_EXT}'
     with patch('builtins.open', mo, create=True):
-        generate('table1', 5)
+        generate('table1', 5, edit_after=False)
     mo.assert_called_with(table1_odt, 'wb')
 
     mock_edit = mocker.patch('vocashaker.core.document.edit')
     with patch('builtins.open', mo, create=True):
-        generate('table1', 5, edit_after=True)
+        generate('table1', 5)
     mo.assert_called_with(table1_odt, 'wb')
     mock_edit.assert_called_with(table1_odt)
 
@@ -204,7 +204,7 @@ def test_generate_from_alternative_template(mocker):
                                   {'col1': 'spes, ei f', 'col2': 'espoir'}]}
     mo = mocker.mock_open()
     with patch('builtins.open', mo, create=True):
-        generate('table1', 5, tpl='template1')
+        generate('table1', 5, tpl='template1', edit_after=False)
     mo.assert_called_with(f'table1.{TEMPLATE_EXT}', 'wb')
 
 
@@ -217,7 +217,7 @@ def test_generate_using_previous_sweepstake(testdb, mocker):
                         ('sol, solis, m', 'soleil')]
     mo = mocker.mock_open()
     with patch('builtins.open', mo, create=True):
-        generate('table1', 3, use_previous=0)
+        generate('table1', 3, use_previous=0, edit_after=False)
     mo.assert_called_with(f'table1.{TEMPLATE_EXT}', 'wb')
 
     mgsn = mocker.patch('vocashaker.core.sweepstakes._get_sweepstake_name')

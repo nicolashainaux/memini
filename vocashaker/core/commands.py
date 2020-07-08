@@ -259,7 +259,7 @@ def edit(name):
 
 
 def generate(name, nb=DEFAULT_Q_NB, scheme=None, output=None, force=False,
-             tpl=None, edit=False, use_previous=None):
+             tpl=None, edit=True, use_previous=None):
     """
     Create a new document using default template and drawing data from the
     table matching name.

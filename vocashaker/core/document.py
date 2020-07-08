@@ -101,7 +101,7 @@ def _process_data(data, scheme=None):
 
 
 def generate(table_name, n, scheme=None, oldest_prevail=False, output=None,
-             force=False, tpl=None, edit_after=False, use_previous=None):
+             force=False, tpl=None, edit_after=True, use_previous=None):
     """
     Generate a new document using n data from the table and the matching
     template.
