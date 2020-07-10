@@ -41,7 +41,7 @@ def _deserialize(data):
 
 def _new_sweepstake():
     dt = str(datetime.datetime.now().replace(microsecond=0)).replace(' ', '@')
-    return os.path.join(USER_SWEEPSTAKES_PATH, f'0_{dt}.json')
+    return os.path.join(USER_SWEEPSTAKES_PATH, f'1_{dt}.json')
 
 
 def _get_sweepstakes():
@@ -53,7 +53,7 @@ def list_sweepstakes():
     return [os.path.basename(sw) for sw in _get_sweepstakes()]
 
 
-def _get_sweepstake_name(sw_id=0):
+def _get_sweepstake_name(sw_id=1):
     for name in list_sweepstakes():
         if name.startswith(f'{sw_id}_') and name.endswith('.json'):
             return os.path.join(USER_SWEEPSTAKES_PATH, name)
@@ -79,6 +79,6 @@ def store_sweepstake(rows):
         f.write('\n')
 
 
-def load_sweepstake(sw_id=0):
+def load_sweepstake(sw_id=1):
     with open(_get_sweepstake_name(sw_id), 'r') as f:
         return _deserialize(json.load(f))

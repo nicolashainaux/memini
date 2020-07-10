@@ -44,27 +44,26 @@ datetime.datetime = MockedDatetime
 
 
 @pytest.fixture
-def sw0():
-    return os.path.join(USER_SWEEPSTAKES_PATH, '0_2020-07-02@15:13:22.json')
+def sw1():
+    return os.path.join(USER_SWEEPSTAKES_PATH, '1_2020-07-02@15:13:22.json')
 
 
 @pytest.fixture
-def sw1():
-    return os.path.join(USER_SWEEPSTAKES_PATH, '1_2020-07-02@15:13:23.json')
+def sw2():
+    return os.path.join(USER_SWEEPSTAKES_PATH, '2_2020-07-02@15:13:23.json')
 
 
 @pytest.fixture
 def sweepstakes():
-    return [os.path.join(USER_SWEEPSTAKES_PATH, '0_2020-07-02@15:13:22.json'),
-            os.path.join(USER_SWEEPSTAKES_PATH, '1_2020-07-02@15:13:23.json'),
-            os.path.join(USER_SWEEPSTAKES_PATH, '2_2020-07-02@15:13:24.json'),
-            os.path.join(USER_SWEEPSTAKES_PATH, '3_2020-07-02@15:13:25.json'),
-            os.path.join(USER_SWEEPSTAKES_PATH, '4_2020-07-02@15:13:26.json'),
-            os.path.join(USER_SWEEPSTAKES_PATH, '5_2020-07-02@15:13:27.json'),
-            os.path.join(USER_SWEEPSTAKES_PATH, '6_2020-07-02@15:13:28.json'),
-            os.path.join(USER_SWEEPSTAKES_PATH, '7_2020-07-02@15:13:29.json'),
-            os.path.join(USER_SWEEPSTAKES_PATH, '8_2020-07-02@15:13:30.json'),
-            os.path.join(USER_SWEEPSTAKES_PATH, '9_2020-07-02@15:13:31.json')]
+    return [os.path.join(USER_SWEEPSTAKES_PATH, '1_2020-07-02@15:13:22.json'),
+            os.path.join(USER_SWEEPSTAKES_PATH, '2_2020-07-02@15:13:23.json'),
+            os.path.join(USER_SWEEPSTAKES_PATH, '3_2020-07-02@15:13:24.json'),
+            os.path.join(USER_SWEEPSTAKES_PATH, '4_2020-07-02@15:13:25.json'),
+            os.path.join(USER_SWEEPSTAKES_PATH, '5_2020-07-02@15:13:26.json'),
+            os.path.join(USER_SWEEPSTAKES_PATH, '6_2020-07-02@15:13:27.json'),
+            os.path.join(USER_SWEEPSTAKES_PATH, '7_2020-07-02@15:13:28.json'),
+            os.path.join(USER_SWEEPSTAKES_PATH, '8_2020-07-02@15:13:29.json'),
+            os.path.join(USER_SWEEPSTAKES_PATH, '9_2020-07-02@15:13:30.json')]
 
 
 def test_serialization():
@@ -79,8 +78,8 @@ def test_serialization():
     assert _deserialize(_serialize(data)) == data
 
 
-def test_new_sweepstake(mocker, sw0):
-    assert _new_sweepstake() == sw0
+def test_new_sweepstake(mocker, sw1):
+    assert _new_sweepstake() == sw1
 
 
 def test_get_sweepstakes(fs, sweepstakes):
@@ -92,29 +91,28 @@ def test_get_sweepstakes(fs, sweepstakes):
 def test_list_sweepstakes(fs, sweepstakes):
     for sw in sweepstakes:
         fs.create_file(sw)
-    assert list_sweepstakes() == ['0_2020-07-02@15:13:22.json',
-                                  '1_2020-07-02@15:13:23.json',
-                                  '2_2020-07-02@15:13:24.json',
-                                  '3_2020-07-02@15:13:25.json',
-                                  '4_2020-07-02@15:13:26.json',
-                                  '5_2020-07-02@15:13:27.json',
-                                  '6_2020-07-02@15:13:28.json',
-                                  '7_2020-07-02@15:13:29.json',
-                                  '8_2020-07-02@15:13:30.json',
-                                  '9_2020-07-02@15:13:31.json']
+    assert list_sweepstakes() == ['1_2020-07-02@15:13:22.json',
+                                  '2_2020-07-02@15:13:23.json',
+                                  '3_2020-07-02@15:13:24.json',
+                                  '4_2020-07-02@15:13:25.json',
+                                  '5_2020-07-02@15:13:26.json',
+                                  '6_2020-07-02@15:13:27.json',
+                                  '7_2020-07-02@15:13:28.json',
+                                  '8_2020-07-02@15:13:29.json',
+                                  '9_2020-07-02@15:13:30.json']
 
 
-def test_get_sweepstake_name(fs, sw0, sw1, sweepstakes):
+def test_get_sweepstake_name(fs, sw1, sw2, sweepstakes):
     for sw in sweepstakes:
         fs.create_file(sw)
-    assert _get_sweepstake_name(0) == sw0
     assert _get_sweepstake_name(1) == sw1
+    assert _get_sweepstake_name(2) == sw2
     with pytest.raises(NoSuchSweepstakeError) as excinfo:
         _get_sweepstake_name(10)
     assert str(excinfo.value) == 'Cannot find a sweepstake starting with "10"'
 
 
-def test_rotate_sweepstakes(fs, sw0, sw1, sweepstakes):
+def test_rotate_sweepstakes(fs, sweepstakes):
     # With no sweepstake files, it will just do nothing:
     _rotate_sweepstakes()
     # Now we add faked files to let _rotate_sweepstakes() really rotate them:
@@ -122,15 +120,14 @@ def test_rotate_sweepstakes(fs, sw0, sw1, sweepstakes):
         fs.create_file(sw)
     _rotate_sweepstakes()
     assert [os.path.basename(f) for f in _get_sweepstakes()] \
-        == ['1_2020-07-02@15:13:22.json',
-            '2_2020-07-02@15:13:23.json',
-            '3_2020-07-02@15:13:24.json',
-            '4_2020-07-02@15:13:25.json',
-            '5_2020-07-02@15:13:26.json',
-            '6_2020-07-02@15:13:27.json',
-            '7_2020-07-02@15:13:28.json',
-            '8_2020-07-02@15:13:29.json',
-            '9_2020-07-02@15:13:30.json']
+        == ['2_2020-07-02@15:13:22.json',
+            '3_2020-07-02@15:13:23.json',
+            '4_2020-07-02@15:13:24.json',
+            '5_2020-07-02@15:13:25.json',
+            '6_2020-07-02@15:13:26.json',
+            '7_2020-07-02@15:13:27.json',
+            '8_2020-07-02@15:13:28.json',
+            '9_2020-07-02@15:13:29.json']
 
 
 def test_store_load_sweepstakes(fs):

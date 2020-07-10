@@ -36,9 +36,9 @@ from vocashaker.core.errors import ColumnsDoNotMatchError
 
 @pytest.fixture
 def sw():
-    return [os.path.join(USER_SWEEPSTAKES_PATH, '0_2020-07-02@15:13:22.json'),
-            os.path.join(USER_SWEEPSTAKES_PATH, '1_2020-07-02@15:13:23.json'),
-            os.path.join(USER_SWEEPSTAKES_PATH, '2_2020-07-02@15:13:24.json')]
+    return [os.path.join(USER_SWEEPSTAKES_PATH, '1_2020-07-02@15:13:22.json'),
+            os.path.join(USER_SWEEPSTAKES_PATH, '2_2020-07-02@15:13:23.json'),
+            os.path.join(USER_SWEEPSTAKES_PATH, '3_2020-07-02@15:13:24.json')]
 
 
 def test_list_(testdb, capsys, fs, sw):
@@ -55,9 +55,9 @@ def test_list_(testdb, capsys, fs, sw):
     commands.list_('sweepstakes')
     captured = capsys.readouterr()
     assert captured.out == \
-        '0_2020-07-02@15:13:22.json\n'\
-        '1_2020-07-02@15:13:23.json\n'\
-        '2_2020-07-02@15:13:24.json\n'
+        '1_2020-07-02@15:13:22.json\n'\
+        '2_2020-07-02@15:13:23.json\n'\
+        '3_2020-07-02@15:13:24.json\n'
     with pytest.raises(CommandError) as excinfo:
         commands.list_('foo')
     assert str(excinfo.value) == 'Sorry, I can only list "tables", '\
@@ -178,7 +178,7 @@ def test_dump(testdb, capsys, fs):
             ('sol, solis, m', 'soleil')]
     fs.create_dir(USER_SWEEPSTAKES_PATH)
     sweepstakes.store_sweepstake(data)
-    commands.dump(0)
+    commands.dump(1)
     captured = capsys.readouterr()
     assert captured.out == "('adventus,  us, m.', 'arrivée')\n"\
         "('candidus,  a, um', 'blanc')\n"\

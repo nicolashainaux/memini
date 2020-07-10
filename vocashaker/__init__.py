@@ -33,9 +33,6 @@ from vocashaker.core import commands
 
 shared.init()
 
-SW_CHOICES = [str(n) for n in range(SWEEPSTAKES_MAX + 1)]
-COL_NBS = [str(n) for n in range(MAXCOL_NB)][1:]
-
 __all__ = ['run']
 
 
@@ -178,8 +175,8 @@ def add(name, filename, pattern):
 
 @run.command('show')
 @click.argument('name')
-@click.option('-s', '--sort', default='False', show_default=True,
-              type=click.Choice(['False', *COL_NBS], case_sensitive=False),
+@click.option('-s', '--sort', default=0, show_default=True,
+              type=click.IntRange(0, MAXCOL_NB),
               help='sort output according to column')
 def show(name, sort):
     """
@@ -187,21 +184,17 @@ def show(name, sort):
 
     Display content of table NAME in standard output.
     """
-    if sort == 'False':
-        sort = False
-    else:
-        sort = int(sort)
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:
-            commands.show(name, sort=sort)
+            commands.show(name, sort=int(sort))
         except VocaShakerError as e:
             echo_error(str(e))
 
 
 @run.command('sort')
 @click.argument('name')
-@click.option('-n', '--col-nb', default='1', type=click.Choice([*COL_NBS]),
+@click.option('-n', '--col-nb', default=1, type=click.IntRange(0, MAXCOL_NB),
               help='sort a table using n-th column')
 def sort(name, col_nb):
     """
@@ -339,9 +332,8 @@ def edit(name):
               help='overwrite already existing file without asking')
 @click.option('-e', '--edit', default=True, is_flag=True, show_default=True,
               help='edit document as soon as it has been generated')
-@click.option('--use-previous', type=click.Choice(['None', *SW_CHOICES]),
-              default='None', show_default=True,
-              help='use a previous sweepstake')
+@click.option('--use-previous', type=click.IntRange(0, SWEEPSTAKES_MAX),
+              default=0, show_default=True, help='use a previous sweepstake')
 def generate(name, questions_number, scheme, output, force, template, edit,
              use_previous):
     """
