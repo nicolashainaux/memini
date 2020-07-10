@@ -45,7 +45,10 @@ __version__ = pp['__version__']
 
 PYVER = sys.version.replace('\n', ' ')
 MESSAGE = f'This is {PROG_NAME}, version {__version__}, '\
-    f'running under python {PYVER}'
+    f'running under python {PYVER}.\nCopyright (C) 2020 Nicolas Hainaux\n'\
+    'This program comes with ABSOLUTELY NO WARRANTY.\n'\
+    'This is free software, and you are welcome to redistribute it '\
+    'under certain conditions. Its license is the GPL version 3 or later.'
 
 USER_LOCAL_SHARE_FALLBACK = os.path.join(str(Path.home()), '.local', 'share',
                                          __myname__)
