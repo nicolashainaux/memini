@@ -59,6 +59,16 @@ def run():
     """Manage vocabulary tables and generate training or test sheets."""
 
 
+def _cmd(cmd, *args, do_click_echo=echo_error):
+    """Generic command"""
+    with database.Manager(USER_DB_PATH) as db:
+        shared.db = db
+        try:
+            cmd(*args)
+        except VocaShakerError as e:
+            do_click_echo(str(e))
+
+
 @run.command('list')
 @click.argument('what')
 def list_(what):
@@ -68,12 +78,7 @@ def list_(what):
     List known tables, templates or sweepstakes. What to list exactly is set
     by argument WHAT (that may be "tables", "templates" or "sweepstakes").
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.list_(what)
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.list_, what)
 
 
 @run.command('parse')
@@ -92,12 +97,8 @@ def parse(filename, pattern, errors_only):
     It will highlight possible parsing errors. You can get a clean output of
     the lines producing errors by setting option --errors-only to true.
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.parse(filename, pattern, errors_only)
-        except VocaShakerError as e:
-            echo_warning(str(e))
+    _cmd(commands.parse, filename, pattern, errors_only,
+         do_click_echo=echo_warning)
 
 
 @run.command('delete')
@@ -108,12 +109,7 @@ def delete(name):
 
     Delete the table NAME. The matching default template will be deleted too.
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.delete(name)
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.delete, name)
 
 
 @run.command('remove')
@@ -127,12 +123,7 @@ def remove(name, span):
     removed. It can be provided as a single int or as an int range, like
     "2-6,9" that would remove rows 2, 3, 4, 5, 6 and 9.
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.remove(name, span)
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.remove, name, span)
 
 
 @run.command('create')
@@ -146,12 +137,7 @@ def create(name, filename, pattern):
     Create a table NAME. The data will be read from file FILENAME
     and parsed according to the provided PATTERN.
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.create(name, filename, pattern)
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.create, name, filename, pattern)
 
 
 @run.command('add')
@@ -165,12 +151,7 @@ def add(name, filename, pattern):
     Add new rows in the table NAME. The data will be read from file FILENAME
     and parsed according to the provided PATTERN.
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.add(name, filename, pattern)
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.add, name, filename, pattern)
 
 
 @run.command('show')
@@ -184,12 +165,7 @@ def show(name, sort):
 
     Display content of table NAME in standard output.
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.show(name, sort=int(sort))
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.show, name, int(sort))
 
 
 @run.command('sort')
@@ -202,13 +178,7 @@ def sort(name, col_nb):
 
     Sort content of table NAME.
     """
-    col_nb = int(col_nb)
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.sort(name, col_nb=col_nb)
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.sort, name, int(col_nb))
 
 
 @run.command('update')
@@ -226,12 +196,7 @@ def update(name, row):
     number 4 of table "mytable". Of course the number of fields must match the
     number of columns in the table.
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.update(name, row)
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.update, name, row)
 
 
 @run.command('dump')
@@ -242,12 +207,7 @@ def dump(sw_id):
 
     Display content of sweepstake #SW_ID in standard output.
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.dump(sw_id)
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.dump, sw_id)
 
 
 @run.command('rename')
@@ -260,12 +220,7 @@ def rename(name1, name2):
     Rename table NAME1 as NAME2. The default template associated with NAME1
     is also renamed to match the new name.
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.rename(name1, name2)
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.rename, name1, name2)
 
 
 @run.command('duplicate')
@@ -278,12 +233,7 @@ def duplicate(name1, name2):
     Duplicate table NAME1 as NAME2. The default template associated with NAME1
     is also duplicated.
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.duplicate(name1, name2)
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.duplicate, name1, name2)
 
 
 @run.command('merge')
@@ -295,12 +245,7 @@ def merge(src, dest):
 
     Append the content of tables from SRC to the DEST table.
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.merge(src, dest)
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.merge, src, dest)
 
 
 @run.command('edit')
@@ -311,12 +256,7 @@ def edit(name):
 
     Run editor (e.g. LibreOffice) on "name" template.
     """
-    with database.Manager(USER_DB_PATH) as db:
-        shared.db = db
-        try:
-            commands.edit(name)
-        except VocaShakerError as e:
-            echo_error(str(e))
+    _cmd(commands.edit, name)
 
 
 @run.command('generate')
