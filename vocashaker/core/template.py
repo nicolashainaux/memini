@@ -25,6 +25,7 @@ import glob
 import shutil
 import zipfile
 import subprocess
+import xml.etree.ElementTree as ET
 
 from vocashaker.core.errors import NotATemplateError
 from vocashaker.core.prefs import EDITOR, ENCODING
@@ -89,6 +90,16 @@ def _check(filename):
         return True
     else:
         return False
+
+
+def _LO_saved_content_xml_detected(filename):
+    """Check if content contains empty relatorio nodes."""
+    tree = ET.parse(filename)
+    root = tree.getroot()
+    for node in root.findall('.//{*}body/{*}text/{*}table//{*}a'):
+        if node.text is None and not list(node):
+            return True
+    return False
 
 
 def _fix_LO_saved_content_xml(content):
