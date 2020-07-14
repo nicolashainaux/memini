@@ -135,5 +135,5 @@ def test_store_load_sweepstakes(fs):
             ('candidus,  a, um', 'blanc'),
             ('sol, solis, m', 'soleil')]
     fs.create_dir(USER_SWEEPSTAKES_PATH)
-    store_sweepstake(data)
-    assert load_sweepstake() == data
+    store_sweepstake('table1', data)
+    assert load_sweepstake() == [('table1', )] + data

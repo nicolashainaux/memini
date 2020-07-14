@@ -212,17 +212,20 @@ def test_generate_using_previous_sweepstake(testdb, mocker):
     mt = mocker.patch('vocashaker.core.template.path')
     mt.return_value = TEST_TEMPLATE1_PATH
     mls = mocker.patch('vocashaker.core.sweepstakes.load_sweepstake')
-    mls.return_value = [('adventus,  us, m.', 'arrivée'),
+    mls.return_value = [('table1', ),
+                        ('adventus,  us, m.', 'arrivée'),
                         ('candidus,  a, um', 'blanc'),
                         ('sol, solis, m', 'soleil')]
     mo = mocker.mock_open()
     with patch('builtins.open', mo, create=True):
-        generate('table1', 3, use_previous=1, edit_after=False)
+        generate('1', nb=3, use_previous=True, edit_after=False)
     mo.assert_called_with(f'table1.{TEMPLATE_EXT}', 'wb')
 
     mgsn = mocker.patch('vocashaker.core.sweepstakes._get_sweepstake_name')
     mgsn.return_value = '1_my_sweepstake'
+    mls = mocker.patch('vocashaker.core.sweepstakes.load_sweepstake')
+    mls.return_value = [('table2', ), ('break, broke, broken', 'casser')]
     with pytest.raises(ColumnsDoNotMatchError) as excinfo:
-        generate('table2', 3, use_previous=1)
+        generate('1', nb=3, use_previous=True, edit_after=False)
     assert str(excinfo.value) == '"1_my_sweepstake" requires 2 columns, '\
         'but "table2" has 3 columns ("col1", "col2" and "col3").'

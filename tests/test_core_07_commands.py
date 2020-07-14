@@ -177,10 +177,11 @@ def test_dump(testdb, capsys, fs):
             ('candidus,  a, um', 'blanc'),
             ('sol, solis, m', 'soleil')]
     fs.create_dir(USER_SWEEPSTAKES_PATH)
-    sweepstakes.store_sweepstake(data)
+    sweepstakes.store_sweepstake('table1', data)
     commands.dump(1)
     captured = capsys.readouterr()
-    assert captured.out == "('adventus,  us, m.', 'arrivée')\n"\
+    assert captured.out == "('table1',)\n"\
+        "('adventus,  us, m.', 'arrivée')\n"\
         "('candidus,  a, um', 'blanc')\n"\
         "('sol, solis, m', 'soleil')\n"
 
@@ -521,5 +522,5 @@ def test_edit(fs, mocker):
 def test_generate(mocker):
     m = mocker.patch('vocashaker.core.document.generate')
     commands.generate('table1', 4)
-    m.assert_called_with('table1', 4, scheme=None, force=False, output=None,
-                         tpl=None, edit_after=True, use_previous=None)
+    m.assert_called_with('table1', nb=4, scheme=None, force=False, output=None,
+                         tpl=None, edit_after=True, use_previous=False)

@@ -302,5 +302,5 @@ def draw_rows(table_name, n, oldest_prevail=False):
     cmd = f'SELECT {cols_list} FROM {table_name} {timestamps_clause}'\
         f'ORDER BY random() LIMIT {n};'
     rows = _exec(table_name, cmd).fetchall()
-    store_sweepstake(rows)
+    store_sweepstake(table_name, rows)
     return rows

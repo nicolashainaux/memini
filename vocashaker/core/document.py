@@ -29,7 +29,7 @@ from relatorio.templates.opendocument import Template
 
 from vocashaker.core import database, template, terminal, sweepstakes
 from vocashaker.core.env import TEMPLATE_EXT
-from vocashaker.core.prefs import BLANK_CHAR, FILLED_CHAR, EDITOR
+from vocashaker.core.prefs import BLANK_CHAR, FILLED_CHAR, EDITOR, DEFAULT_Q_NB
 from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
 from vocashaker.core.errors import SchemeColumnsMismatchError
 from vocashaker.core.errors import CommandCancelledError, NotFoundError
@@ -100,12 +100,22 @@ def _process_data(data, scheme=None):
     return result
 
 
-def generate(table_name, n, scheme=None, oldest_prevail=False, output=None,
-             force=False, tpl=None, edit_after=True, use_previous=0):
+def generate(table_name, nb=DEFAULT_Q_NB, scheme=None, oldest_prevail=False,
+             output=None, force=False, tpl=None, edit_after=True,
+             use_previous=False):
     """
     Generate a new document using n data from the table and the matching
     template.
     """
+    if use_previous:
+        sw_data = sweepstakes.load_sweepstake(int(table_name))
+        table_name, rows = sw_data[0], sw_data[1:]
+        table_name = table_name[0]
+        if len(rows[0]) != len(database.get_cols(table_name)):
+            raise ColumnsDoNotMatchError(
+                len(database.get_cols(table_name)), len(rows[0]),
+                table_name, database.get_cols(table_name),
+                sweepstakes._get_sweepstake_name(use_previous))
     if tpl is None:
         tpl_name = table_name
     else:
@@ -120,14 +130,8 @@ def generate(table_name, n, scheme=None, oldest_prevail=False, output=None,
         if not overwrite:
             raise CommandCancelledError('generate')
     if not use_previous:
-        rows = database.draw_rows(table_name, n, oldest_prevail=oldest_prevail)
-    else:
-        rows = sweepstakes.load_sweepstake(int(use_previous))
-        if len(rows[0]) != len(database.get_cols(table_name)):
-            raise ColumnsDoNotMatchError(
-                len(database.get_cols(table_name)), len(rows[0]),
-                table_name, database.get_cols(table_name),
-                sweepstakes._get_sweepstake_name(use_previous))
+        rows = database.draw_rows(table_name, nb,
+                                  oldest_prevail=oldest_prevail)
     data = _process_data(rows, scheme=scheme)
     basic = Template(source='', filepath=template.path(tpl_name))
     basic_generated = basic.generate(o=data).render()

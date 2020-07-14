@@ -72,10 +72,10 @@ def _rotate_sweepstakes():
             shutil.move(f, new_name)
 
 
-def store_sweepstake(rows):
+def store_sweepstake(table_name, rows):
     _rotate_sweepstakes()
     with open(_new_sweepstake(), 'w') as f:
-        json.dump(_serialize(rows), f, indent=4)
+        json.dump(_serialize([(table_name, )] + rows), f, indent=4)
         f.write('\n')
 
 

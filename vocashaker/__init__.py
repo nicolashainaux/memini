@@ -22,7 +22,7 @@
 import click
 import blessed
 
-from vocashaker.core.prefs import DEFAULT_Q_NB, SWEEPSTAKES_MAX
+from vocashaker.core.prefs import DEFAULT_Q_NB
 from vocashaker.core.env import USER_DB_PATH, __version__, PROG_NAME, MESSAGE
 from vocashaker.core.env import MAXCOL_NB
 from vocashaker.core.errors import VocaShakerError, CommandCancelledError
@@ -332,8 +332,8 @@ def edit(name):
               help='overwrite already existing file without asking')
 @click.option('-e', '--edit', default=True, is_flag=True, show_default=True,
               help='edit document as soon as it has been generated')
-@click.option('--use-previous', type=click.IntRange(0, SWEEPSTAKES_MAX),
-              default=0, show_default=True, help='use a previous sweepstake')
+@click.option('--use-previous', is_flag=True, default=False, show_default=True,
+              help='use a previous sweepstake')
 def generate(name, questions_number, scheme, output, force, template, edit,
              use_previous):
     """
