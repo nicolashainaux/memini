@@ -320,7 +320,7 @@ def edit(name):
 
 
 @run.command('generate')
-@click.argument('name')
+@click.argument('name', required=False)
 @click.option('-n', '--questions-number', default=DEFAULT_Q_NB, type=int,
               show_default=True, help='number of questions')
 @click.option('-s', '--scheme', default=None, type=str, help='scheme to use')
@@ -341,6 +341,10 @@ def generate(name, questions_number, scheme, output, force, template, edit,
 
     Generate a new document using the data from table NAME.
 
+    The --use-previous option can be used to reuse data from previous drawings
+    (stored as "sweepstakes"). If it is used, then the NAME argument must be
+    a sweepstake's id, or not written (then the sweepstake's id defaults to 1).
+
     The number of lines in the document's table can be specified via option -n.
 
     The --scheme option allows to specify which columns may be blanked in the
@@ -360,6 +364,13 @@ def generate(name, questions_number, scheme, output, force, template, edit,
     - if you have 2 columns and you wish the first one to be always blank and
     the second one always filled, then use _*1.
     """
+    if name is None:
+        if use_previous:
+            name = '1'
+        else:
+            echo_error('Missing argument \'NAME\'. It is required unless '
+                       'option --use-previous is turned on. '
+                       'Try \'vosh generate --help\' for help.')
     with database.Manager(USER_DB_PATH) as db:
         shared.db = db
         try:

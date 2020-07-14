@@ -23,6 +23,7 @@ import sqlite3
 
 from click.testing import CliRunner
 
+from vocashaker.core.prefs import DEFAULT_Q_NB
 from vocashaker.core.env import TEST_DB_PATH
 from vocashaker import run, list_, parse, delete, remove, create, add, show
 from vocashaker import rename, generate, edit, duplicate, dump, sort, update
@@ -197,4 +198,16 @@ def test_generate(mocker, fs):
     mocker.patch('vocashaker.core.terminal.ask_yes_no', return_value=False)
     result = runner.invoke(generate, ['table1', '-n 3', '--output=exists.txt'])
     assert result.output.startswith('Info: ')
+    assert result.exit_code == 0
+
+    result = runner.invoke(generate, [])
+    assert result.output.startswith('Error: Missing argument \'NAME\'. It is '
+                                    'required unless')
+    assert result.exit_code == 1
+
+    mg = mocker.patch('vocashaker.core.commands.generate')
+    result = runner.invoke(generate, ['--use-previous'])
+    mg.assert_called_with('1', nb=DEFAULT_Q_NB, scheme=None,
+                          output=None, force=False, tpl=None,
+                          edit=True, use_previous=True)
     assert result.exit_code == 0
