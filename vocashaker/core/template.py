@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
+import re
 import glob
 import shutil
 import zipfile
@@ -88,6 +89,15 @@ def _check(filename):
         return True
     else:
         return False
+
+
+def _fix_LO_saved_content_xml(content):
+    """Remove empty relatorio nodes from content."""
+    output = []
+    pattern = re.compile(r'<text:a.*href="relatorio.*></text:a>')
+    for line in content:
+        output.append(pattern.sub('', line))
+    return output
 
 
 def get_cols_nb(filename):

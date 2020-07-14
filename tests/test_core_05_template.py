@@ -89,6 +89,15 @@ def test_check():
     assert not template._check(wrong_template)
 
 
+def test_fix_LO_saved_content_xml():
+    wrong_content_xml = os.path.join(TESTS_DATADIR, 'wrong_content.xml')
+    fixed_content_xml = os.path.join(TESTS_DATADIR, 'fixed_content.xml')
+    with open(wrong_content_xml, 'r') as infile,\
+         open(fixed_content_xml, 'r') as outfile:
+        assert template._fix_LO_saved_content_xml(infile.readlines()) \
+            == outfile.readlines()
+
+
 def test_get_cols_nb():
     t2 = os.path.join(TESTS_DATADIR, 'template1.odt')
     assert template.get_cols_nb(t2) == 2
