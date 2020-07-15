@@ -24,9 +24,9 @@ import re
 import glob
 import shutil
 import zipfile
-import tempfile
 import subprocess
 import xml.etree.ElementTree as ET
+from tempfile import NamedTemporaryFile
 
 from vocashaker.core.errors import NotATemplateError
 from vocashaker.core.prefs import EDITOR, ENCODING
@@ -137,29 +137,28 @@ def get_cols_nb(filename):
 
 def sanitize(filename):
     """Remove empty relatorio nodes from template, if any."""
-    # Generate a temp file
-    tmpfd, tmpname = tempfile.mkstemp(dir=os.path.dirname(filename))
-    os.close(tmpfd)
-
     updated = False
-    with zipfile.ZipFile(filename, 'r') as zin:
-        with zin.open('content.xml') as f:
-            if _LO_saved_content_xml_detected(f):
-                f.seek(0)
-                updated = True
-                # Create a temp copy of the template without content.xml
-                with zipfile.ZipFile(tmpname, 'w') as zout:
-                    zout.comment = zin.comment  # preserve the comment
-                    for item in zin.infolist():
-                        if item.filename != 'content.xml':
-                            zout.writestr(item, zin.read(item.filename))
-                # Now create and add the new content.xml
-                f.seek(0)
-                new_content = _fix_LO_saved_content_xml(f.readlines())
-                with zipfile.ZipFile(tmpname, 'a', zipfile.ZIP_DEFLATED) as zf:
-                    zf.writestr('content.xml', new_content)
-    if updated:
-        # Replace with the temp archive
-        os.remove(filename)
-        os.rename(tmpname, filename)
+    with NamedTemporaryFile() as tmp_file:
+        tmpname = os.path.basename(tmp_file.name)
+        with zipfile.ZipFile(filename, 'r') as zin:
+            with zin.open('content.xml') as f:
+                if _LO_saved_content_xml_detected(f):
+                    f.seek(0)
+                    updated = True
+                    # Create a temp copy of the template without content.xml
+                    with zipfile.ZipFile(tmpname, 'w') as zout:
+                        zout.comment = zin.comment  # preserve the comment
+                        for item in zin.infolist():
+                            if item.filename != 'content.xml':
+                                zout.writestr(item, zin.read(item.filename))
+                    # Now create and add the new content.xml
+                    f.seek(0)
+                    new_content = _fix_LO_saved_content_xml(f.readlines())
+                    with zipfile.ZipFile(tmpname, 'a',
+                                         zipfile.ZIP_DEFLATED) as zf:
+                        zf.writestr('content.xml', new_content)
+        if updated:
+            # Replace with the temp archive
+            os.remove(filename)
+            shutil.copyfile(tmpname, filename)
     return updated
