@@ -106,8 +106,8 @@ def test_fix_LO_saved_content_xml():
     fixed_content_xml = os.path.join(TESTS_DATADIR, 'fixed_content.xml')
     with open(wrong_content_xml, 'r') as infile,\
          open(fixed_content_xml, 'r') as outfile:
-        assert template._fix_LO_saved_content_xml(infile.readlines()) \
-            == '\n'.join(outfile.readlines())
+        assert template._fix_LO_saved_content_xml(infile.readlines()).strip() \
+            == '\n'.join(outfile.readlines()).strip()
 
 
 def test_get_cols_nb():

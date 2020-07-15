@@ -106,8 +106,14 @@ def _LO_saved_content_xml_detected(filename):
 def _fix_LO_saved_content_xml(content):
     """Remove empty relatorio nodes from content."""
     output = []
-    pattern = re.compile(r'<text:a.*href="relatorio.*></text:a>')
+    pattern = re.compile(
+        r'<text:a xlink:type="simple" xlink:href="relatorio'
+        r'[^<]*?(?<!text:span>)(?<!text:span)[^a-z]</text:a>')
     for line in content:
+        try:  # If line is provided as byte-like object, do decode it into str
+            line = line.decode()
+        except AttributeError:  # If not, keep line as is
+            pass
         output.append(pattern.sub('', line))
     return '\n'.join(output)
 
@@ -139,6 +145,7 @@ def sanitize(filename):
     with zipfile.ZipFile(filename, 'r') as zin:
         with zin.open('content.xml') as f:
             if _LO_saved_content_xml_detected(f):
+                f.seek(0)
                 updated = True
                 # Create a temp copy of the template without content.xml
                 with zipfile.ZipFile(tmpname, 'w') as zout:
@@ -147,6 +154,7 @@ def sanitize(filename):
                         if item.filename != 'content.xml':
                             zout.writestr(item, zin.read(item.filename))
                 # Now create and add the new content.xml
+                f.seek(0)
                 new_content = _fix_LO_saved_content_xml(f.readlines())
                 with zipfile.ZipFile(tmpname, 'a', zipfile.ZIP_DEFLATED) as zf:
                     zf.writestr('content.xml', new_content)

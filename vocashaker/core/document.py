@@ -133,6 +133,7 @@ def generate(table_name, nb=DEFAULT_Q_NB, scheme=None, oldest_prevail=False,
         rows = database.draw_rows(table_name, nb,
                                   oldest_prevail=oldest_prevail)
     data = _process_data(rows, scheme=scheme)
+    template.sanitize(template.path(tpl_name))
     basic = Template(source='', filepath=template.path(tpl_name))
     basic_generated = basic.generate(o=data).render()
     with open(output, 'wb') as f:
