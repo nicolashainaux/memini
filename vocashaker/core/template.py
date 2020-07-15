@@ -24,6 +24,7 @@ import re
 import glob
 import shutil
 import zipfile
+import tempfile
 import subprocess
 import xml.etree.ElementTree as ET
 
@@ -97,7 +98,7 @@ def _LO_saved_content_xml_detected(filename):
     tree = ET.parse(filename)
     root = tree.getroot()
     for node in root.findall('.//{*}body/{*}text/{*}table//{*}a'):
-        if node.text is None and not list(node):
+        if (node.text is None or not node.text.strip()) and not list(node):
             return True
     return False
 
@@ -108,7 +109,7 @@ def _fix_LO_saved_content_xml(content):
     pattern = re.compile(r'<text:a.*href="relatorio.*></text:a>')
     for line in content:
         output.append(pattern.sub('', line))
-    return output
+    return '\n'.join(output)
 
 
 def get_cols_nb(filename):
@@ -126,3 +127,31 @@ def get_cols_nb(filename):
     if '<text:span text:style-name="T1">row.col2</text:span>' in content_xml:
         return 2
     raise NotATemplateError(filename)
+
+
+def sanitize(filename):
+    """Remove empty relatorio nodes from template, if any."""
+    # Generate a temp file
+    tmpfd, tmpname = tempfile.mkstemp(dir=os.path.dirname(filename))
+    os.close(tmpfd)
+
+    updated = False
+    with zipfile.ZipFile(filename, 'r') as zin:
+        with zin.open('content.xml') as f:
+            if _LO_saved_content_xml_detected(f):
+                updated = True
+                # Create a temp copy of the template without content.xml
+                with zipfile.ZipFile(tmpname, 'w') as zout:
+                    zout.comment = zin.comment  # preserve the comment
+                    for item in zin.infolist():
+                        if item.filename != 'content.xml':
+                            zout.writestr(item, zin.read(item.filename))
+                # Now create and add the new content.xml
+                new_content = _fix_LO_saved_content_xml(f.readlines())
+                with zipfile.ZipFile(tmpname, 'a', zipfile.ZIP_DEFLATED) as zf:
+                    zf.writestr('content.xml', new_content)
+    if updated:
+        # Replace with the temp archive
+        os.remove(filename)
+        os.rename(tmpname, filename)
+    return updated

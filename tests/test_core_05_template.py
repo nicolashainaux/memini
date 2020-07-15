@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
+import zipfile
 from unittest.mock import patch
 
 import pytest
@@ -94,6 +95,10 @@ def test_LO_saved_content_xml_detected():
     fixed_content_xml = os.path.join(TESTS_DATADIR, 'fixed_content.xml')
     assert template._LO_saved_content_xml_detected(wrong_content_xml)
     assert not template._LO_saved_content_xml_detected(fixed_content_xml)
+    buggy = os.path.join(TESTS_DATADIR, 'LO_modified_buggy.odt')
+    with zipfile.ZipFile(buggy, 'r') as z:
+        with z.open('content.xml') as f:
+            assert template._LO_saved_content_xml_detected(f)
 
 
 def test_fix_LO_saved_content_xml():
@@ -102,7 +107,7 @@ def test_fix_LO_saved_content_xml():
     with open(wrong_content_xml, 'r') as infile,\
          open(fixed_content_xml, 'r') as outfile:
         assert template._fix_LO_saved_content_xml(infile.readlines()) \
-            == outfile.readlines()
+            == '\n'.join(outfile.readlines())
 
 
 def test_get_cols_nb():
@@ -127,3 +132,12 @@ def test_get_cols_nb():
 
     mt = os.path.join(TESTS_DATADIR, 'modified_template.odt')
     assert template.get_cols_nb(mt) == 2
+
+
+def test_sanitize(fs):
+    buggy = os.path.join(TESTS_DATADIR, 'LO_modified_buggy.odt')
+    fixed = os.path.join(TESTS_DATADIR, 'LO_modified_fixed.odt')
+    fs.add_real_file(buggy)
+    fs.add_real_file(fixed)
+    assert template.sanitize(buggy)
+    assert not template.sanitize(fixed)
