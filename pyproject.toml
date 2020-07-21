@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "vocashaker"
+name = "memini"
 version = "0.1.0"
 description = ""
 authors = ["Nicolas Hainaux <nh.techn@gmail.com>"]
@@ -23,8 +23,7 @@ sphinx = "^3.1.2"
 sphinx_rtd_theme = "^0.5.0"
 
 [tool.poetry.scripts]
-vocashaker = "vocashaker:run"
-vosh = "vocashaker:run"
+memini = "memini:run"
 
 [build-system]
 requires = ["poetry>=0.12"]

@@ -25,7 +25,7 @@ import toml
 with open('./pyproject.toml', 'r') as f:
     pp = toml.load(f)
 
-with open('./vocashaker/data/metadata.toml', 'w') as f:
+with open('./memini/data/metadata.toml', 'w') as f:
     toml.dump({'__version__': pp['tool']['poetry']['version'],
                '__myname__': pp['tool']['poetry']['name'],
                '__authors__': pp['tool']['poetry']['authors']},
