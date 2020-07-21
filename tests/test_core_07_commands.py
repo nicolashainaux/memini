@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-# VocaShaker is a simple project that creates vocabulary grids to train.
+# Memini is a simple project that creates vocabulary grids to train.
 # Copyright 2019 Nicolas Hainaux <nh.techn@gmail.com>
 
-# This file is part of VocaShaker.
+# This file is part of Memini.
 
-# VocaShaker is free software; you can redistribute it and/or modify
+# Memini is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
 # any later version.
 
-# VocaShaker is distributed in the hope that it will be useful,
+# Memini is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with VocaShaker; if not, write to the Free Software
+# along with Memini; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
@@ -24,14 +24,14 @@ from unittest.mock import call
 
 import pytest
 
-from vocashaker.core.env import TESTS_DATADIR, USER_SWEEPSTAKES_PATH
-from vocashaker.core import template
-from vocashaker.core import commands
-from vocashaker.core import database
-from vocashaker.core import sweepstakes
-from vocashaker.core.errors import NoSuchTableError, DestinationExistsError
-from vocashaker.core.errors import NotFoundError, CommandError, MergeError
-from vocashaker.core.errors import ColumnsDoNotMatchError
+from memini.core.env import TESTS_DATADIR, USER_SWEEPSTAKES_PATH
+from memini.core import template
+from memini.core import commands
+from memini.core import database
+from memini.core import sweepstakes
+from memini.core.errors import NoSuchTableError, DestinationExistsError
+from memini.core.errors import NotFoundError, CommandError, MergeError
+from memini.core.errors import ColumnsDoNotMatchError
 
 
 @pytest.fixture
@@ -66,7 +66,7 @@ def test_list_(testdb, capsys, fs, sw):
 
 
 def test_rename(testdb, fs, mocker):
-    m = mocker.patch('vocashaker.core.database.rename_table')
+    m = mocker.patch('memini.core.database.rename_table')
     fs.create_file(template.path('table1'))
     commands.rename('table1', 'table3')
     assert os.path.exists(template.path('table3'))
@@ -85,7 +85,7 @@ def test_rename_missing_template(testdb, fs, mocker):
     def create_fake_template(*args):
         fs.create_file(template.path('table1'))
 
-    m = mocker.patch('vocashaker.core.template.create',
+    m = mocker.patch('memini.core.template.create',
                      side_effect=create_fake_template)
     commands.rename('table1', 'table4')
     m.assert_called_with('table1')
@@ -117,7 +117,7 @@ def test_rename_to_existing_template(testdb, fs):
 
 def test_delete(fs, mocker, testdb):
     fs.create_file(template.path('table1'))
-    m = mocker.patch('vocashaker.core.terminal.ask_yes_no')
+    m = mocker.patch('memini.core.terminal.ask_yes_no')
 
     # User cancels the deletions
     m.side_effect = [False, False]
@@ -201,7 +201,7 @@ def test_duplicate(testdb, fs, capsys):
 
 
 def test_remove(mocker):
-    m = mocker.patch('vocashaker.core.database.remove_rows')
+    m = mocker.patch('memini.core.database.remove_rows')
     commands.remove('table2', '2,3')
     m.assert_called_with('table2', '2,3')
 
@@ -260,7 +260,7 @@ def test_parse(capsys, mocker):
 
 
 def test_create(testdb, capsys, mocker):
-    m = mocker.patch('vocashaker.core.template.create')
+    m = mocker.patch('memini.core.template.create')
     f = os.path.join(TESTS_DATADIR, 'latin.txt')
     commands.create('latin', f, '<Latin>:<Français>')
     m.assert_called_with('latin')
@@ -283,7 +283,7 @@ def test_create(testdb, capsys, mocker):
 
 
 def test_create_with_parse_errors(testdb, capsys, mocker):
-    m = mocker.patch('vocashaker.core.template.create')
+    m = mocker.patch('memini.core.template.create')
     f = os.path.join(TESTS_DATADIR, 'latin_parse_err.txt')
     commands.create('latin2', f, '<Latin>:<Français>')
     m.assert_called_with('latin2')
@@ -346,15 +346,15 @@ def test_merge(mocker, testdb, fs, capsys):
     def create_fake_template5(*args):
         fs.create_file(template.path('table5'))
 
-    mocker.patch('vocashaker.core.template.create',
+    mocker.patch('memini.core.template.create',
                  side_effect=create_fake_template3)
     commands.create('table3', f1, '<Latin>:<Français>')
 
-    mocker.patch('vocashaker.core.template.create',
+    mocker.patch('memini.core.template.create',
                  side_effect=create_fake_template5)
     commands.create('table5', f2, '<Latin>:<Français>')
 
-    mocker.patch('vocashaker.core.template.create',
+    mocker.patch('memini.core.template.create',
                  side_effect=create_fake_template4)
     commands.merge(['table1', 'table3'], 'table4')
 
@@ -378,7 +378,7 @@ def test_merge(mocker, testdb, fs, capsys):
         ' 13 |   laetitia, ae, f.  |               la joie              \n'
 
     os.remove(template.path('table5'))
-    mocker.patch('vocashaker.core.template.create',
+    mocker.patch('memini.core.template.create',
                  side_effect=create_fake_template5)
     commands.merge(['table1'], 'table5')
     commands.show('table5')
@@ -425,7 +425,7 @@ def test_merge_errors(mocker, testdb, fs, capsys):
     def create_fake_template3(*args):
         fs.create_file(template.path('table3'))
 
-    mocker.patch('vocashaker.core.template.create',
+    mocker.patch('memini.core.template.create',
                  side_effect=create_fake_template3)
     commands.create('table3', f1, '<Latin>:<Français>')
     with pytest.raises(MergeError) as excinfo:
@@ -509,7 +509,7 @@ def test_add_with_cols_nb_mismatch(testdb):
 
 
 def test_edit(fs, mocker):
-    m = mocker.patch('vocashaker.core.template.edit')
+    m = mocker.patch('memini.core.template.edit')
     fs.create_file(template.path('tpl1'))
     assert os.path.isfile(template.path('tpl1'))
     commands.edit('tpl1')
@@ -520,7 +520,7 @@ def test_edit(fs, mocker):
 
 
 def test_generate(mocker):
-    m = mocker.patch('vocashaker.core.document.generate')
+    m = mocker.patch('memini.core.document.generate')
     commands.generate('table1', 4)
     m.assert_called_with('table1', nb=4, scheme=None, force=False, output=None,
                          tpl=None, edit_after=True, use_previous=False)

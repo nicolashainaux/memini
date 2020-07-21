@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-# VocaShaker is a simple project that creates vocabulary grids to train.
+# Memini is a simple project that creates vocabulary grids to train.
 # Copyright 2019 Nicolas Hainaux <nh.techn@gmail.com>
 
-# This file is part of VocaShaker.
+# This file is part of Memini.
 
-# VocaShaker is free software; you can redistribute it and/or modify
+# Memini is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
 # any later version.
 
-# VocaShaker is distributed in the hope that it will be useful,
+# Memini is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with VocaShaker; if not, write to the Free Software
+# along with Memini; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
@@ -27,13 +27,13 @@ import subprocess
 from relatorio.templates.opendocument import Template
 
 
-from vocashaker.core import database, template, terminal, sweepstakes
-from vocashaker.core.env import TEMPLATE_EXT
-from vocashaker.core.prefs import BLANK_CHAR, FILLED_CHAR, EDITOR, DEFAULT_Q_NB
-from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
-from vocashaker.core.errors import SchemeColumnsMismatchError
-from vocashaker.core.errors import CommandCancelledError, NotFoundError
-from vocashaker.core.errors import ColumnsDoNotMatchError
+from memini.core import database, template, terminal, sweepstakes
+from memini.core.env import TEMPLATE_EXT
+from memini.core.prefs import BLANK_CHAR, FILLED_CHAR, EDITOR, DEFAULT_Q_NB
+from memini.core.errors import SchemeSyntaxError, SchemeLogicalError
+from memini.core.errors import SchemeColumnsMismatchError
+from memini.core.errors import CommandCancelledError, NotFoundError
+from memini.core.errors import ColumnsDoNotMatchError
 
 
 def _default_scheme(n):

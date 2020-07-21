@@ -1,34 +1,34 @@
 # -*- coding: utf-8 -*-
 
-# VocaShaker is a simple project that creates vocabulary grids to train.
+# Memini is a simple project that creates vocabulary grids to train.
 # Copyright 2019 Nicolas Hainaux <nh.techn@gmail.com>
 
-# This file is part of VocaShaker.
+# This file is part of Memini.
 
-# VocaShaker is free software; you can redistribute it and/or modify
+# Memini is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
 # any later version.
 
-# VocaShaker is distributed in the hope that it will be useful,
+# Memini is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with VocaShaker; if not, write to the Free Software
+# along with Memini; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import click
 import blessed
 
-from vocashaker.core.prefs import DEFAULT_Q_NB
-from vocashaker.core.env import USER_DB_PATH, __version__, PROG_NAME, MESSAGE
-from vocashaker.core.env import MAXCOL_NB
-from vocashaker.core.errors import VocaShakerError, CommandCancelledError
-from vocashaker.core import shared
-from vocashaker.core import database
-from vocashaker.core import commands
+from memini.core.prefs import DEFAULT_Q_NB
+from memini.core.env import USER_DB_PATH, __version__, PROG_NAME, MESSAGE
+from memini.core.env import MAXCOL_NB
+from memini.core.errors import MeminiError, CommandCancelledError
+from memini.core import shared
+from memini.core import database
+from memini.core import commands
 
 
 shared.init()
@@ -65,7 +65,7 @@ def _cmd(cmd, *args, do_click_echo=echo_error):
         shared.db = db
         try:
             cmd(*args)
-        except VocaShakerError as e:
+        except MeminiError as e:
             do_click_echo(str(e))
 
 
@@ -319,5 +319,5 @@ def generate(name, questions_number, scheme, output, force, template, edit,
                               edit=edit, use_previous=use_previous)
         except CommandCancelledError as e:
             echo_info(str(e))
-        except VocaShakerError as e:
+        except MeminiError as e:
             echo_error(str(e))

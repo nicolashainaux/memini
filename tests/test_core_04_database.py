@@ -1,45 +1,45 @@
 # -*- coding: utf-8 -*-
 
-# VocaShaker is a simple project that creates vocabulary grids to train.
+# Memini is a simple project that creates vocabulary grids to train.
 # Copyright 2019 Nicolas Hainaux <nh.techn@gmail.com>
 
-# This file is part of VocaShaker.
+# This file is part of Memini.
 
-# VocaShaker is free software; you can redistribute it and/or modify
+# Memini is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
 # any later version.
 
-# VocaShaker is distributed in the hope that it will be useful,
+# Memini is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with VocaShaker; if not, write to the Free Software
+# along with Memini; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import sqlite3
 
 import pytest
 
-from vocashaker.core.env import USER_SWEEPSTAKES_PATH
-from vocashaker.core import shared
-from vocashaker.core.database import Manager
-from vocashaker.core.database import list_tables, table_exists
-from vocashaker.core.database import _assert_table_exists, _assert_row_exists
-from vocashaker.core.database import rename_table, get_table, table_to_text
-from vocashaker.core.database import remove_table, create_table, get_cols
-from vocashaker.core.database import remove_row, draw_rows, insert_rows
-from vocashaker.core.database import get_rows_nb, copy_table, sort_table
-from vocashaker.core.database import remove_rows, update_table, merge_tables
-from vocashaker.core.database import _timestamp, _reset, _full_reset
-from vocashaker.core.database import _intspan2sqllist, _original_name
-from vocashaker.core.errors import NoSuchTableError
-from vocashaker.core.errors import NoSuchRowError, NoSuchColumnError
-from vocashaker.core.errors import ColumnsDoNotMatchError
-from vocashaker.core.errors import TooManyRowsRequiredError
-from vocashaker.core.errors import DestinationExistsError
+from memini.core.env import USER_SWEEPSTAKES_PATH
+from memini.core import shared
+from memini.core.database import Manager
+from memini.core.database import list_tables, table_exists
+from memini.core.database import _assert_table_exists, _assert_row_exists
+from memini.core.database import rename_table, get_table, table_to_text
+from memini.core.database import remove_table, create_table, get_cols
+from memini.core.database import remove_row, draw_rows, insert_rows
+from memini.core.database import get_rows_nb, copy_table, sort_table
+from memini.core.database import remove_rows, update_table, merge_tables
+from memini.core.database import _timestamp, _reset, _full_reset
+from memini.core.database import _intspan2sqllist, _original_name
+from memini.core.errors import NoSuchTableError
+from memini.core.errors import NoSuchRowError, NoSuchColumnError
+from memini.core.errors import ColumnsDoNotMatchError
+from memini.core.errors import TooManyRowsRequiredError
+from memini.core.errors import DestinationExistsError
 
 
 def test_Manager():

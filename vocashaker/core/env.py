@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-# VocaShaker is a simple project that creates vocabulary grids to train.
+# Memini is a simple project that creates vocabulary grids to train.
 # Copyright 2019 Nicolas Hainaux <nh.techn@gmail.com>
 
-# This file is part of VocaShaker.
+# This file is part of Memini.
 
-# VocaShaker is free software; you can redistribute it and/or modify
+# Memini is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
 # any later version.
 
-# VocaShaker is distributed in the hope that it will be useful,
+# Memini is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with VocaShaker; if not, write to the Free Software
+# along with Memini; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
@@ -25,7 +25,7 @@ from pathlib import Path
 
 import toml
 
-PROG_NAME = 'VocaShaker'
+PROG_NAME = 'Memini'
 MAXCOL_NB = 4
 
 __process_name = os.path.basename(__file__)

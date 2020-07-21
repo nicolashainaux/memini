@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-# VocaShaker is a simple project that creates vocabulary grids to train.
+# Memini is a simple project that creates vocabulary grids to train.
 # Copyright 2019 Nicolas Hainaux <nh.techn@gmail.com>
 
-# This file is part of VocaShaker.
+# This file is part of Memini.
 
-# VocaShaker is free software; you can redistribute it and/or modify
+# Memini is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
 # any later version.
 
-# VocaShaker is distributed in the hope that it will be useful,
+# Memini is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with VocaShaker; if not, write to the Free Software
+# along with Memini; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
@@ -25,11 +25,11 @@ from unittest.mock import patch
 
 import pytest
 
-from vocashaker.core import template, prefs
-from vocashaker.core.env import TEST_BUILT_TABLE1_CONTENTXML_PATH, PROG_NAME
-from vocashaker.core.env import CONTENTXML_PATH, TESTS_DATADIR
-from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT
-from vocashaker.core.errors import NotATemplateError
+from memini.core import template, prefs
+from memini.core.env import TEST_BUILT_TABLE1_CONTENTXML_PATH, PROG_NAME
+from memini.core.env import CONTENTXML_PATH, TESTS_DATADIR
+from memini.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT
+from memini.core.errors import NotATemplateError
 
 
 def test_path():
@@ -46,7 +46,7 @@ def test_list_(fs):
 
 def test_exists(mocker):
     mock_os_is_file = mocker.patch('os.path.isfile')
-    mock_path = mocker.patch('vocashaker.core.template.path')
+    mock_path = mocker.patch('memini.core.template.path')
     mock_path.return_value = '/path/to/template.odt'
     mock_os_is_file.return_value = True
     assert template.exists('table1')
@@ -71,7 +71,7 @@ def test_prepare_content(testdb):
 
 def test_create(testdb, mocker):
     m1 = mocker.mock_open()
-    m2 = mocker.patch('vocashaker.core.template._prepare_content')
+    m2 = mocker.patch('memini.core.template._prepare_content')
     m2.return_value = 'some stuff'
     m3 = mocker.patch('os.remove')
     mocker.patch('shutil.make_archive')

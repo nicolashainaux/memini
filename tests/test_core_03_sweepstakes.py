@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-# VocaShaker is a simple project that creates vocabulary grids to train.
+# Memini is a simple project that creates vocabulary grids to train.
 # Copyright 2019 Nicolas Hainaux <nh.techn@gmail.com>
 
-# This file is part of VocaShaker.
+# This file is part of Memini.
 
-# VocaShaker is free software; you can redistribute it and/or modify
+# Memini is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
 # any later version.
 
-# VocaShaker is distributed in the hope that it will be useful,
+# Memini is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with VocaShaker; if not, write to the Free Software
+# along with Memini; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
@@ -24,14 +24,14 @@ import datetime
 
 import pytest
 
-from vocashaker.core.env import USER_SWEEPSTAKES_PATH
-from vocashaker.core.errors import NoSuchSweepstakeError
-from vocashaker.core.sweepstakes import _serialize, _deserialize
-from vocashaker.core.sweepstakes import _new_sweepstake, _get_sweepstakes
-from vocashaker.core.sweepstakes import list_sweepstakes
-from vocashaker.core.sweepstakes import _get_sweepstake_name
-from vocashaker.core.sweepstakes import _rotate_sweepstakes
-from vocashaker.core.sweepstakes import store_sweepstake, load_sweepstake
+from memini.core.env import USER_SWEEPSTAKES_PATH
+from memini.core.errors import NoSuchSweepstakeError
+from memini.core.sweepstakes import _serialize, _deserialize
+from memini.core.sweepstakes import _new_sweepstake, _get_sweepstakes
+from memini.core.sweepstakes import list_sweepstakes
+from memini.core.sweepstakes import _get_sweepstake_name
+from memini.core.sweepstakes import _rotate_sweepstakes
+from memini.core.sweepstakes import store_sweepstake, load_sweepstake
 
 
 class MockedDatetime(datetime.datetime):

@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-# VocaShaker is a simple project that creates vocabulary grids to train.
+# Memini is a simple project that creates vocabulary grids to train.
 # Copyright 2019 Nicolas Hainaux <nh.techn@gmail.com>
 
-# This file is part of VocaShaker.
+# This file is part of Memini.
 
-# VocaShaker is free software; you can redistribute it and/or modify
+# Memini is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
 # any later version.
 
-# VocaShaker is distributed in the hope that it will be useful,
+# Memini is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with VocaShaker; if not, write to the Free Software
+# along with Memini; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
@@ -28,11 +28,11 @@ import subprocess
 import xml.etree.ElementTree as ET
 from tempfile import NamedTemporaryFile
 
-from vocashaker.core.errors import NotATemplateError
-from vocashaker.core.prefs import EDITOR, ENCODING
-from vocashaker.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT, TEMPLATE_DIR
-from vocashaker.core.env import CONTENTXML_PATH, DATADIR
-from vocashaker.core.database import get_cols
+from memini.core.errors import NotATemplateError
+from memini.core.prefs import EDITOR, ENCODING
+from memini.core.env import USER_TEMPLATES_PATH, TEMPLATE_EXT, TEMPLATE_DIR
+from memini.core.env import CONTENTXML_PATH, DATADIR
+from memini.core.database import get_cols
 
 
 def path(table_name):
@@ -87,7 +87,7 @@ def _check(filename):
     with zipfile.ZipFile(filename) as z:
         with z.open('meta.xml') as f:
             meta_xml = f.readlines()
-    if b'        <meta:initial-creator>vocashaker\n' in meta_xml:
+    if b'        <meta:initial-creator>memini\n' in meta_xml:
         return True
     else:
         return False

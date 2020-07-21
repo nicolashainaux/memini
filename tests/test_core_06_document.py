@@ -1,35 +1,35 @@
 # -*- coding: utf-8 -*-
 
-# VocaShaker is a simple project that creates vocabulary grids to train.
+# Memini is a simple project that creates vocabulary grids to train.
 # Copyright 2019 Nicolas Hainaux <nh.techn@gmail.com>
 
-# This file is part of VocaShaker.
+# This file is part of Memini.
 
-# VocaShaker is free software; you can redistribute it and/or modify
+# Memini is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 3 of the License, or
 # any later version.
 
-# VocaShaker is distributed in the hope that it will be useful,
+# Memini is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
 
 # You should have received a copy of the GNU General Public License
-# along with VocaShaker; if not, write to the Free Software
+# along with Memini; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import pytest
 from unittest.mock import patch
 
-from vocashaker.core.prefs import EDITOR
-from vocashaker.core.env import TEMPLATE_EXT, TEST_TEMPLATE1_PATH
-from vocashaker.core.errors import SchemeSyntaxError, SchemeLogicalError
-from vocashaker.core.errors import SchemeColumnsMismatchError
-from vocashaker.core.errors import ColumnsDoNotMatchError
-from vocashaker.core.errors import CommandCancelledError, NotFoundError
-from vocashaker.core.document import _default_scheme, _parse_scheme
-from vocashaker.core.document import _process_data, generate, edit
+from memini.core.prefs import EDITOR
+from memini.core.env import TEMPLATE_EXT, TEST_TEMPLATE1_PATH
+from memini.core.errors import SchemeSyntaxError, SchemeLogicalError
+from memini.core.errors import SchemeColumnsMismatchError
+from memini.core.errors import ColumnsDoNotMatchError
+from memini.core.errors import CommandCancelledError, NotFoundError
+from memini.core.document import _default_scheme, _parse_scheme
+from memini.core.document import _process_data, generate, edit
 
 
 def test_default_scheme():
@@ -142,10 +142,10 @@ def test_edit(mocker, fs):
 
 
 def test_generate(mocker):
-    mocker.patch('vocashaker.core.database.draw_rows')
-    mt = mocker.patch('vocashaker.core.template.path')
+    mocker.patch('memini.core.database.draw_rows')
+    mt = mocker.patch('memini.core.template.path')
     mt.return_value = TEST_TEMPLATE1_PATH
-    m = mocker.patch('vocashaker.core.document._process_data')
+    m = mocker.patch('memini.core.document._process_data')
     m.return_value = {'rows': [{'col1': 'adventus,  us, m.', 'col2': ''},
                                {'col1': '', 'col2': 'eau'},
                                {'col1': '', 'col2': 'blanc'},
@@ -164,7 +164,7 @@ def test_generate(mocker):
         generate('table1', 5, edit_after=False)
     mo.assert_called_with(table1_odt, 'wb')
 
-    mock_edit = mocker.patch('vocashaker.core.document.edit')
+    mock_edit = mocker.patch('memini.core.document.edit')
     with patch('builtins.open', mo, create=True):
         generate('table1', 5)
     mo.assert_called_with(table1_odt, 'wb')
@@ -173,7 +173,7 @@ def test_generate(mocker):
 
 def test_generate_to_existing_destination(fs, mocker):
     fs.create_file('some_dest.odt')
-    m = mocker.patch('vocashaker.core.terminal.ask_yes_no', return_value=False)
+    m = mocker.patch('memini.core.terminal.ask_yes_no', return_value=False)
     with pytest.raises(CommandCancelledError) as excinfo:
         generate('table1', 5, output='some_dest.odt')
     m.assert_called_with('Output file some_dest.odt already exists, overwrite'
@@ -186,10 +186,10 @@ def test_generate_from_alternative_template(mocker):
         generate('table1', 5, tpl='nonexistent')
     assert str(excinfo.value) == 'Cannot find template file: nonexistent'
 
-    mt = mocker.patch('vocashaker.core.template.path')
+    mt = mocker.patch('memini.core.template.path')
     mt.return_value = TEST_TEMPLATE1_PATH
-    mocker.patch('vocashaker.core.database.draw_rows')
-    m = mocker.patch('vocashaker.core.document._process_data')
+    mocker.patch('memini.core.database.draw_rows')
+    m = mocker.patch('memini.core.document._process_data')
     m.return_value = {'rows': [{'col1': 'adventus,  us, m.', 'col2': ''},
                                {'col1': '', 'col2': 'eau'},
                                {'col1': '', 'col2': 'blanc'},
@@ -209,9 +209,9 @@ def test_generate_from_alternative_template(mocker):
 
 
 def test_generate_using_previous_sweepstake(testdb, mocker):
-    mt = mocker.patch('vocashaker.core.template.path')
+    mt = mocker.patch('memini.core.template.path')
     mt.return_value = TEST_TEMPLATE1_PATH
-    mls = mocker.patch('vocashaker.core.sweepstakes.load_sweepstake')
+    mls = mocker.patch('memini.core.sweepstakes.load_sweepstake')
     mls.return_value = [('table1', ),
                         ('adventus,  us, m.', 'arrivée'),
                         ('candidus,  a, um', 'blanc'),
@@ -221,9 +221,9 @@ def test_generate_using_previous_sweepstake(testdb, mocker):
         generate('1', nb=3, use_previous=True, edit_after=False)
     mo.assert_called_with(f'table1.{TEMPLATE_EXT}', 'wb')
 
-    mgsn = mocker.patch('vocashaker.core.sweepstakes._get_sweepstake_name')
+    mgsn = mocker.patch('memini.core.sweepstakes._get_sweepstake_name')
     mgsn.return_value = '1_my_sweepstake'
-    mls = mocker.patch('vocashaker.core.sweepstakes.load_sweepstake')
+    mls = mocker.patch('memini.core.sweepstakes.load_sweepstake')
     mls.return_value = [('table2', ), ('break, broke, broken', 'casser')]
     with pytest.raises(ColumnsDoNotMatchError) as excinfo:
         generate('1', nb=3, use_previous=True, edit_after=False)
