@@ -86,12 +86,12 @@ for:
       - sh: poetry install
 
     test_script:
-      - sh: poetry run coverage run --source=vocashaker -m pytest -vv
+      - sh: poetry run coverage run --source=memini -m pytest -vv
 
     after_test:
         # COVERALLS_REPO_TOKEN's value is secret and cannot be published. It is:
-        # - taken from coveralls.io > vocashaker > settings
-        # - set directly in ci.appveyor.com > vocashaker > settings > environment
+        # - taken from coveralls.io > memini > settings
+        # - set directly in ci.appveyor.com > memini > settings > environment
         #   (Ubuntu2004)
         - sh: poetry run coveralls
 
