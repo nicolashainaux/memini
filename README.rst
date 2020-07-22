@@ -1,3 +1,5 @@
+{::options parse_block_html="true" /}
+
 |Build Status| |Coveralls|
 
 Overview
