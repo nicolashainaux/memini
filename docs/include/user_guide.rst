@@ -242,5 +242,3 @@ Contribute
 ==========
 
 Any question can be sent to nh dot techn (hosted at gmail dot com).
-
-.. include:: ../CHANGELOG.rst
