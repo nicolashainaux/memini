@@ -5,7 +5,9 @@ Overview
 
 Memini helps teachers and students generate vocabulary training or test sheets.
 
-`Source code <https://gitlab.com/nicolas.hainaux/memini>`__    `Documentation <http://memini.readthedocs.io/>`__
+`Source code <https://gitlab.com/nicolas.hainaux/memini>`__
+
+`Documentation <http://memini.readthedocs.io/>`__
 
 .. image:: docs/pics/prez.gif
 
