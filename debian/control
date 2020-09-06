@@ -1,0 +1,14 @@
+Source: memini
+Maintainer: Nicolas Hainaux <nh.techn@gmail.com>
+Build-Depends: debhelper, dh-python, dh-virtualenv, python3-all, python3-setuptools, python3-docutils, python3-sphinx, python3-pytest, python3-coverage, python3-pytest-mock, python3-pyfakefs
+Section: education
+Priority: optional
+Standards-Version: 4.5.0
+X-Python3-Version: >= 3.6
+
+Package: memini
+Architecture: all
+Section: education
+Priority: optional
+Description: Memini helps teachers and students generate vocabulary training or test sheets.
+Depends: ${python3:Depends}, python3-click, python3-blessed, python3-toml, python3-relatorio, python3-intspan
