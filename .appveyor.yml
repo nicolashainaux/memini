@@ -79,11 +79,10 @@ for:
     install:
       # We need wheel installed to build wheels
       - sh: sudo apt-get -y update
-      - sh: sudo apt-get install -y python3-venv
+      - sh: sudo apt-get install -y python3-venv python-is-python3
       - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
       - sh: source $HOME/.poetry/env
-      - sh: which poetry
-      - sh: which python3
+      - sh: head /home/appveyor/.poetry/bin/poetry
       - sh: poetry env use 3.8
       - sh: poetry install
 
