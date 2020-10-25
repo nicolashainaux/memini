@@ -82,6 +82,8 @@ for:
       - sh: sudo apt-get install -y python3-venv
       - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
       - sh: source $HOME/.poetry/env
+      - sh: which poetry
+      - sh: which python3
       - sh: poetry env use 3.8
       - sh: poetry install
 
