@@ -25,6 +25,7 @@ install:
   - sh: source $HOME/.poetry/env
   - sh: ls -alh /usr/bin/python
   - sh: ls -alh /usr/bin/python3
+  - sh: ls -alh /usr/bin/python*
   - sh: ls -alh $HOME/venv3.6/bin/python3.6
   - sh: ls -alh $HOME/venv3.7/bin/python3.7
   - sh: ls -alh $HOME/venv3.8/bin/python3.8
