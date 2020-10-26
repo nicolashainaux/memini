@@ -24,6 +24,7 @@ install:
   - sh: sudo apt-get install -y $PY_PACKAGES
   - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
   - sh: source $HOME/.poetry/env
+  - sh: sudo rm /usr/bin/python
   - sh: sudo ln -s /usr/bin/python3 /usr/bin/python
   - sh: poetry env use $PYTHON_BIN
   - sh: poetry install
