@@ -21,9 +21,10 @@ install:
   # Ubuntu
   # We need wheel installed to build wheels
   - sh: sudo apt-get -y update
-  - sh: sudo apt-get install -y python3-venv
+  - sh: sudo apt-get install -y $PY_PACKAGES
   - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
   - sh: source $HOME/.poetry/env
+  - sh: sudo ln -s /usr/bin/python3 /usr/bin/python
   - sh: poetry env use $PYTHON_BIN
   - sh: poetry install
 
@@ -56,15 +57,18 @@ for:
           PYTHON38: "C:\\Python38-x64\\python.exe"
           PY_PYTHON: "3.8"
         - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1604
+          PY_PACKAGES: "python3-venv"
           PYTHON_BIN: "$HOME/venv3.6/bin/python3.6"
         - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
+          PY_PACKAGES: "python3-venv"
           PYTHON_BIN: "$HOME/venv3.7/bin/python3.7"
+        - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
+          PY_PACKAGES: "python3-venv python-is-python3"
+          PYTHON_BIN: "$HOME/venv3.8/bin/python3.8"
 
 -
     branches:
         only:
-            - master
-            - pre-release
             - dev
     # For Python versions available on Appveyor, see
     # https://www.appveyor.com/docs/windows-images-software/#python
