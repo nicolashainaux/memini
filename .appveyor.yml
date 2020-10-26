@@ -24,6 +24,7 @@ install:
   - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
   - sh: source $HOME/.poetry/env
   - sh: ls -alh /usr/bin/python
+  - sh: ls -alh /usr/bin/python3
   - sh: ls -alh $HOME/venv3.6/bin/python3.6
   - sh: ls -alh $HOME/venv3.7/bin/python3.7
   - sh: ls -alh $HOME/venv3.8/bin/python3.8
