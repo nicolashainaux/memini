@@ -23,6 +23,9 @@ install:
   - sh: sudo apt-get install -y python3-venv python-is-python3
   - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
   - sh: source $HOME/.poetry/env
+  - sh: ls -alh $HOME/venv3.6/bin/python3.6
+  - sh: ls -alh $HOME/venv3.7/bin/python3.7
+  - sh: ls -alh $HOME/venv3.8/bin/python3.8
   - sh: poetry env use $PYTHON36
   - sh: poetry install
   - sh: poetry env use $PYTHON37
@@ -39,9 +42,6 @@ test_script:
   - cmd: poetry run pytest -vv
   - cmd: poetry env use %PYTHON38%
   - cmd: poetry run pytest -vv
-  - sh: ls -alh $HOME/venv3.6/bin/python3.6
-  - sh: ls -alh $HOME/venv3.7/bin/python3.7
-  - sh: ls -alh $HOME/venv3.8/bin/python3.8
   - sh: poetry env use $PYTHON36
   - sh: poetry run pytest -vv
   - sh: poetry env use $PYTHON37
