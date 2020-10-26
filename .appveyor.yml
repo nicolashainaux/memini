@@ -39,6 +39,9 @@ test_script:
   - cmd: poetry run pytest -vv
   - cmd: poetry env use %PYTHON38%
   - cmd: poetry run pytest -vv
+  - sh: ls -alh $HOME/venv3.6/bin/python3.6
+  - sh: ls -alh $HOME/venv3.7/bin/python3.7
+  - sh: ls -alh $HOME/venv3.8/bin/python3.8
   - sh: poetry env use $PYTHON36
   - sh: poetry run pytest -vv
   - sh: poetry env use $PYTHON37
