@@ -91,7 +91,7 @@ for:
       - sh: pip3 install tox-pyenv
       # - sh: which virtualenv
       # - sh: sudo rm /usr/local/bin/virtualenv
-      - sh: sudo remove --purge virtualenv python3-virtualenv
+      - sh: sudo apt remove --purge virtualenv python3-virtualenv
       - sh: pip3 install -U virtualenv
       # - sh: sudo pip3 install virtualenv==20.0.23
       - sh: poetry install
