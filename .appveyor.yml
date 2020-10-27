@@ -92,6 +92,7 @@ for:
       - sh: pyenv install -v 3.7.9
       - sh: pip3 install tox-pyenv
       - sh: which virtualenv
+      - sh: sudo rm /usr/local/bin/virtualenv
       - sh: pip3 install -U virtualenv
       - sh: poetry install
 
