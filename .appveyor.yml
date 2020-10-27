@@ -88,14 +88,15 @@ for:
       - sh: export PATH="/home/appveyor/.pyenv/bin:/home/appveyor/.local/bin:$PATH"
       - sh: eval "$(pyenv init -)"
       - sh: eval "$(pyenv virtualenv-init -)"
+      - sh: pip3 install tox-pyenv
+      # - sh: which virtualenv
+      # - sh: sudo rm /usr/local/bin/virtualenv
+      - sh: sudo remove --purge virtualenv python3-virtualenv
+      - sh: pip3 install -U virtualenv
+      # - sh: sudo pip3 install virtualenv==20.0.23
+      - sh: poetry install
       - sh: pyenv install -v 3.6.12
       - sh: pyenv install -v 3.7.9
-      - sh: pip3 install tox-pyenv
-      - sh: which virtualenv
-      - sh: sudo rm /usr/local/bin/virtualenv
-      # - sh: pip3 install -U virtualenv
-      - sh: sudo pip3 install virtualenv==20.0.23
-      - sh: poetry install
 
     test_script:
       - sh: poetry run coverage run --source=memini -m pytest -vv
