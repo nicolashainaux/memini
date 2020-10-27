@@ -81,7 +81,7 @@ for:
     install:
       # We need wheel installed to build wheels
       - sh: sudo apt-get -y update
-      - sh: sudo apt-get install -y python3-venv python3-pip python-is-python3 make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl tox
+      - sh: sudo apt-get install -y python3-venv python3-pip python-is-python3 make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
       - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
       - sh: source $HOME/.poetry/env
       - sh: curl https://pyenv.run | bash
@@ -91,12 +91,13 @@ for:
       - sh: pip3 install tox-pyenv
       # - sh: which virtualenv
       # - sh: sudo rm /usr/local/bin/virtualenv
-      - sh: sudo apt remove --purge virtualenv python3-virtualenv
+      # - sh: sudo apt remove --purge -y virtualenv python3-virtualenv
       - sh: pip3 install -U virtualenv
       # - sh: sudo pip3 install virtualenv==20.0.23
       - sh: poetry install
       - sh: pyenv install -v 3.6.12
       - sh: pyenv install -v 3.7.9
+      - sh: sudo apt install tox
 
     test_script:
       - sh: poetry run coverage run --source=memini -m pytest -vv
