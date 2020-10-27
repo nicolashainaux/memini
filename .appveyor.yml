@@ -34,6 +34,7 @@ install:
   - sh: pyenv install -v 3.6.12
   - sh: pyenv install -v 3.7.9
   - sh: pip3 install tox-pyenv
+  - sh: pip3 install -U virtualenv
   - sh: poetry install
 
 build: off
@@ -90,6 +91,7 @@ for:
       - sh: pyenv install -v 3.6.12
       - sh: pyenv install -v 3.7.9
       - sh: pip3 install tox-pyenv
+      - sh: pip3 install -U virtualenv
       - sh: poetry install
 
     test_script:
