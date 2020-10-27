@@ -21,12 +21,13 @@ install:
   # Ubuntu
   # We need wheel installed to build wheels
   - sh: sudo apt-get -y update
-  - sh: sudo apt-get install -y $PY_PACKAGES
+  - sh: sudo apt-get install -y python3-venv python-is-python3 make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl tox
   - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
   - sh: source $HOME/.poetry/env
-  - sh: sudo rm /usr/bin/python
-  - sh: sudo ln -s /usr/bin/python3 /usr/bin/python
-  - sh: poetry env use $PYTHON_BIN
+  - sh: curl https://pyenv.run | bash
+  - sh: pyenv install -v 3.6.12
+  - sh: pyenv install -v 3.7.9
+  - sh: pip3 install tox-pyenv
   - sh: poetry install
 
 build: off
@@ -38,8 +39,7 @@ test_script:
   - cmd: poetry run pytest -vv
   - cmd: poetry env use %PYTHON38%
   - cmd: poetry run pytest -vv
-  - sh: poetry env use $PYTHON_BIN
-  - sh: poetry run pytest -vv
+  - sh: tox
 
 for:
 -
@@ -57,15 +57,7 @@ for:
           PYTHON37: "C:\\Python37-x64\\python.exe"
           PYTHON38: "C:\\Python38-x64\\python.exe"
           PY_PYTHON: "3.8"
-        - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1604
-          PY_PACKAGES: "python3-venv"
-          PYTHON_BIN: "$HOME/venv3.6/bin/python3.6"
-        - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu1804
-          PY_PACKAGES: "python3-venv"
-          PYTHON_BIN: "$HOME/venv3.7/bin/python3.7"
         - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
-          PY_PACKAGES: "python3-venv python-is-python3"
-          PYTHON_BIN: "$HOME/venv3.8/bin/python3.8"
 
 -
     branches:
@@ -81,10 +73,13 @@ for:
     install:
       # We need wheel installed to build wheels
       - sh: sudo apt-get -y update
-      - sh: sudo apt-get install -y python3-venv python-is-python3
+      - sh: sudo apt-get install -y python3-venv python-is-python3 make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl tox
       - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
       - sh: source $HOME/.poetry/env
-      - sh: poetry env use 3.8
+      - sh: curl https://pyenv.run | bash
+      - sh: pyenv install -v 3.6.12
+      - sh: pyenv install -v 3.7.9
+      - sh: pip3 install tox-pyenv
       - sh: poetry install
 
     test_script:
