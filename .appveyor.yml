@@ -92,12 +92,11 @@ for:
       # - sh: which virtualenv
       # - sh: sudo rm /usr/local/bin/virtualenv
       # - sh: sudo apt remove --purge -y virtualenv python3-virtualenv
-      - sh: pip3 install -U virtualenv
+      - sh: pip3 install tox
       # - sh: sudo pip3 install virtualenv==20.0.23
       - sh: poetry install
       - sh: pyenv install -v 3.6.12
       - sh: pyenv install -v 3.7.9
-      - sh: sudo apt install tox
 
     test_script:
       - sh: poetry run coverage run --source=memini -m pytest -vv
