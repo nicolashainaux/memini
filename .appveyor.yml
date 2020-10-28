@@ -47,11 +47,11 @@ build: off
 
 test_script:
 
+  - cmd: poetry env use %PYTHON38%
+  - cmd: poetry run pytest -vv
   - cmd: poetry env use %PYTHON36%
   - cmd: pytest -vv
   - cmd: poetry env use %PYTHON37%
-  - cmd: poetry run pytest -vv
-  - cmd: poetry env use %PYTHON38%
   - cmd: poetry run pytest -vv
 
   # We do not need to run the coverage via poetry. The tox tests suite is defined in pyproject.toml
