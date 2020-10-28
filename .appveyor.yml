@@ -7,9 +7,8 @@ max_jobs: 1
 # Deployment will be added for branch master only.
 
 install:
-  - ps: (Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -UseBasicParsing).Content | %PYTHON38% -
+  - ps: (Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -UseBasicParsing).Content | $PYTHON38 -
   - ps: $env:Path
-
   # - cmd: echo %PATH:;=&echo.%
   # - cmd: set PYTHONIOENCODING=utf-8
   # - cmd: py -0
@@ -24,8 +23,6 @@ install:
   # - cmd: poetry install
   # - cmd: poetry env use %PYTHON38%
   # - cmd: poetry install
-
-
   # Ubuntu
   # We need wheel installed to build wheels
   - sh: sudo apt -y update
