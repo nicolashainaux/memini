@@ -13,7 +13,6 @@ install:
   - cmd: set PYTHONIOENCODING=utf-8
   - cmd: py -0
   - cmd: set PY_PYTHON=3.8
-  - cmd: py -0
   - cmd: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON38%
   - cmd: set PATH=C:\\Python38-x64\\;%USERPROFILE%\\.poetry\\bin;%PATH%
   - cmd: dir %USERPROFILE%\\.poetry\\bin
@@ -23,6 +22,7 @@ install:
   - cmd: poetry install
   - cmd: poetry env use %PYTHON38%
   - cmd: poetry install
+  - cmd: dir C:\projects\memini\.venv
   # Ubuntu
   # We need wheel installed to build wheels
   - sh: sudo apt -y update
@@ -47,9 +47,8 @@ build: off
 
 test_script:
 
-  - cmd: py -0
   - cmd: poetry env use %PYTHON36%
-  - cmd: poetry run pytest -vv
+  - cmd: pytest -vv
   - cmd: poetry env use %PYTHON37%
   - cmd: poetry run pytest -vv
   - cmd: poetry env use %PYTHON38%
