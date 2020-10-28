@@ -23,19 +23,22 @@ install:
   - cmd: poetry install
   # Ubuntu
   # We need wheel installed to build wheels
-  - sh: sudo apt-get -y update
-  - sh: sudo apt-get install -y python3-venv python3-pip python-is-python3 make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl tox
+  - sh: sudo apt -y update
+  - sh: sudo apt install -y python3-venv python3-pip python-is-python3 make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
   - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
   - sh: source $HOME/.poetry/env
   - sh: curl https://pyenv.run | bash
-  - sh: export PATH="/home/appveyor/.pyenv/bin:/home/appveyor/.local/bin:$PATH"
+  - sh: export PATH="/home/appveyor/.pyenv/bin:$PATH"
   - sh: eval "$(pyenv init -)"
   - sh: eval "$(pyenv virtualenv-init -)"
+  # As of 28th october 2020, the debian packages for tox dependencies python3-virtualenv and virtualenv
+  # being buggy, tox should be installed from pip. It could be eventually installed again in the apt-get install list.
+  # (same in the dev install part)
+  - sh: pip3 install tox
+  - sh: pip3 install tox-pyenv
+  - sh: poetry install
   - sh: pyenv install -v 3.6.12
   - sh: pyenv install -v 3.7.9
-  - sh: pip3 install tox-pyenv
-  - sh: pip3 install -U virtualenv
-  - sh: poetry install
 
 build: off
 
@@ -47,6 +50,7 @@ test_script:
   - cmd: poetry run pytest -vv
   - cmd: poetry env use %PYTHON38%
   - cmd: poetry run pytest -vv
+  # We do not need to run the coverage via poetry. The tox tests suite is defined in pyproject.toml
   - sh: tox
 
 for:
@@ -80,26 +84,24 @@ for:
 
     install:
       # We need wheel installed to build wheels
-      - sh: sudo apt-get -y update
-      - sh: sudo apt-get install -y python3-venv python3-pip python-is-python3 make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
+      - sh: sudo apt -y update
+      - sh: sudo apt install -y python3-venv python3-pip python-is-python3 make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
       - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
       - sh: source $HOME/.poetry/env
       - sh: curl https://pyenv.run | bash
-      - sh: export PATH="/home/appveyor/.pyenv/bin:/home/appveyor/.local/bin:$PATH"
+      - sh: export PATH="/home/appveyor/.pyenv/bin:$PATH"
       - sh: eval "$(pyenv init -)"
       - sh: eval "$(pyenv virtualenv-init -)"
-      - sh: pip3 install tox-pyenv
-      # - sh: which virtualenv
-      # - sh: sudo rm /usr/local/bin/virtualenv
-      # - sh: sudo apt remove --purge -y virtualenv python3-virtualenv
+      # As of 28th october 2020, the debian packages for tox dependencies python3-virtualenv and virtualenv
+      # being buggy, tox should be installed from pip. It could be eventually installed again in the apt-get install list.
       - sh: pip3 install tox
-      # - sh: sudo pip3 install virtualenv==20.0.23
+      - sh: pip3 install tox-pyenv
       - sh: poetry install
       - sh: pyenv install -v 3.6.12
       - sh: pyenv install -v 3.7.9
 
     test_script:
-      - sh: tox
+      - sh: tox -c tox_ci.ini
       - sh: poetry run coverage run --source=memini -m pytest -vv
 
     after_test:
