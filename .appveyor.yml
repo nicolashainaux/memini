@@ -18,7 +18,7 @@ install:
   - cmd: set PATH=C:\\Python38-x64\\;C:\\Python38-x64\\Scripts;%USERPROFILE%\\.poetry\\bin;%PATH%
   - cmd: powershell -command "iwr -outf python-3.8.6.exe https://www.python.org/ftp/python/3.8.6/python-3.8.6.exe"
   - cmd: python-3.8.6.exe /quiet /passive
-  - cmd: dir C:
+  - cmd: dir C:\\
   - cmd: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON38%
   - cmd: C:\\Python38-x64\\python.exe -m venv py38
   - cmd: .\py38\Scripts\activate.bat
