@@ -107,19 +107,18 @@ for:
       - sh: eval "$(pyenv virtualenv-init -)"
       - sh: pyenv install -v 3.6.12
       - sh: pyenv install -v 3.7.9
-      - sh: mkdir -p $HOME/.venv/
-      - sh: python -m venv $HOME/.venv/py38
-      - sh: source $HOME/.venv/py38/bin/activate
+      - sh: python -m venv py38
+      - sh: source py38/bin/activate
       - sh: poetry install
       - sh: deactivate
       - sh: pyenv global 3.6.12
-      - sh: python -m venv $HOME/.venv/py36
-      - sh: source $HOME/.venv/py36/bin/activate
+      - sh: python -m venv py36
+      - sh: source py36/bin/activate
       - sh: poetry install
       - sh: deactivate
       - sh: pyenv global 3.7.9
-      - sh: python -m venv $HOME/.venv/py37
-      - sh: source $HOME/.venv/py37/bin/activate
+      - sh: python -m venv py37
+      - sh: source py37/bin/activate
       - sh: poetry install
       - sh: deactivate
       - sh: pyenv global system
