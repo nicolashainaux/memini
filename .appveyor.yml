@@ -103,6 +103,9 @@ for:
     environment:
       matrix:
         - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
+          TOXENV: py36
+        - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
+          TOXENV: py37
 
     install:
       # We need wheel installed to build wheels
