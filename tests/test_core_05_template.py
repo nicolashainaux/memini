@@ -93,6 +93,7 @@ def test_check():
 def test_LO_saved_content_xml_detected():
     wrong_content_xml = os.path.join(TESTS_DATADIR, 'wrong_content.xml')
     fixed_content_xml = os.path.join(TESTS_DATADIR, 'fixed_content.xml')
+    assert os.path.isfile(wrong_content_xml)
     assert template._LO_saved_content_xml_detected(wrong_content_xml)
     assert not template._LO_saved_content_xml_detected(fixed_content_xml)
     buggy = os.path.join(TESTS_DATADIR, 'LO_modified_buggy.odt')
