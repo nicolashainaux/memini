@@ -15,14 +15,16 @@ install:
   - cmd: set PY_PYTHON=3.8
   - cmd: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON38%
   - cmd: set PATH=C:\\Python38-x64\\;%USERPROFILE%\\.poetry\\bin;%PATH%
-  - cmd: dir %USERPROFILE%\\.poetry\\bin
-  - cmd: poetry env use %PYTHON36%
+  # - cmd: poetry env use %PYTHON36%
+  # - cmd: poetry install
+  # - cmd: poetry env use %PYTHON37%
+  # - cmd: poetry install
+  # - cmd: poetry env use %PYTHON38%
+  - cmd: %PYTHON38% -m venv py38
+  - cmd: %PYTHON37% -m venv py37
+  - cmd: %PYTHON36% -m venv py36
+  - cmd: .\py38\Scripts\Activate.ps1
   - cmd: poetry install
-  - cmd: poetry env use %PYTHON37%
-  - cmd: poetry install
-  - cmd: poetry env use %PYTHON38%
-  - cmd: poetry install
-  - cmd: dir C:\projects\memini\.venv
   # Ubuntu
   # We need wheel installed to build wheels
   - sh: sudo apt -y update
@@ -102,19 +104,19 @@ for:
       - sh: eval "$(pyenv virtualenv-init -)"
       - sh: pyenv install -v 3.6.12
       - sh: pyenv install -v 3.7.9
-      - sh: mkdir -p $HOME/.venv/ && cd $HOME/.venv/
-      - sh: python -m venv py38
-      - sh: source py38/bin/activate
+      - sh: mkdir -p $HOME/.venv/
+      - sh: python -m venv $HOME/.venv/py38
+      - sh: source $HOME/.venv/py38/bin/activate
       - sh: poetry install
       - sh: deactivate
       - sh: pyenv global 3.6.12
-      - sh: python -m venv py36
-      - sh: source py36/bin/activate
+      - sh: python -m venv $HOME/.venv/py36
+      - sh: source $HOME/.venv/py36/bin/activate
       - sh: poetry install
       - sh: deactivate
       - sh: pyenv global 3.7.9
-      - sh: python -m venv py37
-      - sh: source py37/bin/activate
+      - sh: python -m venv $HOME/.venv/py37
+      - sh: source $HOME/.venv/py37/bin/activate
       - sh: poetry install
       - sh: deactivate
       - sh: pyenv global system
