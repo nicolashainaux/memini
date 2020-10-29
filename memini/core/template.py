@@ -98,6 +98,8 @@ def _LO_saved_content_xml_detected(filename):
     tree = ET.parse(filename)
     root = tree.getroot()
     for node in root.findall('.//{*}body/{*}text/{*}table//{*}a'):
+        import sys
+        sys.stderr.write(f'node: {node}')
         if (node.text is None or not node.text.strip()) and not list(node):
             return True
     return False
