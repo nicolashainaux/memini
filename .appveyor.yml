@@ -27,6 +27,7 @@ install:
   # - cmd: [System.Environment]::SetEnvironmentVariable('path', $HOME + "\.pyenv\pyenv-win\bin;" + $HOME + "\.pyenv\pyenv-win\shims;" + $env:Path,"User")
   - cmd: pyenv --version
   - cmd: pyenv rehash
+  - cmd: pyenv install --list | grep " 3\.[678]"
   - cmd: pyenv install 3.8.6
   - cmd: pyenv global 3.8.6
   - cmd: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON38%
