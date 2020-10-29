@@ -15,13 +15,16 @@ install:
   - cmd: set PYTHONIOENCODING=utf-8
   - cmd: py -0
   - cmd: set PY_PYTHON=3.8
-  - cmd: set PATH=C:\\Python38-x64\\;C:\\Python38-x64\\Scripts;%USERPROFILE%\\.poetry\\bin;%USERPROFILE%\\.pyenv\\bin;%PATH%
+  - cmd: set PATH=C:\\Python38-x64\\;C:\\Python38-x64\\Scripts;%USERPROFILE%\\.poetry\\bin;%PATH%
   - cmd: powershell -command "iwr -outf get-pip.py https://bootstrap.pypa.io/get-pip.py"
   - cmd: C:\\Python38-x64\\python.exe get-pip.py
   - cmd: pip3.8 install pyenv-win --target %USERPROFILE%\.pyenv
-  - cmd: [System.Environment]::SetEnvironmentVariable('PYENV',$env:USERPROFILE + "\.pyenv\pyenv-win\","User")
-  - cmd: [System.Environment]::SetEnvironmentVariable('PYENV_HOME',$env:USERPROFILE + "\.pyenv\pyenv-win\","User")
-  - cmd: [System.Environment]::SetEnvironmentVariable('path', $HOME + "\.pyenv\pyenv-win\bin;" + $HOME + "\.pyenv\pyenv-win\shims;" + $env:Path,"User")
+  - cmd: set PYENV=%USERPROFILE%\\.pyenv\\pyenv-win\\
+  - cmd: set PYENV_HOME=%USERPROFILE%\\.pyenv\\pyenv-win\\
+  - cmd: set PATH=%USERPROFILE%\\.pyenv\\pyenv-win\\shims;%USERPROFILE%\\.pyenv\\pyenv-win\\bin;%PATH%
+  # - cmd: [System.Environment]::SetEnvironmentVariable('PYENV',$env:USERPROFILE + "\.pyenv\pyenv-win\","User")
+  # - cmd: [System.Environment]::SetEnvironmentVariable('PYENV_HOME',$env:USERPROFILE + "\.pyenv\pyenv-win\","User")
+  # - cmd: [System.Environment]::SetEnvironmentVariable('path', $HOME + "\.pyenv\pyenv-win\bin;" + $HOME + "\.pyenv\pyenv-win\shims;" + $env:Path,"User")
   - cmd: pyenv --version
   - cmd: pyenv rehash
   - cmd: pyenv install 3.8.6
