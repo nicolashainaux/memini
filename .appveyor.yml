@@ -105,6 +105,8 @@ for:
         - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
 
     install:
+      - sh: python3.6 --version
+      - sh: python3.7 --version
       # We need wheel installed to build wheels
       - sh: sudo apt -y update
       - sh: sudo apt install -y python3-venv python3-pip python-is-python3
@@ -124,9 +126,7 @@ for:
       - sh: source py38/bin/activate
       - sh: poetry install
       - sh: deactivate
-      - sh: which python3.6
       - sh: python3.6 --version
-      - sh: which python3.7
       - sh: python3.7 --version
       # - sh: pyenv global 3.6.12
       # - sh: python -m venv py36
