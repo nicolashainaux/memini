@@ -69,15 +69,7 @@ build: off
 
 test_script:
 
-  - cmd: .\py38\Scripts\activate.bat
-  - cmd: pytest
-  - cmd: deactivate
-  - cmd: .\py37\Scripts\activate.bat
-  - cmd: pytest
-  - cmd: deactivate
-  - cmd: .\py36\Scripts\activate.bat
-  - cmd: pytest
-  - cmd: deactivate
+  - cmd: tox -c tox_win.ini
 
   # We do not need to run the coverage via poetry. The tox tests suite is defined in pyproject.toml
   - sh: source py38/bin/activate
