@@ -20,6 +20,7 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
 import os
+import sys
 import zipfile
 from unittest.mock import patch
 
@@ -135,6 +136,8 @@ def test_get_cols_nb():
     assert template.get_cols_nb(mt) == 2
 
 
+@pytest.mark.skipif(sys.version_info < (3, 8, 6) and sys.platform == 'win32',
+                    reason='requires python3.8.6 on Windows')
 def test_sanitize(fs):
     buggy = os.path.join(TESTS_DATADIR, 'LO_modified_buggy.odt')
     fixed = os.path.join(TESTS_DATADIR, 'LO_modified_fixed.odt')

@@ -10,10 +10,8 @@ matrix:
 
 install:
   # Only python3.8 will be supported on Windows
-  # 3.8.6 is the version currently tested (via pyenv).
-  - cmd: echo %PATH:;=&echo.%
+  # Only a too old 3.8 can be currently tested. One test is disabled (might require >= 3.8.6).
   - cmd: set PYTHONIOENCODING=utf-8
-  - cmd: py -0
   - cmd: set PY_PYTHON=3.8
   - cmd: set PATH=C:\\Python38-x64\\;C:\\Python38-x64\\Scripts;%USERPROFILE%\\.poetry\\bin;%PATH%
   - cmd: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON38%
