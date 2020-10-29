@@ -105,43 +105,24 @@ for:
         - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
 
     install:
-      - sh: python3.6 --version
-      - sh: python3.7 --version
       # We need wheel installed to build wheels
       - sh: sudo apt -y update
       - sh: sudo apt install -y python3-venv python3-pip python-is-python3
-      # Following dependencies are required to let pyenv compile Python.
-      # - sh: sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
-      # As of 28th october 2020, the debian packages for tox dependencies python3-virtualenv and virtualenv
-      # being buggy, tox must be installed from PyPI. tox and to-pyenv have been added to dev dependencies.
+      # Note: tox is included in dev dependencies, so it is installed by poetry.
       - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
       - sh: source $HOME/.poetry/env
-      # - sh: curl https://pyenv.run | bash
-      # - sh: export PATH="$HOME/.pyenv/bin:$PATH"
-      # - sh: eval "$(pyenv init -)"
-      # - sh: eval "$(pyenv virtualenv-init -)"
-      # - sh: pyenv install -v 3.6.12
-      # - sh: pyenv install -v 3.7.9
-      - sh: python -m venv py38
-      - sh: source py38/bin/activate
+      - sh: source $HOME/venv3.8/bin/activate
       - sh: poetry install
       - sh: deactivate
-      - sh: python3.6 --version
-      - sh: python3.7 --version
-      # - sh: pyenv global 3.6.12
-      # - sh: python -m venv py36
-      # - sh: source py36/bin/activate
-      # - sh: poetry install
-      # - sh: deactivate
-      # - sh: pyenv global 3.7.9
-      # - sh: python -m venv py37
-      # - sh: source py37/bin/activate
-      # - sh: poetry install
-      # - sh: deactivate
-      # - sh: pyenv global system
+      - sh: source $HOME/venv3.6/bin/activate
+      - sh: poetry install
+      - sh: deactivate
+      - sh: source $HOME/venv3.7/bin/activate
+      - sh: poetry install
+      - sh: deactivate
 
     test_script:
-      - sh: source py38/bin/activate
+      - sh: source $HOME/venv3.8/bin/activate
       - sh: tox -c tox_ci.ini
       - sh: poetry run coverage run --source=memini -m pytest -vv
 
