@@ -2,6 +2,8 @@ version: build{build}
 
 max_jobs: 1
 
+matrix:
+  fast_finish: true
 # Default configuration is actually for master and pre-release branches.
 # Branch dev overrides several settings after this default configuration.
 # Deployment will be added for branch master only.
@@ -21,12 +23,8 @@ install:
   # - cmd: poetry install
   # - cmd: poetry env use %PYTHON38%
   - cmd: powershell -command "iwr -outf get-pip.py https://bootstrap.pypa.io/get-pip.py"
-  - cmd: C:\\Python36-x64\\python.exe get-pip.py
-  - cmd: C:\\Python37-x64\\python.exe get-pip.py
   - cmd: C:\\Python38-x64\\python.exe get-pip.py
   - cmd: pip3.8 install tox
-  - cmd: pip3.7 install tox
-  - cmd: pip3.6 install tox
   - cmd: C:\\Python38-x64\\python.exe -m venv py38
   - cmd: C:\\Python37-x64\\python.exe -m venv py37
   - cmd: C:\\Python36-x64\\python.exe -m venv py36
@@ -55,6 +53,7 @@ install:
   - sh: eval "$(pyenv virtualenv-init -)"
   - sh: pyenv install -v 3.6.12
   - sh: pyenv install -v 3.7.9
+  - sh: pip3 install tox tox-pyenv
   - sh: python -m venv py38
   - sh: source py38/bin/activate
   - sh: poetry install
@@ -74,12 +73,8 @@ install:
 build: off
 
 test_script:
-
-  - cmd: .\py38\Scripts\activate.bat
   - cmd: tox -c tox_win.ini
-
   # We do not need to run the coverage via poetry. The tox tests suite is defined in pyproject.toml
-  - sh: source py38/bin/activate
   - sh: tox
 
 for:
@@ -94,13 +89,11 @@ for:
     environment:
       matrix:
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
-          fast_finish: true
           PYTHON36: "C:\\Python36-x64\\python.exe"
           PYTHON37: "C:\\Python37-x64\\python.exe"
           PYTHON38: "C:\\Python38-x64\\python.exe"
           PY_PYTHON: "3.8"
         - APPVEYOR_BUILD_WORKER_IMAGE: Ubuntu2004
-          fast_finish: true
 
 -
     branches:
