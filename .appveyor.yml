@@ -9,34 +9,19 @@ matrix:
 # Deployment will be added for branch master only.
 
 install:
-  # - pwsh: (Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -UseBasicParsing).Content | C:\\Python38-x64\\python.exe -
-  # - pwsh: $env:Path
+  # Only python3.8 will be supported on Windows
+  # 3.8.6 is the version currently tested.
   - cmd: echo %PATH:;=&echo.%
   - cmd: set PYTHONIOENCODING=utf-8
   - cmd: py -0
   - cmd: set PY_PYTHON=3.8
+  - cmd: set PATH=C:\\Python38-x64\\;C:\\Python38-x64\\Scripts;%USERPROFILE%\\.poetry\\bin;%PATH%
+  - cmd: powershell -command "iwr -outf python-3.8.6.exe https://www.python.org/ftp/python/3.8.6/python-3.8.6.exe"
+  - cmd: python-3.8.6.exe /quiet /passive
   - cmd: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON38%
-  - cmd: set PATH=C:\\Python38-x64\\;C:\\Python38-x64\\Scripts;C:\\Python37-x64;C:\\Python37-x64\\Scripts;C:\\Python36-x64\\;C:\\Python36-x64\\Scripts;%USERPROFILE%\\.poetry\\bin;%PATH%
-  # - cmd: poetry env use %PYTHON36%
-  # - cmd: poetry install
-  # - cmd: poetry env use %PYTHON37%
-  # - cmd: poetry install
-  # - cmd: poetry env use %PYTHON38%
-  - cmd: powershell -command "iwr -outf get-pip.py https://bootstrap.pypa.io/get-pip.py"
-  - cmd: C:\\Python38-x64\\python.exe get-pip.py
-  - cmd: pip3.8 install tox
   - cmd: C:\\Python38-x64\\python.exe -m venv py38
-  - cmd: C:\\Python37-x64\\python.exe -m venv py37
-  - cmd: C:\\Python36-x64\\python.exe -m venv py36
   - cmd: .\py38\Scripts\activate.bat
   - cmd: poetry install
-  - cmd: deactivate
-  - cmd: .\py37\Scripts\activate.bat
-  - cmd: poetry install
-  - cmd: deactivate
-  - cmd: .\py36\Scripts\activate.bat
-  - cmd: poetry install
-  - cmd: deactivate
   # Ubuntu
   # We need wheel installed to build wheels
   - sh: sudo apt -y update
@@ -73,7 +58,7 @@ install:
 build: off
 
 test_script:
-  - cmd: tox -c tox_win.ini
+  - cmd: pytest
   # We do not need to run the coverage via poetry. The tox tests suite is defined in pyproject.toml
   - sh: tox
 
