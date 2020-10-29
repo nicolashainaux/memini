@@ -69,7 +69,14 @@ build: off
 test_script:
 
   - cmd: .\py38\Scripts\activate.bat
-  - cmd: tox
+  - cmd: pytest
+  - sh: deactivate
+  - cmd: .\py37\Scripts\activate.bat
+  - cmd: pytest
+  - sh: deactivate
+  - cmd: .\py36\Scripts\activate.bat
+  - cmd: pytest
+  - sh: deactivate
 
   # We do not need to run the coverage via poetry. The tox tests suite is defined in pyproject.toml
   - sh: source py38/bin/activate
@@ -86,6 +93,7 @@ for:
     # https://www.appveyor.com/docs/linux-images-software#python
     environment:
       matrix:
+          fast_finish: true
         - APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2015
           PYTHON36: "C:\\Python36-x64\\python.exe"
           PYTHON37: "C:\\Python37-x64\\python.exe"
