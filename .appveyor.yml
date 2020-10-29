@@ -106,24 +106,40 @@ for:
 
     install:
       # We need wheel installed to build wheels
-      - sh: sudo add-apt-repository -y ppa:deadsnakes/ppa
       - sh: sudo apt -y update
       - sh: sudo apt install -y python3-venv python3-pip python-is-python3
-      - sh: sudo apt install -y python3.6 python3.6-venv python3.7 python3.7-venv
+      # Following dependencies are required to let pyenv compile Python.
+      - sh: sudo apt install -y make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl
+      # As of 28th october 2020, the debian packages for tox dependencies python3-virtualenv and virtualenv
+      # being buggy, tox must be installed from PyPI.
       - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
       - sh: source $HOME/.poetry/env
-      - sh: source $HOME/venv3.6/bin/activate
+      - sh: curl https://pyenv.run | bash
+      # Adding ~/.local/bin to $PATH is required to use globally pip3-installed tox.
+      - sh: export PATH="$HOME/.pyenv/bin:$HOME/.local/bin:$PATH"
+      - sh: eval "$(pyenv init -)"
+      - sh: eval "$(pyenv virtualenv-init -)"
+      - sh: pyenv install -v 3.6.12
+      - sh: pyenv install -v 3.7.9
+      - sh: pip3 install tox tox-pyenv
+      - sh: python -m venv py38
+      - sh: source py38/bin/activate
       - sh: poetry install
       - sh: deactivate
-      - sh: source $HOME/venv3.7/bin/activate
+      - sh: pyenv global 3.6.12
+      - sh: python -m venv py36
+      - sh: source py36/bin/activate
       - sh: poetry install
       - sh: deactivate
-      - sh: source $HOME/venv3.8/bin/activate
+      - sh: pyenv global 3.7.9
+      - sh: python -m venv py37
+      - sh: source py37/bin/activate
       - sh: poetry install
       - sh: deactivate
+      - sh: pyenv global system
 
     test_script:
-      - sh: source $HOME/venv3.8/bin/activate
+      - sh: source py38/bin/activate
       - sh: tox -c tox_ci.ini
       - sh: poetry run coverage run --source=memini -m pytest -vv
 
