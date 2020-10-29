@@ -32,7 +32,8 @@ install:
   - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
   - sh: source $HOME/.poetry/env
   - sh: curl https://pyenv.run | bash
-  - sh: export PATH="$HOME/.pyenv/bin:$PATH"
+  # Adding ~/.local/bin to $PATH is required to use globally pip3-installed tox.
+  - sh: export PATH="$HOME/.pyenv/bin:$HOME/.local/bin:$PATH"
   - sh: eval "$(pyenv init -)"
   - sh: eval "$(pyenv virtualenv-init -)"
   - sh: pyenv install -v 3.6.12
