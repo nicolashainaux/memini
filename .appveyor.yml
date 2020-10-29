@@ -111,22 +111,26 @@ for:
       # We need wheel installed to build wheels
       - sh: sudo apt -y update
       - sh: sudo apt install -y python3-venv python3-pip python-is-python3
-      # Note: tox is included in dev dependencies, so it is installed by poetry.
       - sh: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3
       - sh: source $HOME/.poetry/env
-      - sh: source $HOME/venv3.8/bin/activate
-      - sh: poetry install
-      - sh: deactivate
       - sh: source $HOME/venv3.6/bin/activate
       - sh: poetry install
       - sh: deactivate
       - sh: source $HOME/venv3.7/bin/activate
       - sh: poetry install
       - sh: deactivate
+      - sh: source $HOME/venv3.8/bin/activate
+      - sh: poetry install
+      - sh: deactivate
 
     test_script:
+      - sh: source $HOME/venv3.6/bin/activate
+      - sh: pytest -vv
+      - sh: deactivate
+      - sh: source $HOME/venv3.7/bin/activate
+      - sh: pytest -vv
+      - sh: deactivate
       - sh: source $HOME/venv3.8/bin/activate
-      - sh: tox -c tox_ci.ini
       - sh: poetry run coverage run --source=memini -m pytest -vv
 
     after_test:
