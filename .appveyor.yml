@@ -20,11 +20,18 @@ install:
   # - cmd: poetry env use %PYTHON37%
   # - cmd: poetry install
   # - cmd: poetry env use %PYTHON38%
-  - cmd: %PYTHON38% -m venv py38
-  - cmd: %PYTHON37% -m venv py37
-  - cmd: %PYTHON36% -m venv py36
+  - cmd: C:\\Python38-x64\\python.exe -m venv py38
+  - cmd: C:\\Python37-x64\\python.exe -m venv py37
+  - cmd: C:\\Python36-x64\\python.exe -m venv py36
   - cmd: .\py38\Scripts\Activate.ps1
   - cmd: poetry install
+  - cmd: deactivate
+  - cmd: .\py37\Scripts\Activate.ps1
+  - cmd: poetry install
+  - cmd: deactivate
+  - cmd: .\py36\Scripts\Activate.ps1
+  - cmd: poetry install
+  - cmd: deactivate
   # Ubuntu
   # We need wheel installed to build wheels
   - sh: sudo apt -y update
@@ -49,12 +56,8 @@ build: off
 
 test_script:
 
-  - cmd: poetry env use %PYTHON38%
-  - cmd: poetry run pytest -vv
-  - cmd: poetry env use %PYTHON36%
-  - cmd: pytest -vv
-  - cmd: poetry env use %PYTHON37%
-  - cmd: poetry run pytest -vv
+  - cmd: .\py38\Scripts\Activate.ps1
+  - cmd: tox
 
   # We do not need to run the coverage via poetry. The tox tests suite is defined in pyproject.toml
   - sh: tox
