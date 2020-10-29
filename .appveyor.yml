@@ -10,19 +10,23 @@ matrix:
 
 install:
   # Only python3.8 will be supported on Windows
-  # 3.8.6 is the version currently tested.
+  # 3.8.6 is the version currently tested (via pyenv).
   - cmd: echo %PATH:;=&echo.%
   - cmd: set PYTHONIOENCODING=utf-8
   - cmd: py -0
   - cmd: set PY_PYTHON=3.8
   - cmd: set PATH=C:\\Python38-x64\\;C:\\Python38-x64\\Scripts;%USERPROFILE%\\.poetry\\bin;%PATH%
-  - cmd: powershell -command "iwr -outf python-3.8.6.exe https://www.python.org/ftp/python/3.8.6/python-3.8.6.exe"
-  - cmd: python-3.8.6.exe /quiet /passive
-  - cmd: dir C:\
+  - cmd: powershell -command "iwr -outf get-pip.py https://bootstrap.pypa.io/get-pip.py"
+  - cmd: C:\\Python38-x64\\python.exe get-pip.py
+  - cmd: pip3.8 install pyenv-win --target %USERPROFILE%\.pyenv
+  - cmd: pyenv install 3.8.6
+  - cmd: pyenv global 3.8.6
   - cmd: curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | %PYTHON38%
-  - cmd: C:\\Python38-x64\\python.exe -m venv py38
+  - cmd: python --version
+  - cmd: python -m venv py38
   - cmd: .\py38\Scripts\activate.bat
   - cmd: poetry install
+  - cmd: deactivate
   # Ubuntu
   # We need wheel installed to build wheels
   - sh: sudo apt -y update
@@ -59,6 +63,7 @@ install:
 build: off
 
 test_script:
+  - cmd: .\py38\Scripts\activate.bat
   - cmd: pytest
   # We do not need to run the coverage via poetry. The tox tests suite is defined in pyproject.toml
   - sh: tox
