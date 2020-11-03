@@ -1,3 +1,9 @@
+memini (1.0.0-0ubuntu2) focal; urgency=low
+
+  * Fix the deb build in launchpad.
+
+ -- Nicolas Hainaux <nicolas.hainaux@gmail.com>  Thu, 29 Oct 2020 22:14:04 +0100
+
 memini (1.0.0-0ubuntu1) focal; urgency=low
 
   * Initial release
